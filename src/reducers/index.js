@@ -1,8 +1,6 @@
-import journalList from '.journalList';
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
+import journal from './journal'
 
-const rootReducer = combineReducers({
-  journalList
-});
-
-export defaul rootReducer;
+export default combineReducers({
+  journal
+})
