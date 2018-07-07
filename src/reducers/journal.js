@@ -11,7 +11,7 @@ const journal = (state = initialState, action ) => {
         entries : [ ...state.entries,  {
           id: action.id,
           name: action.name,
-          text: null,
+          text: "",
           active: false
         }]
       });

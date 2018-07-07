@@ -1,10 +1,12 @@
-import React from 'react'
 import { connect } from 'react-redux'
-import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
-import { editEntryText } from '../actions/index.js'
+import { editEntryText } from '../actions/index'
+import EntryTextBox from '../components/EntryTextBox'
 
 const getActiveEntryText = (selected, entries) => {
-  var i = entries.filter(e => e.id === selected)
+  if(selected == -1)
+    return ""
+  console.log(selected, entries)
+  var i = entries.filter(e => e.id === selected)[0]
   console.log(i.text)
   return i.text
 }
@@ -14,25 +16,16 @@ const mapStateToProps = state => {
     text: getActiveEntryText(state.journal.selected, state.journal.entries)
   }
 }
-let EditEntry = ({ text, dispatch }) => {
-  let input
-
-  return (
-    <div>
-      <FormGroup controlId="formControlsTextarea">
-        <ControlLabel> Textarea </ControlLabel>
-        <FormControl
-          componentClass="textarea"
-          placeholder="textarea"
-          onChange={e => {
-            e.preventDefault()
-            dispatch(editEntryText(e.target.value))
-          }}>
-        </FormControl>
-      </FormGroup>
-    </div>
-  )
+const mapDispatchToProps = dispatch => {
+  return {
+    onChangeAction : e => {
+      dispatch(editEntryText(e.target.value))
+    }
+  }
 }
-EditEntry = connect(mapStateToProps)(EditEntry)
 
+const EditEntry = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EntryTextBox)
 export default EditEntry
