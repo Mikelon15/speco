@@ -2,6 +2,8 @@ import React from 'react';
 import AddEntry from '../containers/AddEntry';
 import Journal from '../containers/Journal';
 import EditEntry from '../containers/EditEntry';
+import LogIn from '../components/LogIn';
+import SignUp from '../components/SignUp';
 import { Col, Row } from 'react-bootstrap';
 
 const App = () => (
@@ -15,6 +17,8 @@ const App = () => (
         <EditEntry />
       </Col>
       <Col xsHidden md={4}>
+        <LogIn />
+        <SignUp />
       </Col>
     </Row>
 
