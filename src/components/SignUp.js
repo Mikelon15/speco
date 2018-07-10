@@ -26,8 +26,8 @@ const SignUp = () => (
         label="User Name"
         placeholder="Enter username"
       />
-
       <FieldGroup id="formControlsPassword" label="Password" type="password" placeholder="password"/>
+      <FieldGroup id="formControlsConfirmPassword" label="Confirm Password" type="password" placeholder="password"/>
       <Button type="submit"> Submit </Button>
     </form>
     </div>
