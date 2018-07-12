@@ -3,7 +3,7 @@ const initialState = {
   email: null,
   uid: null,
   authorized: false,
-  subscribing: false
+  subscribing: true
 };
 
 const user = (state = initialState, action) => {
