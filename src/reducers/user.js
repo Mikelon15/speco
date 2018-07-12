@@ -3,7 +3,8 @@ const initialState = {
   email: null,
   uid: null,
   authorized: false,
-  subscribing: true
+  subscribing: false,
+  error: null
 };
 
 const user = (state = initialState, action) => {
@@ -28,6 +29,15 @@ const user = (state = initialState, action) => {
     case 'USER_START_SUBSCRIBING':
       return Object.assign({}, state, {
         subscribing: true
+      });
+    case 'USER_ERROR_MESSAGE':
+      return Object.assign({}, state, {
+        error: action.code
+      });
+    case 'USER_SIGN_OUT':
+      console.log("SIGNING OUT")
+      return Object.assign({}, state, {
+        authorized: false
       });
     default:
       return state;

@@ -5,7 +5,7 @@ import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
-import App from './components/App';
+import App from './containers/App';
 import registerServiceWorker from './registerServiceWorker';
 
 

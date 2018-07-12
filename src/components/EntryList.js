@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Entry from './Entry';
-import { ListGroup } from 'react-bootstrap';
+import { ListGroup, Button } from 'react-bootstrap';
 
-const EntryList = ({ entries, selected, onClickAction }) => (
+const EntryList = ({ entries, selected, onClickAction, onSignout  }) => (
   <div>
     <ListGroup> EntryList
         {
@@ -11,6 +11,7 @@ const EntryList = ({ entries, selected, onClickAction }) => (
           <Entry key={index} {...entry} onClick={() => onClickAction(index)}/>
         ))}
     </ListGroup>
+    <Button onClick={ e => {e.preventDefault(); onSignout()}}> Signout </Button>
   </div>
 )
 

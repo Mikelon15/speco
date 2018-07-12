@@ -10,22 +10,34 @@ function FieldGroup({ id, label, help, ...props }) {
   );
 }
 
-const LogIn = () => (
+let LogIn = ({ onSubmit }) => {
+  let input = {email: "", password: ""}
+  return (
     <div>
-    <form >
-      LogIn
+    <form onSubmit={e => {
+       e.preventDefault()
+       onSubmit(input)
+     }}> LogIn
       <FieldGroup
-      id="formControlsEmail"
-      type="email"
-      label="Email address"
-      placeholder="Enter email"
-    />
-    <FieldGroup id="formControlsPassword" label="Password" type="password" placeholder="password"/>
-    <h5> Dont have an account? <a href=""> Sign up </a> </h5>
-    <Button type="submit"> Submit </Button>
-    </form>
+        id="formControlsEmail"
+        type="email"
+        label="Email address"
+        placeholder="Enter email"
+        onChange = { e => {input.email = e.target.value}}
+      />
+      <FieldGroup
+        id="formControlsPassword"
+        label="Password"
+        type="password"
+        placeholder="password"
+        onChange = { e => {input.password = e.target.value}}
+      />
+      <h5> Dont have an account? <a href=""> Sign up </a> </h5>
+      <Button type="submit"> Submit </Button>
+      </form>
     </div>
-)
+  )
+}
 
 
 export default LogIn;

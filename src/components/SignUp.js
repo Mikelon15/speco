@@ -15,8 +15,9 @@ let SignUp = ( { onSubmit } ) => {
     return (
     <div>
     <form onSubmit={e => {
-      e.preventDefault()
-       onSubmit(input) }}>
+        e.preventDefault()
+        onSubmit(input)
+    }}>
       SignUp
       <FieldGroup
         id="formControlsEmail"

@@ -42,16 +42,21 @@ export const userAuthorized = () => ({
     type: 'USER_AUTHORIZED'
 });
 
+export const signoutUser = () => ({
+  type: 'USER_SIGN_OUT'
+});
 /*------------------------------------------------------------------------------
 *
 *                             FIREBASE ACTIONS
 *
 ------------------------------------------------------------------------------*/
 
-export const signUpWithEmailAndPassword = (email, password) => {
+export const signUpWithEmailAndPassword = (email, password, username) => {
   return function(dispatch, getState) {
     console.log(email);
-    firebase.auth().createUserWithEmailAndPassword(email, password).then((user)=>{
+    firebase.auth().createUserWithEmailAndPassword(email, password).then((obj)=>{
+      //updates user's profile username
+      obj.user.updateProfile({displayName: username})
     })
     .catch(function(error) {
       // Handle Errors here.
@@ -68,21 +73,41 @@ export const signUpWithEmailAndPassword = (email, password) => {
 }
 export const logInWithEmailAndPassword = (email, password) => {
   return function(dispatch, getState) {
-    firebase.auth().signInWithEmailAndPassword(email, password).then(function(result) {
-      if (result.credential) {
-        // This gives you a Google Access Token.
-        var token = result.credential.accessToken;
-      }
-      var user = result.user;
-
-      dispatch(setUserEmail(result.email));
-      dispatch(setUserName(result.displayName));
-      dispatch(setUserUID(result.uid));
-      dispatch(userAuthorized());
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
+        firebase.auth().signInWithEmailAndPassword(email, password).then(function(result) {
+          console.log(result);
+          dispatch(setUserEmail(result.email));
+          dispatch(setUserName(result.displayName));
+          dispatch(setUserUID(result.uid));
+          dispatch(userAuthorized());
+        });
+      })
+  }
+}
+export const checkUserExists = () => {
+    return function (dispatch) {
+        console.log("made it here");
+        var user = firebase.auth().onAuthStateChanged(function(user){
+          if(user){
+            // user signed in
+            dispatch(setUserEmail(user.email));
+            dispatch(setUserName(user.displayName));
+            dispatch(setUserUID(user.uid));
+            dispatch(userAuthorized());
+          }
+          else{
+            // user not signed in
+          }
+        })
+    }
+};
+export const signout = () => {
+  return function(dispatch){
+    firebase.auth().signOut().then(function(promise){
+      dispatch(signoutUser());
     });
   }
 }
-
 export const addEntry = text => {
   return function(dispatch) {
     var database = firebase.database()
