@@ -5,8 +5,7 @@ import EntryTextBox from '../components/EntryTextBox'
 const getActiveEntryText = (selected, entries) => {
   if(selected == -1)
     return ""
-  console.log(selected, entries)
-  var i = entries.filter(e => e.id === selected)[0]
+  let i = entries.filter(e => e.id === selected)[0]
   console.log(i.text)
   return i.text
 }

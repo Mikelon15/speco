@@ -4,7 +4,7 @@ let nextEntryId = 0
 
 /*------------------------------------------------------------------------------
 *
-*                             USER STATE ACTIONS
+*                             JOURNAL STATE ACTIONS
 *
 ------------------------------------------------------------------------------*/
 export const changeSelected = id => ({
@@ -23,6 +23,11 @@ export const editEntryText = text => ({
   text: text
 })
 
+/*------------------------------------------------------------------------------
+*
+*                             USER STATE ACTIONS
+*
+------------------------------------------------------------------------------*/
 export const setUserName = (name) => ({
   type: 'SET_USER_NAME',
   name
@@ -44,6 +49,10 @@ export const userAuthorized = () => ({
 
 export const signoutUser = () => ({
   type: 'USER_SIGN_OUT'
+});
+
+export const startSubscribing = () => ({
+  type: 'USER_START_SUBSCRIBING'
 });
 /*------------------------------------------------------------------------------
 *
