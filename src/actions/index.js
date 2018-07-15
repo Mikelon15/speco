@@ -95,7 +95,6 @@ export const logInWithEmailAndPassword = (email, password) => {
 }
 export const checkUserExists = () => {
     return function (dispatch) {
-        console.log("made it here");
         var user = firebase.auth().onAuthStateChanged(function(user){
           if(user){
             // user signed in
