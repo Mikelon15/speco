@@ -1,7 +1,5 @@
 import firebase from '../firebase'
 
-let nextEntryId = 0
-
 /*------------------------------------------------------------------------------
 *
 *                             JOURNAL STATE ACTIONS
@@ -12,10 +10,11 @@ export const changeSelected = id => ({
   id
 })
 
-export const addEntryHelper = name => ({
+export const addEntryHelper = (key, title, time) => ({
   type: 'ADD_ENTRY',
-  id: nextEntryId++,
-  name: name
+  key: key,
+  title: title,
+  time: time
 })
 
 export const editEntryText = text => ({
@@ -56,7 +55,7 @@ export const startSubscribing = () => ({
 });
 /*------------------------------------------------------------------------------
 *
-*                             FIREBASE ACTIONS
+*                             FIREBASE USER ACTIONS
 *
 ------------------------------------------------------------------------------*/
 
@@ -95,7 +94,7 @@ export const logInWithEmailAndPassword = (email, password) => {
 }
 export const checkUserExists = () => {
     return function (dispatch) {
-        var user = firebase.auth().onAuthStateChanged(function(user){
+        firebase.auth().onAuthStateChanged(function(user){
           if(user){
             // user signed in
             dispatch(setUserEmail(user.email));
@@ -116,10 +115,31 @@ export const signout = () => {
     });
   }
 }
-export const addEntry = text => {
+
+/*------------------------------------------------------------------------------
+*
+*                             FIREBASE ACTIONS
+*
+------------------------------------------------------------------------------*/
+
+export const addNewEntry = name => {
   return function(dispatch) {
-    var database = firebase.database()
-    database.ref('entries/').push({name: text})
-    dispatch(addEntryHelper(text))
+    // A post entry.
+    let entryData = {
+      title: name,
+      text: "",
+      time: Date()
+    };
+    let location = 'users/'+firebase.auth().currentUser.uid;
+    // Get a key for a new Entry.
+    let newEntryKey = firebase.database().ref(location).child('posts').push().key;
+
+    // Write the new entry data
+    let updates = {};
+    updates['/posts/' + newEntryKey] = entryData;
+
+    // dispatch action to change local data
+    dispatch(addEntryHelper(newEntryKey, entryData.title, entryData.time))
+    return firebase.database().ref(location).update(updates);
   }
 }

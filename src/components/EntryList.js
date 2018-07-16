@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import Entry from './Entry';
 import { ListGroup, Button } from 'react-bootstrap';
 
-const EntryList = ({ entries, selected, onClickAction, onSignout  }) => (
+const EntryList = ({ entries, onClickAction, onSignout  }) => (
   <div>
     <ListGroup> EntryList
         {
-          entries.map((entry, index) => (
-          <Entry key={index} {...entry} onClick={() => onClickAction(index)}/>
+          entries.map((title, key) => (
+          <Entry key={key} {...title} onClick={() => onClickAction(key)}/>
         ))}
     </ListGroup>
     <Button onClick={ e => {e.preventDefault(); onSignout()}}> Signout </Button>
@@ -18,11 +18,10 @@ const EntryList = ({ entries, selected, onClickAction, onSignout  }) => (
 EntryList.propTypes = {
   entries: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
+      key: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
-  selected: PropTypes.number.isRequired,
   onClickAction: PropTypes.func.isRequired
 }
 

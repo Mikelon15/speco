@@ -9,17 +9,18 @@ const journal = (state = initialState, action ) => {
     case 'ADD_ENTRY':
       return Object.assign({}, state, {
         entries : [ ...state.entries,  {
-          id: action.id,
-          name: action.name,
+          key: action.key,
+          title: action.title,
           text: "",
+          time: action.time,
           active: false
         }]
       });
     case 'SELECT_ENTRY':
       return Object.assign({}, state, {
-          selected: action.id,
+          selected: action.key,
           entries: state.entries.map(entry =>
-            (entry.id === action.id)
+            (entry.key === action.key)
             ? {...entry, active: true}
             : {...entry, active: false}
           )
@@ -27,7 +28,7 @@ const journal = (state = initialState, action ) => {
       case 'EDIT_ENTRY_TEXT':
           return Object.assign({}, state, {
               entries: state.entries.map(entry =>
-                (entry.id === state.selected)
+                (entry.key === state.selected)
                 ? {...entry, text: action.text}
                 : entry
               )

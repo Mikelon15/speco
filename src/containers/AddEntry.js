@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addEntry } from '../actions'
+import { addNewEntry } from '../actions'
 
 let AddTodo = ({ dispatch }) => {
   let input
@@ -13,7 +13,7 @@ let AddTodo = ({ dispatch }) => {
           if (!input.value.trim()) {
             return
           }
-          dispatch(addEntry(input.value))
+          dispatch(addNewEntry(input.value))
           input.value = ''
         }}
       >

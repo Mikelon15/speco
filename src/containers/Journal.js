@@ -4,8 +4,10 @@ import EntryList from '../components/EntryList';
 
 const mapStateToProps = state => {
   return {
-    selected: state.journal.selected,
-    entries:  state.journal.entries
+    entries: state.journal.entries.map(e => { return {
+      title: e.title,
+      key: e.key
+    }})
   }
 }
 

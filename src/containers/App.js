@@ -5,7 +5,7 @@ import Journal from './Journal';
 import EditEntry from './EditEntry';
 import UserAuth from './UserAuth';
 import { Col, Row } from 'react-bootstrap';
-import { checkUserExists, signout } from '../actions/index'
+import { checkUserExists } from '../actions/index'
 
 
 let app = (
