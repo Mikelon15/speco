@@ -1,11 +1,22 @@
 const initialState = {
   selected : "",
+  isFetching: "",
   entries : []
 };
 
 
 const journal = (state = initialState, action ) => {
   switch (action.type){
+    case 'LOAD_ENTRY':
+      return Object.assign({}, state, {
+        entries : [ ...state.entries,  {
+          key: action.key,
+          title: action.title,
+          text: action.text,
+          time: action.time,
+          active: false
+        }]
+      });
     case 'ADD_ENTRY':
       return Object.assign({}, state, {
         entries : [ ...state.entries,  {

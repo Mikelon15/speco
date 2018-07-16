@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Entry from './Entry';
-import { ListGroup, Button } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 
 const EntryList = ({ entries, selected, onClickAction, onSignout  }) => (
   <div>
@@ -15,7 +15,6 @@ const EntryList = ({ entries, selected, onClickAction, onSignout  }) => (
           })
         }
     </ListGroup>
-    <Button onClick={ e => {e.preventDefault(); onSignout()}}> Signout </Button>
   </div>
 )
 

@@ -17,6 +17,14 @@ export const addEntryHelper = (key, title, time) => ({
   time: time
 })
 
+export const loadEntry = (key, title, time, text) => ({
+  type: 'LOAD_ENTRY',
+  key: key,
+  title: title,
+  time: time,
+  text: text
+})
+
 export const editEntryTextHelper = text => ({
   type: 'EDIT_ENTRY_TEXT',
   text: text
@@ -40,6 +48,10 @@ export const setUserEmail = (email) => ({
 export const setUserUID = (uid) => ({
     type: 'SET_USER_UID',
     uid
+});
+
+export const toggleUserFetching = () => ({
+  type: 'TOGGLE_USER_FETCHING'
 });
 
 export const userAuthorized = () => ({
@@ -101,6 +113,8 @@ export const checkUserExists = () => {
             dispatch(setUserName(user.displayName));
             dispatch(setUserUID(user.uid));
             dispatch(userAuthorized());
+            dispatch(fetchInitialUserData());
+            dispatch(toggleUserFetching())
           }
           else{
             // user not signed in
@@ -143,8 +157,12 @@ export const addNewEntry = name => {
     return firebase.database().ref(location).update(updates);
   }
 }
+
 export const editEntryText = (text, key) => {
   return function(dispatch){
+    //if nothing is selected, return and do nothing
+    if (key === "") return;
+
     // update object
     let updates = {}
     updates['/posts/'+key+'/text'] = text;
@@ -152,5 +170,21 @@ export const editEntryText = (text, key) => {
     //update data
     dispatch(editEntryTextHelper(text))
     return getUserDatabase().update(updates);
+  }
+}
+
+export const fetchInitialUserData = () => {
+  return function (dispatch) {
+    firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/posts')
+    // .orderByKey()
+    .limitToLast(10)
+    .once('value', (snapshot) => {
+      let data = snapshot.val()
+      if(data != null){
+        Object.keys(data).forEach(key => {
+          dispatch(loadEntry(key, data[key].title, data[key].time, data[key].text ))
+        });
+      }
+    })
   }
 }

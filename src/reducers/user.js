@@ -2,6 +2,7 @@ const initialState = {
   name: null,
   email: null,
   uid: null,
+  isFetching: false,
   authorized: false,
   subscribing: false,
   error: null
@@ -21,6 +22,11 @@ const user = (state = initialState, action) => {
       return Object.assign({}, state, {
         uid: action.uid
     });
+    case 'TOGGLE_USER_FETCHING':
+        let fetch = !state.isFetching
+        return Object.assign({}, state, {
+            isFetching: fetch
+        });
     case 'USER_AUTHORIZED':
         return Object.assign({}, state, {
             authorizing: false,
@@ -35,7 +41,6 @@ const user = (state = initialState, action) => {
         error: action.code
       });
     case 'USER_SIGN_OUT':
-      console.log("SIGNING OUT")
       return Object.assign({}, state, {
         authorized: false
       });
