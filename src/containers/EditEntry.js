@@ -3,10 +3,9 @@ import { editEntryText } from '../actions/index'
 import EntryTextBox from '../components/EntryTextBox'
 
 const getActiveEntryText = (selected, entries) => {
-  if(selected === -1)
+  if(selected === "")
     return ""
-  let i = entries.filter(e => e.id === selected)[0]
-  console.log(i.text)
+  let i = entries.filter(e => e.key === selected)[0]
   return i.text
 }
 

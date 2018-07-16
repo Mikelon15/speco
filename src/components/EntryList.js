@@ -3,13 +3,17 @@ import PropTypes from 'prop-types';
 import Entry from './Entry';
 import { ListGroup, Button } from 'react-bootstrap';
 
-const EntryList = ({ entries, onClickAction, onSignout  }) => (
+const EntryList = ({ entries, selected, onClickAction, onSignout  }) => (
   <div>
     <ListGroup> EntryList
         {
-          entries.map((title, key) => (
-          <Entry key={key} {...title} onClick={() => onClickAction(key)}/>
-        ))}
+          entries.map((e, index) => {
+            //check if the entry is the selected one and mark as active
+            e.active = (e.key === selected)
+            //return the Entry Component
+            return (<Entry key={e.key} {...e} onClick={() => onClickAction(e.key)}/>)
+          })
+        }
     </ListGroup>
     <Button onClick={ e => {e.preventDefault(); onSignout()}}> Signout </Button>
   </div>
@@ -22,6 +26,7 @@ EntryList.propTypes = {
       title: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
+  selected: PropTypes.string.isRequired,
   onClickAction: PropTypes.func.isRequired
 }
 

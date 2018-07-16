@@ -5,9 +5,9 @@ import firebase from '../firebase'
 *                             JOURNAL STATE ACTIONS
 *
 ------------------------------------------------------------------------------*/
-export const changeSelected = id => ({
+export const changeSelected = key => ({
   type: 'SELECT_ENTRY',
-  id
+  key
 })
 
 export const addEntryHelper = (key, title, time) => ({
