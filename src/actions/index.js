@@ -17,7 +17,7 @@ export const addEntryHelper = (key, title, time) => ({
   time: time
 })
 
-export const editEntryText = text => ({
+export const editEntryTextHelper = text => ({
   type: 'EDIT_ENTRY_TEXT',
   text: text
 })
@@ -115,7 +115,7 @@ export const signout = () => {
     });
   }
 }
-
+const getUserDatabase = () => {return firebase.database().ref('users/'+firebase.auth().currentUser.uid)}
 /*------------------------------------------------------------------------------
 *
 *                             FIREBASE ACTIONS
@@ -141,5 +141,16 @@ export const addNewEntry = name => {
     // dispatch action to change local data
     dispatch(addEntryHelper(newEntryKey, entryData.title, entryData.time))
     return firebase.database().ref(location).update(updates);
+  }
+}
+export const editEntryText = (text, key) => {
+  return function(dispatch){
+    // update object
+    let updates = {}
+    updates['/posts/'+key+'/text'] = text;
+
+    //update data
+    dispatch(editEntryTextHelper(text))
+    return getUserDatabase().update(updates);
   }
 }
