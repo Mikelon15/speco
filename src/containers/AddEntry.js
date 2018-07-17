@@ -1,13 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNewEntry } from '../actions'
-
+import { addNewEntry, signout } from '../actions'
+import { FormGroup, FormControl, Button } from 'react-bootstrap'
 let AddTodo = ({ dispatch }) => {
   let input
 
   return (
     <div>
-      <form
+      <FormGroup
         onSubmit={e => {
           e.preventDefault()
           if (!input.value.trim()) {
@@ -17,15 +17,16 @@ let AddTodo = ({ dispatch }) => {
           input.value = ''
         }}
       >
-        <input
+        <FormControl
           ref={node => {
             input = node
           }}
         />
-        <button type="submit">
+        <Button type="submit">
           Add Entry
-        </button>
-      </form>
+        </Button>
+      </FormGroup>
+      <Button onClick={ e => {e.preventDefault(); dispatch(signout())}}> Signout </Button>
     </div>
   )
 }

@@ -1,46 +1,46 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import AddEntry from './AddEntry';
-import Journal from './Journal';
-import EditEntry from './EditEntry';
+// import EditEntry from './EditEntry';
+// import Journal from './Journal';
 import UserAuth from './UserAuth';
-import { Col, Row, Button } from 'react-bootstrap';
-import { checkUserExists, toggleUserFetching, signout } from '../actions/index'
+import { Col, Row } from 'react-bootstrap';
+import { checkUserExists } from '../actions/index'
+// toggleUserFetching
 
-
-const app = signout => (
+let app  = (
   <Row className="show-grid">
     <Col xs={6} md={4}>
-      <Journal />
       <AddEntry />
-      <Button onClick={ e => {e.preventDefault(); signout()}}> Signout </Button>
-    </Col>
-    <Col xs={6} md={4}>
-      <EditEntry />
-    </Col>
-    <Col xsHidden md={4}>
     </Col>
   </Row>
 )
+// <Journal />
+// <Col xs={6} md={4}>
+// <EditEntry />
+// </Col>
+// <Col xsHidden md={4}>
+// </Col>
 
 // connects to the store to check if there is a user session still active
 const ScreenApp = connect(
   (state) => ({
-    authorized: state.user.authorized,
-    isFetching: state.user.isFetching
+    authorized: state.user.authorized
    })
-)(({ authorized, isFetching, dispatch }) => {
+)(({ authorized, dispatch }) => {
   //Check if user state persisted from last session.
   // If the user state is persisted, then there is a
   // authToken in the local storage that can be used to log in
-  if(!isFetching && !authorized){
-    dispatch(toggleUserFetching())
-    dispatch(checkUserExists())
-  }
-  let signoutUser = dispatch(signout)
+
+  // console.log("AUTHORIZED CHANGED")
+  // if(!authorized){
+  //     console.log("CHECKING FOR USER")
+  //     dispatch(checkUserExists())
+  // }
+
   // if the authToken exists, render main app,
   // else render UserAuth to get token
-  return (authorized) ? app(signoutUser) : (<UserAuth />)
+  return (authorized) ? app : (<UserAuth />)
 });
 
 class App extends React.Component{

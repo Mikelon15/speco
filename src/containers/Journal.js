@@ -1,5 +1,5 @@
 import {connect } from 'react-redux';
-import { changeSelected } from '../actions';
+import { changeSelected, signout } from '../actions';
 import EntryList from '../components/EntryList';
 
 const mapStateToProps = state => {
@@ -17,6 +17,9 @@ const mapDispatchToProps = dispatch => {
   return {
     onClickAction : key => {
       dispatch(changeSelected(key))
+    },
+    signoutUser: () => {
+      dispatch(signout())
     }
   }
 };

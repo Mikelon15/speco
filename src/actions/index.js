@@ -95,11 +95,11 @@ export const logInWithEmailAndPassword = (email, password) => {
   return function(dispatch, getState) {
       firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
         firebase.auth().signInWithEmailAndPassword(email, password).then(function(result) {
-          console.log(result);
+          // console.log("USER LOGGED IN");
+          dispatch(userAuthorized());
           dispatch(setUserEmail(result.email));
           dispatch(setUserName(result.displayName));
           dispatch(setUserUID(result.uid));
-          dispatch(userAuthorized());
         });
       })
   }
@@ -109,15 +109,16 @@ export const checkUserExists = () => {
         firebase.auth().onAuthStateChanged(function(user){
           if(user){
             // user signed in
+            dispatch(userAuthorized());
             dispatch(setUserEmail(user.email));
             dispatch(setUserName(user.displayName));
             dispatch(setUserUID(user.uid));
-            dispatch(userAuthorized());
-            dispatch(fetchInitialUserData());
-            dispatch(toggleUserFetching())
+            // dispatch(fetchInitialUserData());
+            // dispatch(toggleUserFetching())
           }
           else{
             // user not signed in
+            console.log("USER DOES NOT EXIST")
           }
         })
     }
@@ -177,11 +178,12 @@ export const fetchInitialUserData = () => {
   return function (dispatch) {
     firebase.database().ref('users/'+firebase.auth().currentUser.uid+'/posts')
     // .orderByKey()
-    .limitToLast(10)
+    .limitToLast(3)
     .once('value', (snapshot) => {
       let data = snapshot.val()
       if(data != null){
-        Object.keys(data).forEach(key => {
+        let list = Object.keys(data).reverse();
+        list.forEach(key => {
           dispatch(loadEntry(key, data[key].title, data[key].time, data[key].text ))
         });
       }
