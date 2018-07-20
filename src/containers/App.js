@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import Journal from './Journal';
 // import UserAuth from './UserAuth';
 import LogIn from '../components/login/LoginPage';
-import { Col, Row } from 'react-bootstrap';
-import { checkUserExists } from '../actions/index'
+import { Col, Row, Button } from 'react-bootstrap';
+import { checkUserExists, signout } from '../actions/index'
 // toggleUserFetching
 
 let ScreenApp  = (
@@ -56,17 +56,19 @@ const mapDispatchToProps = dispatch => {
     // onChangeAction : e => {
       // dispatch(editEntryText(e.target.value, activeEntryKey))
     // }
+    signOut: () => {dispatch(signout())}
   }
 }
 
 class App extends React.Component{
   render(){
+    let { auth, signOut } = this.props;
     let list =  (
       <div> HAS USER
       <Journal />
+      <Button onClick={ e => {e.preventDefault(); signOut()}}> Signout </Button>
       </div>
     );
-    let { auth } = this.props;
     let Appi = (auth) ? list : <LogIn />
     console.log(auth);
     return (

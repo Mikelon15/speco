@@ -123,10 +123,11 @@ export const signInWithEmailAndPassword = (email, password) => {
   return function(dispatch) {
       return firebaseApi.signInWithEmailAndPassword(email, password).then(user => {
             console.log("USER LOGGED IN");
-            dispatch(userAuthorized());
             dispatch(setUserEmail(user.email));
             dispatch(setUserName(user.displayName));
             dispatch(setUserUID(user.uid));
+            dispatch(userAuthorized());
+            dispatch(fetchInitialUserData());
             // dispatch(toggleUserFetching());
       });
   }
@@ -169,13 +170,13 @@ export const authLoggedIn = (userUID) => {
 //         })
 //     }
 // };
-// export const signout = () => {
-//   return function(dispatch){
-//     firebase.auth().signOut().then(function(promise){
-//       dispatch(signoutUser());
-//     });
-//   }
-// }
+export const signout = () => {
+  return function(dispatch){
+    firebaseApi.authSignOut().then(function(promise){
+      dispatch(signoutUser());
+    });
+  }
+}
 // const getUserDatabase = () => {return firebase.database().ref('users/'+firebase.auth().currentUser.uid)}
 /*------------------------------------------------------------------------------
 *
@@ -222,9 +223,9 @@ export const authLoggedIn = (userUID) => {
 
 export const fetchInitialUserData = () => {
   return function (dispatch, getState) {
-    // console.log(getState().user.uid)
-    // '+getState().user.uid+
-    firebaseApi.GetValueByPathOnce('users/posts').then(snapshot => {
+    console.log("USER ID", getState().user.uid)
+
+    firebaseApi.GetValueByPathOnce('users/'+getState().user.uid+'/posts').then(snapshot => {
       let data = snapshot.val()
       console.log(data)
       if(data != null){
