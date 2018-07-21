@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { createStore, applyMiddleware } from 'redux';
+import registerServiceWorker from './registerServiceWorker';
 
 // api
 import FirebaseApi from './api/firebase';
@@ -18,12 +19,8 @@ import App from './containers/App'
 // actions
 import { authInitialized } from './actions/index'
 
-// stores
-
 // styles
 
-// import App from './containers/App';
-import registerServiceWorker from './registerServiceWorker';
 
 const loggerMiddleware = createLogger()
 
@@ -38,8 +35,8 @@ const store = createStore(
 
 
 FirebaseApi.initAuth().then(user => {
+  // dispatch
   store.dispatch(authInitialized(user))
-  // store.dispatch
   render(
     <Provider store = {store}>
       <App />
