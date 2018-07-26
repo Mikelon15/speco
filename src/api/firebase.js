@@ -24,12 +24,14 @@ class FirebaseApi {
   }
 
   static signInWithEmailAndPassword(email, password) {
-    return firebase.auth().signInWithEmailAndPassword(email, password).then(user => {
-      return user;
-    });
+    return new Promise((resolve, reject) => {
+      firebase.auth().signInWithEmailAndPassword(email, password).then(user => {
+        return user;
+      });
+    })
   }
-  static getFirebaseAuth(){
-    return firebase.auth();
+  static getFirebase(){
+    return firebase;
   }
 
   static authSignOut(){
@@ -51,7 +53,19 @@ class FirebaseApi {
     });
   }
 
-  static GetValueByPathOnce(path) {
+  static getUserID(){
+    return firebase.auth().currentUser.uid;
+  }
+
+  static createNewKeyInPath(path) {
+    return firebase
+      .database()
+      .ref(path)
+      .push()
+      .key
+  }
+
+  static getValueByPathOnce(path) {
     return firebase
       .database()
       .ref(path)
@@ -59,7 +73,7 @@ class FirebaseApi {
       .once('value');
   }
 
-  static GetChildAddedByKeyOnce(path, key) {
+  static getChildAddedByKeyOnce(path, key) {
     return firebase
       .database()
       .ref(path)
@@ -75,6 +89,12 @@ class FirebaseApi {
       .ref(path)
       .set(value);
 
+  }
+  static updateDatabaseByPath(path, update){
+    return firebase
+      .database()
+      .ref(path)
+      .update(update)
   }
 }
 

@@ -6,6 +6,7 @@ import Journal from './Journal';
 import UserAuth from './UserAuth';
 import { Col, Row, Button } from 'react-bootstrap';
 import { signout, resetEntryListHelper } from '../actions/index'
+import AddJournal from './AddJournal'
 
 const mapStateToProps = state => {
   return {
@@ -33,14 +34,15 @@ class App extends React.Component{
       <div> SPECO
         <Row className="show-grid">
           <Col xs={6} md={4}>
+            <AddJournal />
             <Journal />
+            <Button onClick={ e => {e.preventDefault(); signOut()}}> Signout </Button>
           </Col>
           <Col xs={6} md={4}>
           </Col>
           <Col xsHidden md={4}>
           </Col>
         </Row>
-        <Button onClick={ e => {e.preventDefault(); signOut()}}> Signout </Button>
       </div>
     );
     let Appi = (auth) ? list : <UserAuth />

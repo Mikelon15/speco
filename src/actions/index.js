@@ -128,7 +128,7 @@ export const signUpWithEmailAndPassword = (email, password, username) => {
 
 export const signInWithEmailAndPassword = (user) => {
   return function(dispatch) {
-    firebaseApi.getFirebaseAuth().signInWithEmailAndPassword(user.email, user.password)
+    firebaseApi.signInWithEmailAndPassword(user.email, user.password)
     .then(val =>  {
         dispatch(authLoggedIn(val.user));
       }).catch(error => {
@@ -159,9 +159,9 @@ export const signout = () => {
 *                             FIREBASE JOURNAL ACTIONS
 *
 ------------------------------------------------------------------------------*/
-export const fetchInitialUserData = () => {
+export const fetchUserJournals = () => {
   return function (dispatch, getState) {
-    firebaseApi.GetValueByPathOnce('users/'+getState().user.uid+'/posts').then(snapshot => {
+    firebaseApi.getValueByPathOnce('users/'+getState().user.uid+'/journals').then(snapshot => {
       let data = snapshot.val()
       if(data != null){
         let list = Object.keys(data).reverse();
@@ -170,35 +170,31 @@ export const fetchInitialUserData = () => {
         });
       }
     })
-    // .orderByKey()
-    // .limitToLast(3)
-    // .once('value', (snapshot) => {
-      // }
-    // })
   }
 }
 
-// export const addNewEntry = name => {
-//   return function(dispatch) {
-//     // A post entry.
-//     let entryData = {
-//       title: name,
-//       text: "",
-//       time: Date()
-//     };
-//     let location = 'users/'+firebase.auth().currentUser.uid;
-//     // Get a key for a new Entry.
-//     let newEntryKey = firebase.database().ref(location).child('posts').push().key;
-//
-//     // Write the new entry data
-//     let updates = {};
-//     updates['/posts/' + newEntryKey] = entryData;
-//
-//     // dispatch action to change local data
-//     dispatch(addEntryHelper(newEntryKey, entryData.title, entryData.time))
-//     return firebase.database().ref(location).update(updates);
-//   }
-// }
+export const addNewJournal = name => {
+  return function(dispatch) {
+    // A post entry.
+    let journalData = {
+      title: name,
+      time: Date()
+    };
+    //get user location
+    let location = 'users/'+firebaseApi.getUserID()+'/journals/';
+
+    // Get a key for a new Entry.
+    let newEntryKey = firebaseApi.createNewKeyInPath(location);
+
+    // Write the new entry data
+    let updates = {};
+    updates[newEntryKey] = journalData;
+
+    // dispatch action to change local data
+    dispatch(addEntryHelper(newEntryKey, journalData.title, journalData.time))
+    return firebaseApi.updateDatabaseByPath(location, updates);
+  }
+}
 
 // export const editEntryText = (text, key) => {
 //   return function(dispatch){

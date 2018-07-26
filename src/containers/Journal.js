@@ -1,5 +1,5 @@
 import {connect } from 'react-redux';
-import { fetchInitialUserData } from '../actions';
+import { fetchUserJournals } from '../actions';
 import EntryList from '../components/EntryList';
 
 const mapStateToProps = state => {
@@ -14,13 +14,13 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  dispatch(fetchInitialUserData())
+  dispatch(fetchUserJournals())
   return {
     // onClickAction : key => {
     //   dispatch(changeSelected(key))
     // }
     // fetchJournalEntries: () => {
-    //   dispatch(fetchInitialUserData())
+    //   dispatch(fetchUserJournals())
     // }
   }
 };

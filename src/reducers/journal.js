@@ -1,11 +1,46 @@
 const initialState = {
   selected : "",
-  isFetching: "",
-  entries : []
+  fetched: false,
+  fetching: false,
+  journals: [],
+  entries : [] //to remove and add in a different reducer
 };
 
 const journal = (state = initialState, action ) => {
   switch (action.type){
+    case 'JOURNAL_SELECT':
+      return Object.assign({}, state, {
+        selected: action.key,
+        journals: state.entries.map(journal =>
+          (journal.key === action.key)
+          ? {...journal, active: true}
+          : {...journal, active: false}
+        )
+      });
+    case 'JOURNAL_TOGGLE_FETCHED':
+      return Object.assign({}, state, {
+        fetched: !state.fetched
+      });
+    case 'JOURNAL_TOGGLE_FETCHING':
+      return Object.assign({}, state, {
+        fetcheding: !state.fetcheding
+      });
+    case 'JOURNAL_LOAD':
+      return Object.assign({}, state, {
+        entries : [ ...state.entries,  {
+          key: action.key,
+          title: action.title,
+          time: action.time,
+          active: false
+        }]
+      });
+    case 'JOURNAL_RESET_LIST':
+      return Object.assign({}, state, {
+        journals: []
+      });
+    case 'JOURNAL_EDIT':
+      return Object.assign({}, state, {});
+
     case 'ADD_ENTRY':
     return Object.assign({}, state, {
       entries : [ ...state.entries,  {
