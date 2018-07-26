@@ -23,10 +23,13 @@ class FirebaseApi {
     return firebase.auth().createUserWithEmailAndPassword(user.email, user.password);
   }
 
-  static signInWithEmailAndPassword(user) {
-    return firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(()=>{
-      return firebase.auth().signInWithEmailAndPassword(user.email, user.password);
-    })
+  static signInWithEmailAndPassword(email, password) {
+    return firebase.auth().signInWithEmailAndPassword(email, password).then(user => {
+      return user;
+    });
+  }
+  static getFirebaseAuth(){
+    return firebase.auth();
   }
 
   static authSignOut(){

@@ -3,9 +3,6 @@ const initialState = {
   email: null,
   uid: null,
   fetching: false,
-  fetched: false,
-  authorized: false,
-  subscribing: false,
   error: null
 };
 
@@ -28,22 +25,9 @@ const user = (state = initialState, action) => {
         return Object.assign({}, state, {
             fetching: fetch
         });
-    case 'TOGGLE_USER_FETCHED':
-        return Object.assign({}, state, {
-            fetched: !state.fetched
-        });
-    case 'USER_AUTHORIZED':
-        return Object.assign({}, state, {
-            authorizing: false,
-            authorized: true
-        });
-    case 'USER_START_SUBSCRIBING':
-      return Object.assign({}, state, {
-        subscribing: true
-      });
     case 'USER_ERROR_MESSAGE':
       return Object.assign({}, state, {
-        error: action.code
+        error: action.error
       });
     case 'USER_SIGN_OUT':
       return initialState;

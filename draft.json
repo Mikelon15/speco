@@ -1,0 +1,72 @@
+{
+  "components": {
+    "App": {
+      "JournalUI": {
+        "Logo": {},
+        "createNew": {
+          "newJournal": "",
+          "newEntry": ""
+        },
+        "Navigation": {
+          "activeJournal": "",
+          "activeEntry": ""
+        },
+        "componentList": {
+          "list": "",
+          "selected": "",
+          "onClickAction": "",
+          "fetchList": ""
+        }
+      },
+      "EntryTextBox": {},
+      "Profile": {
+        "signout": "",
+        "background": { "backgroundList": []}
+      }
+    },
+    "UserAuth": {
+      "LogIn": {},
+      "SignUp": {}
+    }
+  },
+  "reducers":{
+    "auth": {
+      "initialized": false,
+      "isLogged": false,
+      "isSubscribing": false,
+      "error": ""
+    },
+    "journal": {
+      "entry":{
+        "key": "",
+        "title": "",
+        "text": "",
+        "time": "",
+        "active": false
+      },
+      "journal":{
+        "key": "",
+        "title": "",
+        "text": "",
+        "time": "",
+        "active": false
+      },
+      "entries": [],
+      "journals": [],
+      "currentView": "EITHER JOURNALS OR ENTRIES",
+      "isFetchingJournal": false,
+      "isFetchingEntries": false,
+      "fetchedJournal": false,
+      "fetchedEntries": false,
+      "selectedEntry": "",
+      "selectedJournal": "",
+      "error": ""
+    },
+    "user": {
+      "name": "",
+      "uid": "",
+      "email": "",
+      "error": ""
+    }
+  }
+}

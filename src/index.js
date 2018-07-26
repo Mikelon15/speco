@@ -20,8 +20,6 @@ import App from './containers/App'
 import { authInitialized } from './actions/index'
 
 // styles
-
-
 const loggerMiddleware = createLogger()
 
 // store intiialization

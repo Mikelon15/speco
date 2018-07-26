@@ -33,16 +33,7 @@ export class RegistrationPage extends React.Component {
 
   createUser(event) {
     event.preventDefault();
-
-    this.setState({saving: true});
-
     this.props.actions.signInWithEmailAndPassword(this.state.user)
-      // .then(user => toastr.success('You are logged in'))
-      .catch(error => {
-        console.log('ERROR')
-        // toastr.error(error.message);
-        // this.setState({saving: false});
-      });
   }
 
   render() {

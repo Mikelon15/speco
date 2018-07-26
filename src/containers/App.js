@@ -3,51 +3,14 @@ import { connect } from 'react-redux';
 // import AddEntry from './AddEntry';
 // import EditEntry from './EditEntry';
 import Journal from './Journal';
-// import UserAuth from './UserAuth';
-import LogIn from '../components/login/LoginPage';
+import UserAuth from './UserAuth';
 import { Col, Row, Button } from 'react-bootstrap';
-import { checkUserExists, signout } from '../actions/index'
-// toggleUserFetching
-
-let ScreenApp  = (
-  <Row className="show-grid">
-    <Col xs={6} md={4}>
-    </Col>
-    <Col xs={6} md={4}>
-    </Col>
-    <Col xsHidden md={4}>
-    </Col>
-  </Row>
-)
-
-// <EditEntry />
-// <AddEntry />
-// <Journal />
-// connects to the store to check if there is a user session still active
-// const ScreenApp = connect(
-//   (state) => ({
-//     authorized: state.user.authorized
-//    })
-// )(({ authorized, dispatch }) => {
-//   //Check if user state persisted from last session.
-//   // If the user state is persisted, then there is a
-//   // authToken in the local storage that can be used to log in
-//
-//   // console.log("AUTHORIZED CHANGED")
-//   if(!authorized){
-//       console.log("CHECKING FOR USER")
-//       dispatch(checkUserExists())
-//   }
-//
-//   // if the authToken exists, render main app,
-//   // else render UserAuth to get token
-//   return (authorized) ? app : (<UserAuth />)
-// });
+import { signout, resetEntryListHelper } from '../actions/index'
 
 const mapStateToProps = state => {
   return {
     // finds the active entry to update text changes
-    auth: state.user.authorized
+    auth: state.auth.logged,
   }
 }
 const mapDispatchToProps = dispatch => {
@@ -56,7 +19,10 @@ const mapDispatchToProps = dispatch => {
     // onChangeAction : e => {
       // dispatch(editEntryText(e.target.value, activeEntryKey))
     // }
-    signOut: () => {dispatch(signout())}
+    signOut: () => {
+      dispatch(resetEntryListHelper())
+      dispatch(signout())
+    }
   }
 }
 
@@ -64,13 +30,20 @@ class App extends React.Component{
   render(){
     let { auth, signOut } = this.props;
     let list =  (
-      <div> HAS USER
-      <Journal />
-      <Button onClick={ e => {e.preventDefault(); signOut()}}> Signout </Button>
+      <div> SPECO
+        <Row className="show-grid">
+          <Col xs={6} md={4}>
+            <Journal />
+          </Col>
+          <Col xs={6} md={4}>
+          </Col>
+          <Col xsHidden md={4}>
+          </Col>
+        </Row>
+        <Button onClick={ e => {e.preventDefault(); signOut()}}> Signout </Button>
       </div>
     );
-    let Appi = (auth) ? list : <LogIn />
-    console.log(auth);
+    let Appi = (auth) ? list : <UserAuth />
     return (
       <div>
         {Appi}

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import LogIn from '../components/LogIn';
+import LogIn from '../components/login/LoginPage';
 import SignUp from '../components/SignUp';
-import { logInWithEmailAndPassword, signUpWithEmailAndPassword, startSubscribing } from '../actions/index'
+import { signInWithEmailAndPassword, signUpWithEmailAndPassword, toggleUserSubscribing } from '../actions/index'
 
 const mapStateToProps = state => {
   return {
-    subscribing: state.user.subscribing
+    subscribing: state.auth.subscribing,
+    error: state.auth.error
   }
 }
 
@@ -15,21 +16,36 @@ const mapDispatchToProps = dispatch => {
     onSignUp: e => {
         dispatch(signUpWithEmailAndPassword(e.email, e.password, e.username))
     },
-    onlogIn: e => {
-        dispatch(logInWithEmailAndPassword(e.email, e.password))
+    onSignIn: e => {
+        dispatch(signInWithEmailAndPassword(e.email, e.password))
     },
-    startSubscribing: () => {
-      dispatch(startSubscribing())
+    toggleUserSubscribing: () => {
+      dispatch(toggleUserSubscribing())
     }
   }
 }
 
 class UserAuth extends Component{
   render() {
-    const authType = (this.props.subscribing) ? <SignUp onSubmit={this.props.onSignUp} /> : <LogIn onSubmit={this.props.onlogIn} onRegister={this.props.startSubscribing}/>;
+    let errorMsg = (this.props.error) ? this.props.error.toString() : ""
+    const authType = (this.props.subscribing) ?
+      (
+        <div>
+          {errorMsg}
+          <SignUp onSubmit={this.props.onSignUp} />
+          Already have an account? <a href="" onClick={e=>{e.preventDefault(); this.props.toggleUserSubscribing()}}> Sign In </a>
+        </div>
+      ) :
+      (
+        <div>
+          {errorMsg}
+          <LogIn onSubmit={this.props.onSignIn} />;
+          Dont have an account? <a href="" onClick={e=>{e.preventDefault(); this.props.toggleUserSubscribing()}}> Sign Up </a>
+        </div>
+      )
     return(
       <div>
-      {authType}
+        {authType}
       </div>
     )
   }

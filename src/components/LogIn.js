@@ -10,7 +10,7 @@ function FieldGroup({ id, label, help, ...props }) {
   );
 }
 
-let LogIn = ({ onSubmit, onRegister }) => {
+let LogIn = ({ onSubmit }) => {
   let input = {email: "", password: ""}
   return (
     <div>
@@ -32,7 +32,6 @@ let LogIn = ({ onSubmit, onRegister }) => {
         placeholder="password"
         onChange = { e => {input.password = e.target.value}}
       />
-      <h5> Dont have an account? <a href="" onClick={e=>{e.preventDefault(); onRegister(); }} > Sign up </a> </h5>
       <Button type="submit"> Submit </Button>
       </form>
     </div>

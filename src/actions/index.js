@@ -2,51 +2,49 @@ import firebaseApi from '../api/firebase'
 
 /*------------------------------------------------------------------------------
 *
-*                             JOURNAL STATE ACTIONS
-*
-------------------------------------------------------------------------------*/
-export const changeSelected = key => ({
-  type: 'SELECT_ENTRY',
-  key
-})
-
-export const addEntryHelper = (key, title, time) => ({
-  type: 'ADD_ENTRY',
-  key: key,
-  title: title,
-  time: time
-})
-
-export const loadEntry = (key, title, time, text) => ({
-  type: 'LOAD_ENTRY',
-  key: key,
-  title: title,
-  time: time,
-  text: text
-})
-
-export const editEntryTextHelper = text => ({
-  type: 'EDIT_ENTRY_TEXT',
-  text: text
-})
-
-/*------------------------------------------------------------------------------
-*
-*                             USER STATE ACTIONS
+*                             AUTH STATE ACTIONS
 *
 ------------------------------------------------------------------------------*/
 export const authInitializedDone = () => ({
   type: 'AUTH_INITIALIZATION_DONE'
 });
 
-export const authLoggedInSuccess = (userUID) => ({
-  type: 'AUTH_LOGGED_IN_SUCCESS', userUID
+export const authLoggedInSuccess = () => ({
+  type: 'AUTH_LOGGED_IN_SUCCESSFUL'
 });
 
 export const authLoggedOutSuccess = () => ({
-  type: 'AUTH_LOGGED_OUT_SUCCESS'
+  type: 'AUTH_LOGGED_OUT_SUCCESSFUL'
 });
 
+export const signoutUser = () => ({
+  type: 'AUTH_LOGGED_OUT_SUCCESSFUL'
+});
+
+export const authError = (error) => ({
+  type: 'AUTH_ERROR_MESSAGE',
+  error
+});
+
+export const toggleUserSubscribing = () => ({
+  type: 'AUTH_TOGGLE_SUBSCRIBING'
+})
+
+export const authInitialized = (user) => {
+  return (dispatch) => {
+    dispatch(authInitializedDone());
+    if (user) {
+      dispatch(authLoggedIn(user));
+    } else {
+      dispatch(authLoggedOutSuccess());
+    }
+  };
+}
+/*------------------------------------------------------------------------------
+*
+*                             USER STATE ACTIONS
+*
+------------------------------------------------------------------------------*/
 export const setUserName = (name) => ({
   type: 'SET_USER_NAME',
   name
@@ -66,110 +64,88 @@ export const toggleUserFetching = () => ({
   type: 'TOGGLE_USER_FETCHING'
 });
 
-export const userAuthorized = () => ({
-    type: 'USER_AUTHORIZED'
-});
+export const userErrorMessage = (error) => ({
+  type: 'USER_ERROR_MESSAGE',
+  error
+})
 
-export const signoutUser = () => ({
-  type: 'USER_SIGN_OUT'
-});
-
-export const startSubscribing = () => ({
-  type: 'USER_START_SUBSCRIBING'
-});
-
-export const authInitialized = (user) => {
-  return (dispatch) => {
-    console.log(user)
-    dispatch(authInitializedDone());
-    if (user) {
-      dispatch(authLoggedIn(user.uid));
-      dispatch(setUserEmail(user.email));
-      dispatch(setUserName(user.displayName));
-      dispatch(setUserUID(user.uid));
-      dispatch(fetchInitialUserData());
-    } else {
-      dispatch(authLoggedOutSuccess());
-    }
-  };
-}
 /*------------------------------------------------------------------------------
 *
-*                             FIREBASE USER ACTIONS
+*                             JOURNAL STATE ACTIONS
 *
 ------------------------------------------------------------------------------*/
+export const addEntryHelper = (key, title, time) => ({
+  type: 'ADD_ENTRY',
+  key: key,
+  title: title,
+  time: time
+})
 
-// export const signUpWithEmailAndPassword = (email, password, username) => {
-//   return function(dispatch, getState) {
-//     console.log(email);
-//     firebase.auth().createUserWithEmailAndPassword(email, password).then((obj)=>{
-//       //updates user's profile username
-//       obj.user.updateProfile({displayName: username})
-//     })
-//     .catch(function(error) {
-//       // Handle Errors here.
-//       var errorCode = error.code;
-//       var errorMessage = error.message;
-//       if (errorCode === 'auth/weak-password') {
-//         alert('The password is too weak.');
-//       } else {
-//         alert(errorMessage);
-//       }
-//       console.log(error);
-//     });
-//   }
-// }
-export const signInWithEmailAndPassword = (email, password) => {
-  return function(dispatch) {
-      return firebaseApi.signInWithEmailAndPassword(email, password).then(user => {
-            console.log("USER LOGGED IN");
-            dispatch(setUserEmail(user.email));
-            dispatch(setUserName(user.displayName));
-            dispatch(setUserUID(user.uid));
-            dispatch(userAuthorized());
-            dispatch(fetchInitialUserData());
-            // dispatch(toggleUserFetching());
-      });
+
+export const editEntryTextHelper = text => ({
+  type: 'EDIT_ENTRY_TEXT',
+  text: text
+})
+
+export const loadEntryHelper = (key, title, time, text) => ({
+  type: 'LOAD_ENTRY',
+  key: key,
+  title: title,
+  time: time,
+  text: text
+})
+
+export const resetEntryListHelper = () => ({
+  type: 'RESET_ENTRY_LIST'
+})
+
+export const selectEntryHelper = key => ({
+  type: 'SELECT_ENTRY',
+  key
+})
+
+/*------------------------------------------------------------------------------
+*
+*                             FIREBASE AUTH ACTIONS
+*
+------------------------------------------------------------------------------*/
+export const signUpWithEmailAndPassword = (email, password, username) => {
+  return function(dispatch, getState) {
+    let user = { email: email, password: password }
+    firebaseApi.createUserWithEmailAndPassword(user).then((obj)=>{
+      //updates user's profile username
+      obj.user.updateProfile({displayName: username})
+      //dipatch functions to let app know user is signed in
+      dispatch(authLoggedIn(obj.user))
+      dispatch(toggleUserSubscribing())
+    })
+    .catch((error) => {
+      // Handle Errors here
+      dispatch(authError(error))
+    });
   }
 }
-export const authLoggedIn = (userUID) => {
+
+export const signInWithEmailAndPassword = (user) => {
+  return function(dispatch) {
+    firebaseApi.getFirebaseAuth().signInWithEmailAndPassword(user.email, user.password)
+    .then(val =>  {
+        dispatch(authLoggedIn(val.user));
+      }).catch(error => {
+        dispatch(authError(error))
+      });
+    }
+}
+
+export const authLoggedIn = (user) => {
   return (dispatch) => {
-    dispatch(authLoggedInSuccess(userUID));
-    dispatch(userAuthorized());
-    // dispatch(beginAjaxCall());
-    firebaseApi.GetChildAddedByKeyOnce('/users', userUID)
-      .then(
-        user => {
-          // dispatch(userLoadedSuccess(user.val()));
-          // dispatch(push('/'));
-        })
-      // .catch(
-      //   error => {
-      //     dispatch(beginAjaxCall());
-      //     // @TODO better error handling
-      //     throw(error);
-      //   });
+    dispatch(setUserUID(user.uid));
+    dispatch(setUserEmail(user.email));
+    dispatch(setUserName(user.displayName));
+    dispatch(authLoggedInSuccess());
   };
 }
-// export const checkUserExists = () => {
-//     return function (dispatch) {
-//         firebase.auth().onAuthStateChanged(function(user){
-//           if(user){
-//             // user signed in
-//             dispatch(userAuthorized());
-//             dispatch(setUserEmail(user.email));
-//             dispatch(setUserName(user.displayName));
-//             dispatch(setUserUID(user.uid));
-//             dispatch(fetchInitialUserData());
-//             dispatch(toggleUserFetching())
-//           }
-//           else{
-//             // user not signed in
-//             console.log("USER DOES NOT EXIST")
-//           }
-//         })
-//     }
-// };
+
 export const signout = () => {
   return function(dispatch){
     firebaseApi.authSignOut().then(function(promise){
@@ -177,13 +153,31 @@ export const signout = () => {
     });
   }
 }
-// const getUserDatabase = () => {return firebase.database().ref('users/'+firebase.auth().currentUser.uid)}
+
 /*------------------------------------------------------------------------------
 *
-*                             FIREBASE ACTIONS
+*                             FIREBASE JOURNAL ACTIONS
 *
 ------------------------------------------------------------------------------*/
-//
+export const fetchInitialUserData = () => {
+  return function (dispatch, getState) {
+    firebaseApi.GetValueByPathOnce('users/'+getState().user.uid+'/posts').then(snapshot => {
+      let data = snapshot.val()
+      if(data != null){
+        let list = Object.keys(data).reverse();
+        list.forEach(key => {
+          dispatch(loadEntryHelper(key, data[key].title, data[key].time, data[key].text ))
+        });
+      }
+    })
+    // .orderByKey()
+    // .limitToLast(3)
+    // .once('value', (snapshot) => {
+      // }
+    // })
+  }
+}
+
 // export const addNewEntry = name => {
 //   return function(dispatch) {
 //     // A post entry.
@@ -220,25 +214,3 @@ export const signout = () => {
 //     return getUserDatabase().update(updates);
 //   }
 // }
-
-export const fetchInitialUserData = () => {
-  return function (dispatch, getState) {
-    console.log("USER ID", getState().user.uid)
-
-    firebaseApi.GetValueByPathOnce('users/'+getState().user.uid+'/posts').then(snapshot => {
-      let data = snapshot.val()
-      console.log(data)
-      if(data != null){
-        let list = Object.keys(data).reverse();
-        list.forEach(key => {
-          dispatch(loadEntry(key, data[key].title, data[key].time, data[key].text ))
-        });
-      }
-    })
-    // .orderByKey()
-    // .limitToLast(3)
-    // .once('value', (snapshot) => {
-      // }
-    // })
-  }
-}
