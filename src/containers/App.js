@@ -42,10 +42,11 @@ class App extends React.Component{
   render(){
     let { auth, signOut } = this.props;
     let list =  (
-      <div> SPECO
+      <div>
+        <h1>SPECO</h1>
+
         <Row id="app" className="show-grid">
           <Col xs={6} md={4}>
-            Shelf
             <Journal />
             <Button onClick={ e => {e.preventDefault(); signOut()}}> Signout </Button>
           </Col>
