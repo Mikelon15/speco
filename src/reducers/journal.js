@@ -20,7 +20,8 @@ const journal = (state = initialState, action ) => {
       });
     case 'JOURNAL_RESET_LIST':
       return Object.assign({}, state, {
-        journals: []
+        journals: [],
+        selected: ""
       });
     case 'JOURNAL_SELECT':
       return Object.assign({}, state, {

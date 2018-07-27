@@ -8,13 +8,13 @@ const entries = (state = initialState, action) => {
   switch (action.type) {
       case 'ENTRY_ADD':
         return Object.assign({}, state, {
-          entries : [ ...state.entries,  {
+          entries : [{
             key: action.key,
             title: action.title,
             text: "",
             time: action.time,
             active: false
-          }]
+          }, ...state.entries]
         });
       case 'ENTRY_DESELECT':
         return Object.assign({}, state, {
@@ -38,17 +38,18 @@ const entries = (state = initialState, action) => {
         })
       case 'ENTRY_LOAD':
         return Object.assign({}, state, {
-          entries : [ ...state.entries,  {
+          entries : [{
             title: action.title,
             key: action.key,
             text: action.text,
             time: action.time,
             active: false
-          }]
+          }, ...state.entries]
         });
       case 'ENTRY_RESET_LIST':
         return Object.assign({}, state, {
-            entries: []
+            entries: [],
+            selected: ""
         });
       case 'ENTRY_SELECT':
         return Object.assign({}, state, {

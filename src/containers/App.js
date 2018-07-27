@@ -22,7 +22,7 @@ const mapStateToProps = state => {
     // finds the active entry to update text changes
     auth: state.auth.logged,
     entry: state.entries.selected,
-    text:getActiveEntryText(state.entries.selected, state.entries.entries)
+    text: getActiveEntryText(state.entries.selected, state.entries.entries)
   }
 }
 const mapDispatchToProps = dispatch => {

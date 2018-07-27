@@ -212,6 +212,7 @@ export const signout = () => {
     firebaseApi.authSignOut().then(function(promise){
       dispatch(signoutUser());
       dispatch(resetJournalListHelper());
+      dispatch(resetEntryListHelper());
     });
   }
 }
