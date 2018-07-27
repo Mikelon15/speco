@@ -16,6 +16,10 @@ const entries = (state = initialState, action) => {
             active: false
           }]
         });
+      case 'ENTRY_DESELECT':
+        return Object.assign({}, state, {
+          selected: ""
+        })
       case 'ENTRY_EDIT_TEXT':
         return Object.assign({}, state, {
           entries: state.entries.map(entry =>

@@ -105,6 +105,20 @@ export const toggleFetchedJournalHlper = () => ({
 export const toggleFetchingJournalHlper = () => ({
   type: 'JOURNAL_TOGGLE_FETCHING'
 })
+export const deselectJournal = () => {
+  return (dispatch) => {
+    dispatch(deselectJournalHelper())
+    dispatch(deselectEntryHelper())
+    dispatch(resetEntryListHelper())
+  }
+}
+export const selectJournal = (key) => {
+  return (dispatch) => {
+    dispatch(selectJournalHelper(key))
+    dispatch(fetchUserEntries())
+    dispatch(fetchUserEntries())
+  }
+}
 
 /*------------------------------------------------------------------------------
 *
@@ -118,6 +132,9 @@ export const addEntryHelper = (key, title, time) => ({
   time: time
 })
 
+export const deselectEntryHelper = () => ({
+  type: 'ENTRY_DESELECT'
+})
 
 export const editEntryTextHelper = text => ({
   type: 'ENTRY_EDIT_TEXT',
@@ -243,6 +260,49 @@ export const addNewJournal = name => {
   }
 }
 
+/*------------------------------------------------------------------------------
+*
+*                             FIREBASE ENTRY ACTIONS
+*
+------------------------------------------------------------------------------*/
+export const fetchUserEntries = () => {
+  return function (dispatch, getState) {
+    // fetch the user's firebase journals
+    firebaseApi.getValueByPathOnce('users/'+getState().user.uid+'/ntries/'+getState().journal.selected+'/').then(snapshot => {
+      // fetch the desired data from the snapshot
+      let data = snapshot.val()
+      //if the data returns contains journals, load them onto the view
+      if(data != null)
+         Object.keys(data).forEach(key => { //dispatch action to load journal
+           dispatch(loadEntryHelper(key, data[key].title, data[key].time, data[key].text))
+        });
+    })
+  }
+}
+
+export const addNewEntry = (journalKey, name) => {
+  return function(dispatch) {
+    // A post entry.
+    let entryData = {
+      title: name,
+      text: "",
+      time: Date()
+    };
+    //get user location
+    let location = 'users/'+firebaseApi.getUserID()+'/entries/'+journalKey+'/';
+
+    // Get a key for a new Entry.
+    let newEntryKey = firebaseApi.createNewKeyInPath(location);
+
+    // Write the new entry data
+    let updates = {};
+    updates[newEntryKey] = entryData;
+
+    // dispatch action to change local data
+    dispatch(addEntryHelper(newEntryKey, entryData.title, entryData.time))
+    return firebaseApi.updateDatabaseByPath(location, updates);
+  }
+}
 // export const editEntryText = (text, key) => {
 //   return function(dispatch){
 //     //if nothing is selected, return and do nothing

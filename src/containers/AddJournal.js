@@ -1,17 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNewJournal } from '../actions'
+import { addNewJournal, addNewEntry } from '../actions'
 // import { FormGroup, FormControl, Button } from 'react-bootstrap'
 
 const mapStateToProps = state => {
   return {
-
+    selectedJournal: state.journal.selected
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
-    add: (name) => {
+    addNewJournal: (name) => {
       dispatch(addNewJournal(name))
+    },
+    addNewEntry: (journalKey, name) => {
+      dispatch(addNewEntry(journalKey, name))
     }
   }
 }
@@ -29,7 +32,11 @@ class AddJournal extends React.Component {
     }
 
     handleSubmit(event) {
-      this.props.add(this.state.value)
+      let { selectedJournal } = this.props;
+      if(selectedJournal === "")
+        this.props.addNewJournal(this.state.value)
+      else
+        this.props.addNewEntry(selectedJournal, this.state.value)
       this.setState({value: ''})
       event.preventDefault();
     }
