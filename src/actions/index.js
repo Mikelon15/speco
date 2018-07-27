@@ -74,6 +74,43 @@ export const userErrorMessage = (error) => ({
 *                             JOURNAL STATE ACTIONS
 *
 ------------------------------------------------------------------------------*/
+export const deselectJournalHelper = () => ({
+  type: 'JOURNAL_DESELECT'
+})
+
+export const editJournalHelper = () => ({
+  type: 'JOURNAL_EDIT'
+})
+
+export const loadJournalHelper = (key, title, time) => ({
+  type: 'JOURNAL_LOAD',
+  key: key,
+  title: title,
+  time: time
+})
+
+export const resetJournalListHelper = () => ({
+  type: 'JOURNAL_RESET_LIST'
+})
+
+export const selectJournalHelper = key => ({
+  type: 'JOURNAL_SELECT',
+  key
+})
+
+export const toggleFetchedJournalHlper = () => ({
+  type: 'JOURNAL_TOGGLE_FETCHED'
+})
+
+export const toggleFetchingJournalHlper = () => ({
+  type: 'JOURNAL_TOGGLE_FETCHING'
+})
+
+/*------------------------------------------------------------------------------
+*
+*                             ENTRY STATE ACTIONS
+*
+------------------------------------------------------------------------------*/
 export const addEntryHelper = (key, title, time) => ({
   type: 'ADD_ENTRY',
   key: key,
@@ -150,6 +187,7 @@ export const signout = () => {
   return function(dispatch){
     firebaseApi.authSignOut().then(function(promise){
       dispatch(signoutUser());
+      dispatch(resetJournalListHelper());
     });
   }
 }
@@ -161,14 +199,15 @@ export const signout = () => {
 ------------------------------------------------------------------------------*/
 export const fetchUserJournals = () => {
   return function (dispatch, getState) {
+    // fetch the user's firebase journals
     firebaseApi.getValueByPathOnce('users/'+getState().user.uid+'/journals').then(snapshot => {
+      // fetch the desired data from the snapshot
       let data = snapshot.val()
-      if(data != null){
-        let list = Object.keys(data).reverse();
-        list.forEach(key => {
-          dispatch(loadEntryHelper(key, data[key].title, data[key].time, data[key].text ))
+      //if the data returns contains journals, load them onto the view
+      if(data != null)
+         Object.keys(data).forEach(key => { //dispatch action to load journal
+           dispatch(loadJournalHelper(key, data[key].title, data[key].time))
         });
-      }
     })
   }
 }
@@ -191,7 +230,7 @@ export const addNewJournal = name => {
     updates[newEntryKey] = journalData;
 
     // dispatch action to change local data
-    dispatch(addEntryHelper(newEntryKey, journalData.title, journalData.time))
+    dispatch(loadJournalHelper(newEntryKey, journalData.title, journalData.time))
     return firebaseApi.updateDatabaseByPath(location, updates);
   }
 }

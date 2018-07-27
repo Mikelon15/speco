@@ -25,9 +25,10 @@ class FirebaseApi {
 
   static signInWithEmailAndPassword(email, password) {
     return new Promise((resolve, reject) => {
-      firebase.auth().signInWithEmailAndPassword(email, password).then(user => {
-        return user;
-      });
+      firebase.auth().signInWithEmailAndPassword(email, password).then(
+        user => resolve(user),
+        error => reject(error)
+      );
     })
   }
   static getFirebase(){

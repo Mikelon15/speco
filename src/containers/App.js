@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import AddEntry from './AddEntry';
+import AddJournal from './AddJournal';
 // import EditEntry from './EditEntry';
 import Journal from './Journal';
 import UserAuth from './UserAuth';
 import { Col, Row, Button } from 'react-bootstrap';
 import { signout, resetEntryListHelper } from '../actions/index'
-import AddJournal from './AddJournal'
 
 const mapStateToProps = state => {
   return {
@@ -34,6 +33,7 @@ class App extends React.Component{
       <div> SPECO
         <Row className="show-grid">
           <Col xs={6} md={4}>
+            Shelf
             <AddJournal />
             <Journal />
             <Button onClick={ e => {e.preventDefault(); signOut()}}> Signout </Button>

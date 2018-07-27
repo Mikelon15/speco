@@ -1,10 +1,12 @@
+import React from 'react'
 import {connect } from 'react-redux';
-import { fetchUserJournals } from '../actions';
-import EntryList from '../components/EntryList';
+import { fetchUserJournals, selectJournalHelper, deselectJournalHelper } from '../actions';
+import Shelf from '../components/Shelf';
+import Location from '../components/Location';
 
 const mapStateToProps = state => {
     return {
-      entries: state.journal.entries.map(e => {
+      journals: state.journal.journals.map(e => {
         return {
           title: e.title,
           key: e.key
@@ -16,18 +18,27 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   dispatch(fetchUserJournals())
   return {
-    // onClickAction : key => {
-    //   dispatch(changeSelected(key))
-    // }
-    // fetchJournalEntries: () => {
-    //   dispatch(fetchUserJournals())
-    // }
+    selectJournal : key => {
+      dispatch(selectJournalHelper(key))
+    },
+    deselectJournal : () => {
+      dispatch(deselectJournalHelper())
+    }
   }
 };
 
-const Journal = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EntryList)
 
-export default Journal;
+class Journal extends React.Component{
+  render(){
+    let { journals, selected, selectJournal, deselectJournal } = this.props;
+    let items = journals;
+    return(
+      <div>
+        <Location journal={selected} />
+        <Shelf items={items} selected={selected} onClickAction={selectJournal}/>
+      </div>
+    )
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Journal);
