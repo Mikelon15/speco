@@ -116,7 +116,6 @@ export const selectJournal = (key) => {
   return (dispatch) => {
     dispatch(selectJournalHelper(key))
     dispatch(fetchUserEntries())
-    dispatch(fetchUserEntries())
   }
 }
 
@@ -267,8 +266,9 @@ export const addNewJournal = name => {
 ------------------------------------------------------------------------------*/
 export const fetchUserEntries = () => {
   return function (dispatch, getState) {
+    console.log("FETCHING ENTRIES")
     // fetch the user's firebase journals
-    firebaseApi.getValueByPathOnce('users/'+getState().user.uid+'/ntries/'+getState().journal.selected+'/').then(snapshot => {
+    firebaseApi.getValueByPathOnce('users/'+getState().user.uid+'/entries/'+getState().journal.selected+'/').then(snapshot => {
       // fetch the desired data from the snapshot
       let data = snapshot.val()
       //if the data returns contains journals, load them onto the view
@@ -303,17 +303,19 @@ export const addNewEntry = (journalKey, name) => {
     return firebaseApi.updateDatabaseByPath(location, updates);
   }
 }
-// export const editEntryText = (text, key) => {
-//   return function(dispatch){
-//     //if nothing is selected, return and do nothing
-//     if (key === "") return;
-//
-//     // update object
-//     let updates = {}
-//     updates['/posts/'+key+'/text'] = text;
-//
-//     //update data
-//     dispatch(editEntryTextHelper(text))
-//     return getUserDatabase().update(updates);
-//   }
-// }
+export const editEntryText = (text, key) => {
+  return function(dispatch, getState){
+    //if nothing is selected, return and do nothing
+    if (key === "") return;
+
+    // user location
+    let location = 'users/'+getState().user.uid+'/entries/'+getState().journal.selected+'/'+key+'/';
+
+    let updates = {};
+    updates['text'] = text;
+
+    //update data
+    dispatch(editEntryTextHelper(text))
+    return firebaseApi.updateDatabaseByPath(location, updates);
+  }
+}

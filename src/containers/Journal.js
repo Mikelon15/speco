@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { fetchUserJournals, selectJournal, deselectJournal } from '../actions';
+import { fetchUserJournals, selectJournal, deselectJournal, selectEntryHelper } from '../actions';
 import Shelf from '../components/Shelf';
 // import Location from '../components/Location';
 import AddJournal from './AddJournal';
@@ -26,6 +26,9 @@ const mapDispatchToProps = dispatch => {
   return {
     selectJournal : key => {
       dispatch(selectJournal(key))
+    },
+    selectEntry : key => {
+      dispatch(selectEntryHelper(key))
     },
     deselectJournal : () => {
       dispatch(deselectJournal())
@@ -53,14 +56,16 @@ class Journal extends React.Component{
     // state  varibles
     let { journals, entries, selectedEntry, selectedJournal } = this.props;
     // action variables
-    let {selectJournal } = this.props;
+    let {selectJournal, selectEntry } = this.props;
     // show journal or entries depending on which location user is at
     let items = (selectedJournal === "") ? journals : entries;
+    let selectItem = (selectedJournal === "") ? selectJournal : selectEntry
+    let selectedItem = (selectedEntry === "") ? selectedJournal : selectedEntry
     return(
       <div>
         <AddJournal />
         <button onClick={this.handleClick}> HOME </button>
-        <Shelf items={items} selected={selectedJournal} onClickAction={selectJournal}/>
+        <Shelf items={items} selected={selectedItem} onClickAction={selectItem}/>
       </div>
     )
   }

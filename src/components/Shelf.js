@@ -12,6 +12,9 @@ class Shelf extends React.Component{
             { items.map((e, index) => {
               //check if the entry is the selected one and mark as active
               e.active = (e.key === selected)
+              if (e.key === selected){
+                console.log("FOUND")
+              }
               //return the Item Component
               return (<Item key={e.key} {...e} onClick={(event) => {onClickAction(e.key); event.preventDefault(); }}/>)
             })}
