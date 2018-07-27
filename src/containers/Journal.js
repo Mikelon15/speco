@@ -11,24 +11,33 @@ const mapStateToProps = state => {
           title: e.title,
           key: e.key
       }}),
-      selected: state.journal.selected
+      selectedJournal: state.journal.selected,
+
   }
 }
 
 const mapDispatchToProps = dispatch => {
-  dispatch(fetchUserJournals())
   return {
     selectJournal : key => {
       dispatch(selectJournalHelper(key))
     },
     deselectJournal : () => {
       dispatch(deselectJournalHelper())
+    },
+    fetchJournals : () => {
+      dispatch(fetchUserJournals())
     }
   }
 };
 
 
 class Journal extends React.Component{
+  constructor(props){
+    super(props)
+  }
+  componentWillMount(){
+    this.props.fetchJournals();
+  }
   render(){
     let { journals, selected, selectJournal, deselectJournal } = this.props;
     let items = journals;

@@ -112,7 +112,7 @@ export const toggleFetchingJournalHlper = () => ({
 *
 ------------------------------------------------------------------------------*/
 export const addEntryHelper = (key, title, time) => ({
-  type: 'ADD_ENTRY',
+  type: 'ENTRY_ADD',
   key: key,
   title: title,
   time: time
@@ -120,12 +120,20 @@ export const addEntryHelper = (key, title, time) => ({
 
 
 export const editEntryTextHelper = text => ({
-  type: 'EDIT_ENTRY_TEXT',
+  type: 'ENTRY_EDIT_TEXT',
   text: text
 })
 
+export const toggleEntryFetchedHelper = () => ({
+  type: 'ENTRY_TOGGLE_FETCHED'
+})
+
+export const toggleEntryFetchingHelper = () => ({
+  type: 'ENTRY_TOGGLE_FETCHING'
+})
+
 export const loadEntryHelper = (key, title, time, text) => ({
-  type: 'LOAD_ENTRY',
+  type: 'ENTRY_LOAD',
   key: key,
   title: title,
   time: time,
@@ -133,11 +141,11 @@ export const loadEntryHelper = (key, title, time, text) => ({
 })
 
 export const resetEntryListHelper = () => ({
-  type: 'RESET_ENTRY_LIST'
+  type: 'ENTRY_RESET_LIST'
 })
 
 export const selectEntryHelper = key => ({
-  type: 'SELECT_ENTRY',
+  type: 'ENTRY_SELECT',
   key
 })
 
