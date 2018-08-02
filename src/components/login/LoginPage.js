@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {signInWithEmailAndPassword} from '../../actions/index';
+import {signInWithEmailAndPassword, toggleUserSubscribing} from '../../actions/index';
 import LoginForm from './LoginForm';
+
 // import toastr from 'toastr';
 
 export class RegistrationPage extends React.Component {
@@ -33,36 +32,35 @@ export class RegistrationPage extends React.Component {
 
   createUser(event) {
     event.preventDefault();
-    this.props.actions.signInWithEmailAndPassword(this.state.user)
+    this.props.signInWithEmailAndPassword(this.state.user)
   }
 
   render() {
     return (
-      <LoginForm
-        onChange={this.updateUserState}
-        onSave={this.createUser}
-        saving={this.state.saving}
-        user={this.state.user}
-      />
+      <div>
+        <LoginForm
+          onChange={this.updateUserState}
+          onSave={this.createUser}
+          saving={this.state.saving}
+          user={this.state.user}
+        />
+        <div id="toggleLogin">Dont have an account? <a href="" onClick={e=>{e.preventDefault(); this.props.toggleUserSubscribing()}}> Sign Up </a></div>
+      </div>
     );
   }
 }
-
-RegistrationPage.propTypes = {
-  actions: PropTypes.object.isRequired
-};
-
-RegistrationPage.contextTypes = {
-  router: PropTypes.object
-};
 
 function mapStateToProps(state, ownProps) {
   return {};
 }
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return {
-    actions: bindActionCreators({signInWithEmailAndPassword}, dispatch)
+    signInWithEmailAndPassword: user => {dispatch(signInWithEmailAndPassword(user))},
+    toggleUserSubscribing: () => {
+      dispatch(toggleUserSubscribing())
+    }
+
   };
 }
 

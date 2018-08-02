@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Grid, Col, Row } from 'react-bootstrap';
 import LogIn from '../components/login/LoginPage';
 import SignUp from '../components/SignUp';
+import "./UserAuth.css"
+
 import { signInWithEmailAndPassword, signUpWithEmailAndPassword, toggleUserSubscribing } from '../actions/index'
 
 const mapStateToProps = state => {
@@ -17,11 +20,12 @@ const mapDispatchToProps = dispatch => {
         dispatch(signUpWithEmailAndPassword(e.email, e.password, e.username))
     },
     onSignIn: e => {
+
         dispatch(signInWithEmailAndPassword(e.email, e.password))
     },
     toggleUserSubscribing: () => {
-      dispatch(toggleUserSubscribing())
-    }
+          dispatch(toggleUserSubscribing())
+        }
   }
 }
 
@@ -29,6 +33,7 @@ class UserAuth extends Component{
   render() {
     let errorMsg = (this.props.error) ? this.props.error.toString() : ""
     const authType = (this.props.subscribing) ?
+
       (
         <div>
           {errorMsg}
@@ -39,13 +44,24 @@ class UserAuth extends Component{
       (
         <div>
           {errorMsg}
-          <LogIn onSubmit={this.props.onSignIn} />;
-          Dont have an account? <a href="" onClick={e=>{e.preventDefault(); this.props.toggleUserSubscribing()}}> Sign Up </a>
+          <LogIn onSubmit={this.props.onSignIn} />
         </div>
       )
+
     return(
-      <div>
-        {authType}
+      <div className="authform">
+        <Grid>
+          <Row className="show-grid">
+            <Col className="hidden-xs" sm={3}>
+            </Col>
+            <Col sm={6}>
+              <h1> SPECO </h1>
+              {authType}
+            </Col>
+            <Col className="hidden-xs" sm={3}>
+            </Col>
+          </Row>
+          </Grid>
       </div>
     )
   }

@@ -1,27 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import TextInput from '../common/TextInput';
-
+import './login.css'
 const LoginForm = ({user, onSave, onChange, saving}) => {
   return (
     <form>
-      <h1>Login</h1>
+      <h3>Login</h3>
       <TextInput
+        type="text"
         name="email"
-        label="Email"
+        label="email"
+        placeholder="Email"
         onChange={onChange}
         value={user.email}
         />
-
       <TextInput
+        type="password"
         name="password"
-        label="Password"
+        label="password"
+        placeholder="Password"
         onChange={onChange}
         value={user.password}
         />
 
       <input
+        id="loginButton"
         type="submit"
         disabled={saving}
         value={saving ? 'Logining in...' : 'Login'}
