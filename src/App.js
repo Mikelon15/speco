@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Journal from './Journal';
-import UserAuth from './UserAuth';
-import EntryTextBox from '../components/EntryTextBox';
+import Journal from './containers/Journal';
+import UserAuth from './containers/UserAuth';
+import EntryTextBox from './components/EntryTextBox';
 // import { Grid, Button } from '@material-ui/core/';
-import { signout, resetEntryListHelper, editEntryText } from '../actions/index'
+import { signout, resetEntryListHelper, editEntryText } from './actions/index'
 
 let activeEntryKey = ""
 
