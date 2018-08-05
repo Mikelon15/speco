@@ -1,41 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextInput from '../common/TextInput';
 import './login.css'
 
-const LoginForm = ({user, onSave, onChange, saving}) => {
-  return (
-    <form>
-      <h3>Login</h3>
-      <TextInput
-        placeholder="Email"
-        name="email"
-        id="email"
-        type="text"
-        label="Email"
-        onChange={onChange}
-        value={user.email}
-        />
-      <TextInput
-        placeholder="Password"
-        name="password"
-        id="password"
-        type="password"
-        label="Password"
-        onChange={onChange}
-        value={user.password}
-        />
-      <button
-        id="loginButton"
-        type="submit"
-        disabled={saving}
-        onClick={onSave}
-        >
-          {saving ? 'Logining in...' : 'Login'}
-        </button>
-    </form>
-  );
-};
+import TextField, {Input} from '@material/react-text-field';
+
+class LoginForm extends React.Component {
+  state = {value: 'Woof'};
+
+  render() {
+    let { saving, user, onChange } = this.props;
+    return (
+    <div>
+        <br/>
+        <TextField
+           className='long-text-field'
+           label='Email'
+         >
+           <Input
+             name='email'
+             onChange={onChange}
+             value={user.email}
+           />
+         </TextField>
+          <br/>
+         <TextField
+           className='long-text-field'
+            label='Password'
+          >
+            <Input
+              name='password'
+              type='password'
+              onChange={onChange}
+              value={user.password}
+            />
+          </TextField>
+          <br/>
+    </div>
+    );
+  }
+}
 
 LoginForm.propTypes = {
   onSave: PropTypes.func.isRequired,

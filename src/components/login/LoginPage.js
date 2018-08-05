@@ -1,9 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {signInWithEmailAndPassword, toggleUserSubscribing} from '../../actions/index';
 import LoginForm from './LoginForm';
 
+import Button from '@material/react-button/dist'; // /index.js is implied
 // import toastr from 'toastr';
 
 export class RegistrationPage extends React.Component {
@@ -24,6 +25,7 @@ export class RegistrationPage extends React.Component {
   }
 
   updateUserState(event) {
+
     const field = event.target.name;
     let user = this.state.user;
     user[field] = event.target.value;
@@ -41,10 +43,18 @@ export class RegistrationPage extends React.Component {
         <LoginForm
           onChange={this.updateUserState}
           onSave={this.createUser}
-          saving={this.state.saving}
           user={this.state.user}
         />
         <div id="toggleLogin">Dont have an account? <a href="" onClick={e=>{e.preventDefault(); this.props.toggleUserSubscribing()}}> Sign Up </a></div>
+
+       <Button
+         id="loginButton"
+         type="submit"
+         onClick={this.createUser}
+         className='button-primary'
+         >
+           Login
+         </Button>
       </div>
     );
   }

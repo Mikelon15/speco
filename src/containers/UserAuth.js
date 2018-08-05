@@ -56,18 +56,8 @@ class UserAuth extends Component{
 
     return(
       <div className="authform">
-        <Grid>
-          <Row className="show-grid">
-            <Col className="hidden-xs" sm={3}>
-            </Col>
-            <Col sm={6}>
               <h1> SPECO </h1>
               {authType}
-            </Col>
-            <Col className="hidden-xs" sm={3}>
-            </Col>
-          </Row>
-          </Grid>
       </div>
     )
   }

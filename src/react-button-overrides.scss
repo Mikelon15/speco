@@ -1,0 +1,28 @@
+@import "@material/button/mixins";
+
+@import "@material/react-floating-label/index.scss";
+@import "@material/react-line-ripple/index.scss";
+@import "@material/react-notched-outline/index.scss";
+@import "@material/react-text-field/index.scss";
+
+
+.button-primary {
+  @include mdc-button-container-fill-color(lightblue);
+}
+
+.mdc-text-field {
+  width: 90%;
+}
+
+.mdc-text-field__input {
+  @include mdc-typography(headline4);
+  padding: 25px 0px 15px;
+}
+.mdc-floating-label{
+  font-size: 1.5em;
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+.logo{
+  
+}

@@ -1,10 +1,12 @@
+import './App.css';
 import React from 'react';
 import { connect } from 'react-redux';
 import Journal from './containers/Journal';
 import UserAuth from './containers/UserAuth';
 import EntryTextBox from './components/EntryTextBox';
-// import { Grid, Button } from '@material-ui/core/';
 import { signout, resetEntryListHelper, editEntryText } from './actions/index'
+
+
 
 let activeEntryKey = ""
 
@@ -16,6 +18,7 @@ const getActiveEntryText = (selected, entries) => {
   activeEntryKey = i.key
   return i.text
 }
+
 
 const mapStateToProps = state => {
   return {
