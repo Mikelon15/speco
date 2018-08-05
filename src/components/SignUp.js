@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap'
+import { withStyles, TextField } from '@material-ui/core';
 
 function FieldGroup({ id, label, help, ...props }) {
   return (
@@ -10,6 +11,18 @@ function FieldGroup({ id, label, help, ...props }) {
   );
 }
 
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    height: 1000
+  },
+});
+
 let SignUp = ( { onSubmit } ) => {
     let input = {email: "",  username: "",  password: "",  confirm: ""}
     return (
@@ -19,28 +32,36 @@ let SignUp = ( { onSubmit } ) => {
         onSubmit(input)
     }}>
       SignUp
-      <FieldGroup
+      <TextField
+        fullWidth
+        margin="normal"
         id="formControlsEmail"
         type="email"
         label="Email address"
         placeholder="Enter email"
         onChange= {e => {input.email = e.target.value}}
       />
-      <FieldGroup
+      <TextField
+        fullWidth
+        margin="normal"
         id="formControlsUsername"
         type="username"
         label="Username"
         placeholder="Enter username"
         onChange= {e => {input.username = e.target.value}}
       />
-      <FieldGroup
+      <TextField
+        fullWidth
+        margin="normal"
         id="formControlsPassword"
         label="Password"
         type="password"
         placeholder="password"
         onChange= {e => {input.password = e.target.value}}
       />
-      <FieldGroup
+      <TextField
+        fullWidth
+        margin="normal"
         id="formControlsPasswordConfirm"
         label="Password"
         type="password"
@@ -54,4 +75,4 @@ let SignUp = ( { onSubmit } ) => {
 }
 
 
-export default SignUp;
+export default withStyles(styles)(SignUp);
