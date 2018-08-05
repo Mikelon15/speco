@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Journal from './Journal';
 import UserAuth from './UserAuth';
 import EntryTextBox from '../components/EntryTextBox';
-import { Grid, Button } from '@material-ui/core/';
+// import { Grid, Button } from '@material-ui/core/';
 import { signout, resetEntryListHelper, editEntryText } from '../actions/index'
 
 let activeEntryKey = ""
@@ -44,25 +44,25 @@ class App extends React.Component{
     let { auth, signOut } = this.props;
     let list =  (
       <div id="app">
-      
+
         <h1>SPECO</h1>
-        <Grid
+        <div
           container
           direction="row"
           className="app-root"
           justify="space-between"
           alignItems="center"
         >
-          <Grid item xs={6} md={4}>
+          <div item xs={6} md={4}>
             <Journal />
-            <Button onClick={ e => {e.preventDefault(); signOut()}}> Signout </Button>
-          </Grid>
-          <Grid item xs={6} md={4}>
+            <button onClick={ e => {e.preventDefault(); signOut()}}> Signout </button>
+          </div>
+          <div item xs={6} md={4}>
             <EntryTextBox  text={this.props.text} onChangeAction={this.props.onChangeAction}/>
-          </Grid>
-          <Grid item xsHidden md={4}>
-          </Grid>
-        </Grid>
+          </div>
+          <div item xsHidden md={4}>
+          </div>
+        </div>
       </div>
     );
     let Appi = (auth) ? list : <UserAuth />

@@ -38,7 +38,13 @@ class UserAuth extends Component{
         <div>
           {errorMsg}
           <SignUp onSubmit={this.props.onSignUp} />
-          Already have an account? <a href="" onClick={e=>{e.preventDefault(); this.props.toggleUserSubscribing()}}> Sign In </a>
+            Already have an account?
+            <a href=""
+              onClick={e=>{e.preventDefault();
+              this.props.toggleUserSubscribing()}}
+            >
+              Sign In
+            </a>
         </div>
       ) :
       (
