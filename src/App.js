@@ -3,7 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Journal from './containers/Journal';
 import UserAuth from './containers/UserAuth';
-import EntryTextBox from './components/EntryTextBox';
 import { signout, resetEntryListHelper, editEntryText } from './actions/index'
 
 
@@ -46,7 +45,7 @@ class App extends React.Component{
 
     let { auth, signOut } = this.props;
     let list =  (
-      <div id="app">
+      <div>
 
         <h1>SPECO</h1>
         <div
@@ -61,7 +60,7 @@ class App extends React.Component{
             <button onClick={ e => {e.preventDefault(); signOut()}}> Signout </button>
           </div>
           <div item xs={6} md={4}>
-            <EntryTextBox  text={this.props.text} onChangeAction={this.props.onChangeAction}/>
+            <textarea text={this.props.text} onChangeAction={this.props.onChangeAction}/>
           </div>
           <div item xsHidden md={4}>
           </div>
@@ -70,7 +69,7 @@ class App extends React.Component{
     );
     let Appi = (auth) ? list : <UserAuth />
     return (
-      <div>
+      <div  id="app">
         {Appi}
       </div>
     )

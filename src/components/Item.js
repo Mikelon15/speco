@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ListGroupItem } from 'react-bootstrap';
 
 const Entry = ({ onClick, title, active}) => (
-  <ListGroupItem className={active ? "active" : ""} onClick={onClick} >
+  <il className={active ? "active" : ""} onClick={onClick} >
     {title}
-  </ListGroupItem>
+  </il>
 )
 
 Entry.propTypes = {

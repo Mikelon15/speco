@@ -1,3 +1,7 @@
 @import "@material/typography/mdc-typography";
 @import "@material/react-button/index.scss";
 @import "./react-button-overrides";
+
+#app {
+  background-color: lightblue;
+}

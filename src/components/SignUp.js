@@ -1,14 +1,4 @@
 import React from 'react';
-import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap'
-
-function FieldGroup({ id, label, help, ...props }) {
-  return (
-    <FormGroup controlId={id}>
-      <ControlLabel>{label}</ControlLabel>
-      <FormControl {...props} />
-    </FormGroup>
-  );
-}
 
 let SignUp = ( { onSubmit } ) => {
     let input = {email: "",  username: "",  password: "",  confirm: ""}
@@ -19,7 +9,7 @@ let SignUp = ( { onSubmit } ) => {
         onSubmit(input)
     }}>
       SignUp
-      <FieldGroup
+      <input
         fullWidth
         margin="normal"
         id="formControlsEmail"
@@ -28,7 +18,7 @@ let SignUp = ( { onSubmit } ) => {
         placeholder="Enter email"
         onChange= {e => {input.email = e.target.value}}
       />
-      <FieldGroup
+      <input
         fullWidth
         margin="normal"
         id="formControlsUsername"
@@ -37,7 +27,7 @@ let SignUp = ( { onSubmit } ) => {
         placeholder="Enter username"
         onChange= {e => {input.username = e.target.value}}
       />
-      <FieldGroup
+      <input
         fullWidth
         margin="normal"
         id="formControlsPassword"
@@ -46,7 +36,7 @@ let SignUp = ( { onSubmit } ) => {
         placeholder="password"
         onChange= {e => {input.password = e.target.value}}
       />
-      <FieldGroup
+      <input
         fullWidth
         margin="normal"
         id="formControlsPasswordConfirm"
@@ -55,7 +45,6 @@ let SignUp = ( { onSubmit } ) => {
         placeholder="password"
         onChange= {e => {input.confirm = e.target.value}}
       />
-      <Button type="submit"> Submit </Button>
     </form>
     </div>
   )
@@ -63,3 +52,4 @@ let SignUp = ( { onSubmit } ) => {
 
 
 export default SignUp;
+// <Button type="submit"> Submit </Button>

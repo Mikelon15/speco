@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Grid, Col, Row } from 'react-bootstrap';
 import LogIn from '../components/login/LoginPage';
 import SignUp from '../components/SignUp';
 import "./UserAuth.css"
@@ -36,21 +35,29 @@ class UserAuth extends Component{
 
       (
         <div>
-          {errorMsg}
-          <SignUp onSubmit={this.props.onSignUp} />
-            Already have an account?
-            <a href=""
-              onClick={e=>{e.preventDefault();
-              this.props.toggleUserSubscribing()}}
-            >
-              Sign In
-            </a>
+          <div className="third" />
+          <div className="third">
+            {errorMsg}
+            <SignUp onSubmit={this.props.onSignUp} />
+              Already have an account?
+              <a href=""
+                onClick={e=>{e.preventDefault();
+                this.props.toggleUserSubscribing()}}
+              >
+                Sign In
+              </a>
+          </div>
+          <div className="third" />
         </div>
       ) :
       (
         <div>
-          {errorMsg}
-          <LogIn onSubmit={this.props.onSignIn} />
+          <div className="third" />
+          <div className="third">
+            {errorMsg}
+            <LogIn onSubmit={this.props.onSignIn} />
+          </div>
+          <div className="third" />
         </div>
       )
 
