@@ -31,13 +31,9 @@ export const toggleUserSubscribing = () => ({
 })
 
 export const authInitialized = (user) => {
-  return (dispatch) => {
+  return (dispatch) => {    
     dispatch(authInitializedDone());
-    if (user) {
-      dispatch(authLoggedIn(user));
-    } else {
-      dispatch(authLoggedOutSuccess());
-    }
+    (user) ? dispatch(authLoggedIn(user)) : dispatch(authLoggedOutSuccess());
   };
 }
 /*------------------------------------------------------------------------------
@@ -189,13 +185,15 @@ export const signUpWithEmailAndPassword = (email, password, username) => {
 
 export const signInWithEmailAndPassword = (user) => {
   return function(dispatch) {
+    console.log(user)
     firebaseApi.signInWithEmailAndPassword(user.email, user.password)
-    .then(val =>  {
-        dispatch(authLoggedIn(val.user));
-      }).catch(error => {
-        dispatch(authError(error))
-      });
-    }
+    .then(val => {
+      dispatch(authLoggedIn(val.user));
+    })
+    .catch(error => {
+      dispatch(authError(error))
+    });
+  }
 }
 
 export const authLoggedIn = (user) => {

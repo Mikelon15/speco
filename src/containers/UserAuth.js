@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+// import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import LogIn from '../components/login/LoginPage';
-import SignUp from '../components/SignUp';
-import "./UserAuth.css"
+// import LogIn from '../components/login/LoginPage';
+// import SignUp from '../components/SignUp';
+import Token from '../components/token/Token.js';
 
 import { signInWithEmailAndPassword, signUpWithEmailAndPassword, toggleUserSubscribing } from '../actions/index'
 
@@ -15,62 +15,31 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSignUp: e => {
-        dispatch(signUpWithEmailAndPassword(e.email, e.password, e.username))
-    },
-    onSignIn: e => {
-
-        dispatch(signInWithEmailAndPassword(e.email, e.password))
-    },
-    toggleUserSubscribing: () => {
-          dispatch(toggleUserSubscribing())
-        }
+    onSignUp: e => { dispatch(signUpWithEmailAndPassword(e.email, e.password, e.username)) },
+    onSignIn: e => { dispatch(signInWithEmailAndPassword(e)) },
+    toggleUserSubscribing: () => { dispatch(toggleUserSubscribing()) }
   }
 }
 
-class UserAuth extends Component{
-  render() {
-    let errorMsg = (this.props.error) ? this.props.error.toString() : ""
-    const authType = (this.props.subscribing) ?
+// class UserAuth extends Component{
+//   render() {
+//     let { error, subscribing, onSignUp, onSignIn, toggleUserSubscribing } = this.props;
+//     let errorMsg = (error) ? error.toString() : ""
+//     let authType = (subscribing) ?
+//       (<SignUp onSubmit={onSignUp} onSignUp={toggleUserSubscribing} />) : (< LogIn onSubmit={onSignIn} /> )
 
-      (
-        <div>
-          <div className="third" />
-          <div className="third">
-            {errorMsg}
-            <SignUp onSubmit={this.props.onSignUp} />
-              Already have an account?
-              <a href=""
-                onClick={e=>{e.preventDefault();
-                this.props.toggleUserSubscribing()}}
-              >
-                Sign In
-              </a>
-          </div>
-          <div className="third" />
-        </div>
-      ) :
-      (
-        <div>
-          <div className="third" />
-          <div className="third">
-            {errorMsg}
-            <LogIn onSubmit={this.props.onSignIn} />
-          </div>
-          <div className="third" />
-        </div>
-      )
-
-    return(
-      <div className="authform">
-              <h1> SPECO </h1>
-              {authType}
-      </div>
-    )
-  }
-}
+//     return(
+      // <Token 
+      // <div>
+      //   <h1> SPECO </h1>
+      //   { errorMsg }
+      //   { authType }
+      // </div>
+//     )
+//   }
+// }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(UserAuth);
+)(Token);

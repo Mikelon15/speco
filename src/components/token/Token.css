@@ -1,0 +1,51 @@
+.grid-container {
+  height: 98vh;
+  display: grid;
+  grid-column-gap: 50px;
+  grid-template-columns: auto auto auto;
+  background-color: #2196F3;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url('http://www.ryanraffa.com/classes/cclab2012/assets/69955_packing_neu_4.jpg');
+}
+.grid-item {
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+.grid-item.main{
+  margin: 15%;
+  box-shadow: 0px 0px 5px 0px #0b0202;
+  border-radius: 5px;
+  height: 400px;
+  background-color: rgba(150, 150, 255, 0.95);
+  background-blend-mode: darken;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+}
+input{
+  display: block;
+  margin: 10px 0px 20px 30%;
+  width: 40%; 
+  height: 20px;
+}
+h3{
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 25px;
+  font-style: unset;
+}
+h5{
+  font-size: 15px;
+  font-family: "Courier New", Courier, monospace; 
+}
+button{
+  border-radius: 10px;
+    cursor: cell;
+    background: white;
+    padding: 5px 15px;
+    font-size: 15px;
+    font-weight: bold;
+    border-color: black;
+    box-shadow: 0 0 5px 0px black;
+    color: #0b0202;
+    background-color: whitesmoke;
+}
