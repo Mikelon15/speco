@@ -1,6 +1,6 @@
 import React from 'react';
-import LoginForm from './LoginForm';
-import Button from '@material/react-button/dist'; 
+import LoginForm from './LoginForm'; 
+import { Button } from '@material-ui/core';
 
 export class RegistrationPage extends React.Component {
   constructor(props, context) {
@@ -48,11 +48,12 @@ export class RegistrationPage extends React.Component {
           </h5>
         </div>
 
-        <Button
-        id="loginButton"
+        <Button 
+        variant="contained" 
+        color="primary" 
         type="submit"
-        onClick={this.createUser}
-        className='button-primary'>
+        style={{float: 'right'}}
+        onClick={this.createUser}>
           Login
         </Button>
       </div>

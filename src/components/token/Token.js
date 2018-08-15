@@ -18,7 +18,7 @@ export default class Token extends Component {
             <div className="grid-container">
                 <div className="grid-item"></div>
                 <div className="grid-item main">
-                    SPECO
+                    <h1 class="logo">speco</h1>
                     { errorMessage }
                     { authType }
                 </div>
