@@ -1,8 +1,11 @@
 import React from 'react';
+import PropTypes from "prop-types";
 import LoginForm from './LoginForm'; 
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
+import Styles from '../styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 
-export class RegistrationPage extends React.Component {
+export class LoginPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -31,34 +34,48 @@ export class RegistrationPage extends React.Component {
   }
 
   render() {
+    let { error } = this.props; 
     return (
       <div>
-        <h3>LOGIN</h3>
-        <LoginForm
-        onChange={this.updateUserState}
-        onSave={this.createUser}
-        user={this.state.user} />
-
-        <div id="toggleLogin">
-          <h5>Dont have an account? 
-            <a href="" 
-            onClick={e=>{e.preventDefault(); this.props.toggle()}}> 
-              Sign Up 
-            </a>
-          </h5>
-        </div>
-
-        <Button 
-        variant="contained" 
-        color="primary" 
-        type="submit"
-        style={{float: 'right'}}
-        onClick={this.createUser}>
-          Login
-        </Button>
+          <Typography variant='title'>Sign in</Typography>
+          
+          {(error) ?
+              <Typography color="error">{error.toString()}</Typography> : "" 
+          }
+          
+          <LoginForm
+            onChange={this.updateUserState}
+            onSave={this.createUser}
+            user={this.state.user} />
+          
+          <div id="toggleLogin">
+            <Typography>
+              Dont have an account? 
+              <a onClick={e=>{e.preventDefault(); this.props.toggle()}}> 
+                Sign Up 
+              </a>
+            </Typography>
+          </div>
+         
+          <Button 
+            type="submit"
+            fullWidth
+            variant="raised"
+            color="primary" 
+            style={{float: 'right'}}
+            onClick={this.createUser}>
+            Login
+          </Button>
       </div>
     );
   }
 }
 
-export default RegistrationPage;
+LoginPage.propTypes = {
+  // error: PropTypes.string.isRequired,
+  classes: PropTypes.object.isRequired,
+  toggle: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired
+};
+
+export default withStyles(Styles)(LoginPage);

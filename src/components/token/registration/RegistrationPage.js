@@ -1,20 +1,21 @@
-import React, {PropTypes} from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {createUserWithEmailAndPassword} from '../../actions/authActions';
+import React from 'react';
+import PropTypes from "prop-types";
 import RegistrationForm from './RegistrationForm';
-import toastr from 'toastr';
+import { Typography, Button } from "@material-ui/core";
+import { withStyles } from '@material-ui/core';
+import styles from '../styles';
 
-export class RegistrationPage extends React.Component {
+class RegistrationPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
       user: {
+        username: "",
         email: "",
-        password: ""
-      },
-      saving: false
+        password: "",
+        confirm: ""
+      }
     };
 
     this.updateUserState = this.updateUserState.bind(this);
@@ -30,45 +31,50 @@ export class RegistrationPage extends React.Component {
 
   createUser(event) {
     event.preventDefault();
-
-    this.setState({saving: true});
-
-    this.props.actions.createUserWithEmailAndPassword(this.state.user)
-      .then((user) => toastr.success('User Created'))
-      .catch(error => {
-        toastr.error(error.message);
-        this.setState({saving: false});
-      });
   }
 
   render() {
+    let { error } = this.props; 
     return (
-      <RegistrationForm
-        onChange={this.updateUserState}
-        onSave={this.createUser}
-        saving={this.state.saving}
-        user={this.state.user}
-      />
+      <div>
+        <Typography variant='title'>Sign Up</Typography>
+        {(error) ?
+          <Typography color="error">{error.toString()}</Typography> : "" 
+        }
+        <RegistrationForm
+          onChange={this.updateUserState}
+          onSave={this.createUser}
+          saving={this.state.saving}
+          user={this.state.user}
+        />
+        <div id="toggleLogin">
+          <Typography>
+            Already have an account? 
+            <a onClick={e=>{e.preventDefault(); this.props.toggle()}}> 
+              Sign In 
+            </a>
+          </Typography>
+        </div>
+        
+        <Button 
+          type="submit"
+          fullWidth
+          variant="raised"
+          color="primary" 
+          style={{float: 'right'}}
+          onClick={this.createUser}>
+          Sign Up
+        </Button>
+      </div>
     );
   }
 }
 
 RegistrationPage.propTypes = {
-  actions: PropTypes.object.isRequired
+  // error: PropTypes.string.isRequired,
+  classes: PropTypes.object.isRequired,
+  toggle: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired
 };
 
-RegistrationPage.contextTypes = {
-  router: PropTypes.object
-};
-
-function mapStateToProps(state, ownProps) {
-  return {};
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({createUserWithEmailAndPassword}, dispatch)
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(RegistrationPage);
+export default withStyles(styles)(RegistrationPage);
