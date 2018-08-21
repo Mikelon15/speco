@@ -8,11 +8,11 @@ import styles from '../styles';
 
 class LoginForm extends React.Component {
   render() {
-    let { user, onChange, classes } = this.props;
+    let { user, onChange, classes, valid } = this.props;
     return (
       <div>
         <form className={classes.form}>
-          <FormControl margin="normal" required fullWidth>
+          <FormControl error={!valid} margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email Address</InputLabel>
             <Input 
               value={user.email}
@@ -22,7 +22,7 @@ class LoginForm extends React.Component {
               autoComplete="email" 
               autoFocus />
           </FormControl>
-          <FormControl margin="normal" required fullWidth>
+          <FormControl error={!valid} margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
             <Input
               value={user.password}
@@ -33,6 +33,7 @@ class LoginForm extends React.Component {
               autoComplete="current-password"
             />
           </FormControl>
+          
         </form>
       </div>
     );
@@ -40,8 +41,9 @@ class LoginForm extends React.Component {
 }
 
 LoginForm.propTypes = {
+  valid: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(LoginForm);

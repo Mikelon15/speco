@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import Token from '../components/token/Token.js';
 
-import { signInWithEmailAndPassword, signUpWithEmailAndPassword, toggleUserSubscribing } from '../actions/index'
+import { signInWithEmailAndPassword, signUpWithEmailAndPassword, toggleUserSubscribing, authClearError } from '../actions/index'
 
 const mapStateToProps = state => {
   return {
@@ -12,9 +12,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSignUp: e => { dispatch(signUpWithEmailAndPassword(e.email, e.password, e.username)) },
+    onSignUp: (email, password, username) => { dispatch(signUpWithEmailAndPassword(email, password, username)) },
     onSignIn: e => { dispatch(signInWithEmailAndPassword(e)) },
-    toggleUserSubscribing: () => { dispatch(toggleUserSubscribing()) }
+    toggleUserSubscribing: () => { 
+      dispatch(toggleUserSubscribing()) 
+      dispatch(authClearError())
+    }
   }
 }
 

@@ -28,7 +28,12 @@ const auth = (state = initialState, action) => {
       return Object.assign({}, state, {
         error: action.error
       });
-
+    case 'AUTH_RESET':
+      return Object.assign({}, state, initialState);
+    case 'AUTH_CLEAR_ERROR':
+      return Object.assign({}, state, {
+        error: null
+      })
     default:
       return state;
   }

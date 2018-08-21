@@ -29,50 +29,82 @@ export class LoginPage extends React.Component {
 
   createUser(event) {
     event.preventDefault();
-    console.log(this.state.user)
     this.props.onSubmit(this.state.user)
   }
 
+
   render() {
-    let { error } = this.props; 
+    let { error, classes } = this.props; 
+
+    let message = "", valid = true; 
+    if(error) {
+      valid = false;
+      if(error) {
+        switch(error.code){
+          case("auth/invalid-email"): 
+            message = "Account could not be found with credentials provided";
+            break;
+          case("auth/user-not-found" ): 
+            message = "Account could not be found with credentials provided";
+            break;
+          case("auth/too-many-requests"): 
+            message = error.message; 
+            break;
+          case("auth/wrong-password"): 
+            message = "Account could not be found with credentials provided";
+            break;
+          default:
+            message = error.message; 
+        }  
+      }
+    }
+
     return (
       <div>
-          <Typography variant='title'>Sign in</Typography>
-          
-          {(error) ?
-              <Typography color="error">{error.toString()}</Typography> : "" 
-          }
-          
+          <Typography variant='title'>
+            SIGN IN
+          </Typography>
+
           <LoginForm
+            valid={valid}
             onChange={this.updateUserState}
             onSave={this.createUser}
-            user={this.state.user} />
-          
-          <div id="toggleLogin">
-            <Typography>
-              Dont have an account? 
-              <a onClick={e=>{e.preventDefault(); this.props.toggle()}}> 
-                Sign Up 
-              </a>
-            </Typography>
-          </div>
-         
+            user={this.state.user} 
+          />
+
+          <Typography color="error">
+            {message}
+          </Typography>
+
           <Button 
+            className={classes.submit}
             type="submit"
             fullWidth
             variant="raised"
             color="primary" 
             style={{float: 'right'}}
             onClick={this.createUser}>
-            Login
+            SIGN IN
           </Button>
+
+          <Typography className={classes.register}>
+            <a className={classes.pointer} onClick={e=>{e.preventDefault(); this.props.toggle()}}> 
+              Register now!
+            </a>
+          </Typography>
+
+          <Typography className={classes.resetpassword}>
+            <a className={classes.pointer} onClick={e=>{e.preventDefault(); this.props.toggle()}}> 
+              Forgot password?
+            </a>
+          </Typography>
       </div>
     );
   }
 }
 
 LoginPage.propTypes = {
-  // error: PropTypes.string.isRequired,
+  // error: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   toggle: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired

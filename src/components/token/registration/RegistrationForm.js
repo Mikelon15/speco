@@ -1,19 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
+import { FormControl, Input, InputLabel, FormHelperText } from '@material-ui/core';
 import styles from '../styles';
 
 
 class RegistrationForm extends React.Component {
   render() {
-    let { user, onChange, classes } = this.props;
+    let { user, onChange, classes, valid } = this.props;
     return (
       <div>
         <form className={classes.form}>
-        <FormControl margin="normal" required fullWidth>
+        <FormControl error={(valid.username === "") ? false : true} margin="normal" required fullWidth>
             <InputLabel htmlFor="username">Username</InputLabel>
             <Input
               value={user.username}
@@ -21,9 +19,11 @@ class RegistrationForm extends React.Component {
               name="username"
               id="username"
               autoComplete="current-username"
+              autoFocus
             />
+            <FormHelperText>{valid.username}</FormHelperText>
           </FormControl>
-          <FormControl margin="normal" required fullWidth>
+          <FormControl error={(valid.email === "") ? false : true} margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email Address</InputLabel>
             <Input 
               value={user.email}
@@ -31,9 +31,10 @@ class RegistrationForm extends React.Component {
               id="email" 
               name="email" 
               autoComplete="email" 
-              autoFocus />
+            />
+            <FormHelperText>{valid.email}</FormHelperText>
           </FormControl>
-          <FormControl margin="normal" required fullWidth>
+          <FormControl error={(valid.password === "") ? false : true} margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
             <Input
               value={user.password}
@@ -43,8 +44,9 @@ class RegistrationForm extends React.Component {
               id="password"
               autoComplete="current-password"
             />
+            <FormHelperText>{valid.password}</FormHelperText>
           </FormControl>
-          <FormControl margin="normal" required fullWidth>
+          <FormControl error={(valid.confirm === "") ? false : true} margin="normal" required fullWidth>
             <InputLabel htmlFor="confirm">Password</InputLabel>
             <Input
               value={user.confirm}
@@ -54,6 +56,7 @@ class RegistrationForm extends React.Component {
               id="confirm"
               autoComplete="current-password"
             />
+            <FormHelperText>{valid.confirm}</FormHelperText>
           </FormControl>
         </form>
       </div>
@@ -63,6 +66,7 @@ class RegistrationForm extends React.Component {
 
 RegistrationForm.propTypes = {
   user: PropTypes.object.isRequired,
+  valid: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired
 };
 

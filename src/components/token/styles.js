@@ -10,7 +10,7 @@ export const styles = theme => ({
     },
   },
   paper: {
-    backgroundColor: 'lightbrown',
+    backgroundColor: '#c1cac9',
     opacity: .96,
     marginTop: theme.spacing.unit * 8,
     display: 'flex',
@@ -29,6 +29,18 @@ export const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  register: {
+    margin: '15px 0 15px 0',
+    float: 'left'
+  },
+  resetpassword: {
+    margin: '15px 0 15px 0',
+    float: 'right'
+  },
+  pointer: {
+    cursor: 'pointer',
+    textDecoration: 'underline' 
+  }
 });
 
 export default styles; 

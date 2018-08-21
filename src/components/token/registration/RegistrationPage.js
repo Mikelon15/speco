@@ -14,6 +14,12 @@ class RegistrationPage extends React.Component {
         username: "",
         email: "",
         password: "",
+        confirm: "",
+      },
+      valid: {
+        username: "",
+        email: "",
+        password: "",
         confirm: ""
       }
     };
@@ -31,31 +37,69 @@ class RegistrationPage extends React.Component {
 
   createUser(event) {
     event.preventDefault();
+    let newState = Object.assign({}, this.state);
+    let { username, email, password, confirm } = this.state.user; 
+    let noErrors = true; 
+
+    // display the correct helper text for password
+    if(password !== confirm){
+      noErrors = false; 
+      newState.valid.password = "Passwords do not match";
+      newState.valid.confirm = "Passwords do not match";
+    } else if(password === "" && confirm === ""){
+      noErrors = false; 
+      newState.valid.password = "Please enter your password";
+      newState.valid.confirm = "Please confirm your password";
+    } else { 
+      newState.valid.password = ""; 
+      newState.valid.confirm = "";
+    }
+    // display the correct helper text for username
+    if(username === ""){
+      noErrors = false; 
+      newState.valid.username = "Please enter a valid username";
+    } else { newState.valid.username = "" }
+
+    // helper message for blank email
+    if(email === ""){
+      noErrors = false;
+      newState.valid.email = "Please enter a valid email";
+    }
+
+    // update the state, and if no errors, then register user
+    this.setState(newState);
+    if (noErrors)
+      this.props.onSubmit(email, password, username);
   }
 
   render() {
-    let { error } = this.props; 
+    let { error, classes } = this.props; 
+
+    // "auth/email-already-in-use"
+    // "auth/invalid-email"
+    let valid = Object.assign({}, this.state.valid);
+    if(error) {
+      switch(error.code){
+        case("auth/invalid-email"): 
+          valid.email = error.message;
+          break;
+        case("auth/email-already-in-use"): 
+          valid.email = error.message;
+          break;
+        default:
+      }  
+    }
+    
     return (
       <div>
-        <Typography variant='title'>Sign Up</Typography>
-        {(error) ?
-          <Typography color="error">{error.toString()}</Typography> : "" 
-        }
+        <Typography variant='title'>SIGN UP</Typography>
         <RegistrationForm
           onChange={this.updateUserState}
           onSave={this.createUser}
           saving={this.state.saving}
           user={this.state.user}
+          valid={valid}
         />
-        <div id="toggleLogin">
-          <Typography>
-            Already have an account? 
-            <a onClick={e=>{e.preventDefault(); this.props.toggle()}}> 
-              Sign In 
-            </a>
-          </Typography>
-        </div>
-        
         <Button 
           type="submit"
           fullWidth
@@ -63,15 +107,20 @@ class RegistrationPage extends React.Component {
           color="primary" 
           style={{float: 'right'}}
           onClick={this.createUser}>
-          Sign Up
+          SIGN UP
         </Button>
+        <Typography className={classes.register}>
+          <a className={classes.pointer} onClick={e=>{e.preventDefault(); this.props.toggle()}}> 
+            Already have an account? 
+          </a>
+        </Typography>
       </div>
     );
   }
 }
 
 RegistrationPage.propTypes = {
-  // error: PropTypes.string.isRequired,
+  // error: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   toggle: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired

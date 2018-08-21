@@ -31,6 +31,8 @@ const user = (state = initialState, action) => {
       });
     case 'USER_SIGN_OUT':
       return initialState;
+    case 'USER_RESET':
+      return Object.assign({}, state, initialState);
     default:
       return state;
   }

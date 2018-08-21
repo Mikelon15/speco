@@ -7,6 +7,7 @@ import { createLogger } from 'redux-logger'
 import { createStore, applyMiddleware } from 'redux';
 import registerServiceWorker from './registerServiceWorker';
 
+
 // api
 import FirebaseApi from './api/firebase';
 

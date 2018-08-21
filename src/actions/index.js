@@ -36,6 +36,15 @@ export const authInitialized = (user) => {
     (user) ? dispatch(authLoggedIn(user)) : dispatch(authLoggedOutSuccess());
   };
 }
+
+export const authReset = () => ({
+  type: 'AUTH_RESET'
+})
+
+export const authClearError = () => ({
+  type: 'AUTH_CLEAR_ERROR'
+})
+
 /*------------------------------------------------------------------------------
 *
 *                             USER STATE ACTIONS
@@ -63,6 +72,10 @@ export const toggleUserFetching = () => ({
 export const userErrorMessage = (error) => ({
   type: 'USER_ERROR_MESSAGE',
   error
+})
+
+export const userReset = () => ({
+  type: 'USER_RESET'
 })
 
 /*------------------------------------------------------------------------------
@@ -185,7 +198,6 @@ export const signUpWithEmailAndPassword = (email, password, username) => {
 
 export const signInWithEmailAndPassword = (user) => {
   return function(dispatch) {
-    console.log(user)
     firebaseApi.signInWithEmailAndPassword(user.email, user.password)
     .then(val => {
       dispatch(authLoggedIn(val.user));
@@ -209,6 +221,8 @@ export const signout = () => {
   return function(dispatch){
     firebaseApi.authSignOut().then(function(promise){
       dispatch(signoutUser());
+      dispatch(authReset());
+      dispatch(userReset());
       dispatch(resetJournalListHelper());
       dispatch(resetEntryListHelper());
     });

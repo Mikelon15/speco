@@ -10,7 +10,7 @@ h1.logo{
   background-color: rgb(220, 222, 245);
   background-repeat: no-repeat;
   background-size: cover;
-  background-image: url('http://www.ryanraffa.com/classes/cclab2012/assets/69955_packing_neu_4.jpg');
+  background-image: url('./beach.jpg');
 }
 #toggleLogin {
   padding: 20px;

@@ -10,13 +10,14 @@ class Token extends Component {
     render(){
         let { onSignUp, onSignIn, toggleUserSubscribing, 
               classes, subscribing, error } = this.props;
+        let errorMsg = (error) ? error : ""; 
         let authType = (subscribing) ?
             (<SignUp 
-                error={error}    
+                error={errorMsg}    
                 onSubmit={onSignUp} 
                 toggle={toggleUserSubscribing} />) : 
             (<LogIn
-                error={error}
+                error={errorMsg}
                 toggle={toggleUserSubscribing}
                 onSubmit={onSignIn} />)
         return(
