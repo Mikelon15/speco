@@ -1,19 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, ListItem, Checkbox } from '@material-ui/core';
+import { List, ListItem, Checkbox, withStyles } from '@material-ui/core';
+
+const styles = theme => ({
+  list: {
+    backgroundColor: 'white',
+    color: 'green'
+  }
+})
 
 class Shelf extends React.Component{
   render(){
-    const { items, selected, onClickAction  } = this.props;
+    //     const { selected } = this.props;
+    const { items, onClickAction  } = this.props;
     return (
         <div>
-          <List>
+          <List className={this.props.classes.list}>
             { items.map((e, index) => {
               //check if the entry is the selected one and mark as active
-              e.active = (e.key === selected)
-              if (e.key === selected){
-                console.log("FOUND")
-              }
+              // e.active = (e.key === selected)
+              // if (e.key === selected){
+              //   console.log("FOUND")
+              // }
               //return the Item Component
               return (
                 <ListItem
@@ -51,4 +59,4 @@ Shelf.propTypes = {
   onClickAction: PropTypes.func.isRequired
 }
 
-export default Shelf
+export default withStyles(styles)(Shelf)

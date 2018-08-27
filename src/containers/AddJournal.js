@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addNewJournal, addNewEntry } from '../actions'
-// import { FormGroup, FormControl, Button } from 'react-bootstrap'
+import { Input, Button } from '@material-ui/core';
 
 const mapStateToProps = state => {
   return {
@@ -43,12 +43,17 @@ class AddJournal extends React.Component {
 
     render() {
       return (
-          <form onSubmit={ this.handleSubmit }>
-          <label>
-            <input type="text" value={this.state.value} onChange={this.handleChange} />
-          </label>
-          <input type="submit" value="Add" />
-        </form>
+        <div>
+          <Input
+            placeholder="add new item"
+            value={this.state.value}
+            onChange={this.handleChange}
+            name="new"
+            type="text"
+            id="new"
+          />
+          <Button onClick={ this.handleSubmit } variant="contained" color="primary" > Add </Button>
+        </div>
       );
     }
 }

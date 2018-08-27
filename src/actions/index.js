@@ -78,6 +78,16 @@ export const userReset = () => ({
   type: 'USER_RESET'
 })
 
+export const setUserLocationHelper = (location) => ({
+  type: 'USER_SET_LOCATION',
+  location
+})
+
+export const setUserLocation = (location) => {
+  return (dispatch) => {
+    dispatch(setUserLocationHelper(location))
+  }
+}
 /*------------------------------------------------------------------------------
 *
 *                             JOURNAL STATE ACTIONS
@@ -281,7 +291,8 @@ export const fetchUserEntries = () => {
   return function (dispatch, getState) {
     console.log("FETCHING ENTRIES")
     // fetch the user's firebase journals
-    firebaseApi.getValueByPathOnce('users/'+getState().user.uid+'/entries/'+getState().journal.selected+'/').then(snapshot => {
+    firebaseApi.getValueByPathOnce('users/'+getState().user.uid+'/entries/'+
+                          getState().journal.selected+'/').then(snapshot => {
       // fetch the desired data from the snapshot
       let data = snapshot.val()
       //if the data returns contains journals, load them onto the view
@@ -322,7 +333,8 @@ export const editEntryText = (text, key) => {
     if (key === "") return;
 
     // user location
-    let location = 'users/'+getState().user.uid+'/entries/'+getState().journal.selected+'/'+key+'/';
+    let location = 'users/'+getState().user.uid+'/entries/'+
+                        getState().journal.selected+'/'+key+'/';
 
     let updates = {};
     updates['text'] = text;

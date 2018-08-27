@@ -1,0 +1,11 @@
+.home{
+    float: left;
+}
+.add{
+    display: inline;
+}
+.controls{
+    padding: 20px;
+    text-align: left;
+    margin-top: 200px;
+}

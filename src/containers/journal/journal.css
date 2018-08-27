@@ -1,0 +1,14 @@
+.container{
+    height: 99vh; 
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('./ls.jpg');
+}
+.bottom{
+    box-shadow: 0px -3px 15px grey; 
+    bottom: 0; 
+    width: 100vw; 
+    position: fixed;
+    margin: auto;
+    background-color: beige;
+}

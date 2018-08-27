@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Journal from './containers/Journal';
+import Journal from './containers/journal/Journal';
 import UserAuth from './containers/UserAuth';
 import { signout, resetEntryListHelper, editEntryText } from './actions/index'
 
