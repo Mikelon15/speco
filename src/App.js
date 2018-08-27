@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Journal from './containers/journal/Journal';
+// import Journal from './containers/journal/Journal';
 import UserAuth from './containers/UserAuth';
 import { signout, resetEntryListHelper, editEntryText } from './actions/index'
 
@@ -42,7 +42,7 @@ class App extends React.Component{
     let { auth } = this.props;
     return (
       <div id="app">
-        { (auth) ? <Journal /> : <UserAuth /> }
+        { (auth) ? "" : <UserAuth /> }
       </div>
     )
   }

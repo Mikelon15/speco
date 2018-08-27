@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, FormControl, Input, InputLabel } from '@material-ui/core/styles'; 
+import { withStyles, FormControl, Input, InputLabel } from '@material-ui/core'; 
 import styles from '../styles';
 
 class LoginForm extends React.Component {

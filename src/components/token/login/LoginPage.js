@@ -5,7 +5,7 @@ import { Button, Typography } from '@material-ui/core';
 import Styles from '../styles';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-export class LoginPage extends React.Component {
+class LoginPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 

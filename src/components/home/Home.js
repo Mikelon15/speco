@@ -39,7 +39,7 @@ class Home extends React.Component {
         if(!this.state.updating) return; 
         let t = new Date(); 
         this.setState({time: t.toLocaleTimeString()});
-        setTimeout(this.startClock, 100);
+        // setTimeout(this.startClock, 100);
     }
     componentWillUnmount(){
         this.setState({updating: false});
