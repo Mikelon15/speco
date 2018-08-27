@@ -4,8 +4,6 @@ import Journal from './containers/Journal';
 import UserAuth from './containers/UserAuth';
 import { signout, resetEntryListHelper, editEntryText } from './actions/index'
 
-
-
 let activeEntryKey = ""
 
 // iterates through the entries list to find the selected one
@@ -41,35 +39,10 @@ const mapDispatchToProps = dispatch => {
 
 class App extends React.Component{
   render(){
-
-    let { auth, signOut } = this.props;
-    let list =  (
-      <div>
-
-        <h1>SPECO</h1>
-        <div
-          container
-          direction="row"
-          className="app-root"
-          justify="space-between"
-          alignItems="center"
-        >
-          <div item xs={6} md={4}>
-            <Journal />
-            <button onClick={ e => {e.preventDefault(); signOut()}}> Signout </button>
-          </div>
-          <div item xs={6} md={4}>
-            <textarea text={this.props.text} onChangeAction={this.props.onChangeAction}/>
-          </div>
-          <div item xsHidden md={4}>
-          </div>
-        </div>
-      </div>
-    );
-    let Appi = (auth) ? list : <UserAuth />
+    let { auth } = this.props;
     return (
-      <div  id="app">
-        {Appi}
+      <div id="app">
+        { (auth) ? <Journal /> : <UserAuth /> }
       </div>
     )
   }

@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Item from '../components/Item';
+import { List, ListItem, Checkbox } from '@material-ui/core';
 
 class Shelf extends React.Component{
   render(){
     const { items, selected, onClickAction  } = this.props;
     return (
         <div>
-          <li>
+          <List>
             { items.map((e, index) => {
               //check if the entry is the selected one and mark as active
               e.active = (e.key === selected)
@@ -15,9 +15,26 @@ class Shelf extends React.Component{
                 console.log("FOUND")
               }
               //return the Item Component
-              return (<Item key={e.key} {...e} onClick={(event) => {onClickAction(e.key); event.preventDefault(); }}/>)
+              return (
+                <ListItem
+                  key={e.key}
+                  {...e}
+                  dense
+                  button
+                  onClick={(event) => {
+                    onClickAction(e.key);
+                    event.preventDefault();
+                  }}
+                > 
+                  <Checkbox
+                    tabIndex={-1}
+                    disableRipple
+                  />
+                  {e.title}
+                </ListItem>
+              )
             })}
-          </li>
+          </List>
         </div>
     )
   }
