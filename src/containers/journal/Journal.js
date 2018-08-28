@@ -10,15 +10,16 @@ import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 // containers and components 
 import './journal.css';
 import Home from '../../components/home/Home';
+import Library from '../Library';
+import Entry from '../../components/entry/Editor';
 
 // user actions 
 import { fetchUserJournals, setUserLocation } from '../../actions';
-import Library from '../Library';
 
 
-  const mapStateToProps = state => {
-    return {
-      location: state.user.location
+const mapStateToProps = state => {
+  return {
+    location: state.user.location
   }
 }
 
@@ -60,6 +61,7 @@ class Journal extends React.Component{
             <Grid align='center' item md={4} xs={8}>
               {( location === 'journals' ) ? <Library /> : ""}
               {( location === 'home' )     ? <Home /> : ""}
+              {( location === 'entry' )    ? <Entry /> : ""}
             </Grid>
             <Grid item xs={2} md={4}></Grid>
         </Grid>

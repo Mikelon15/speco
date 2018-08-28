@@ -4,8 +4,7 @@ import { List, ListItem, Checkbox, withStyles } from '@material-ui/core';
 
 const styles = theme => ({
   list: {
-    backgroundColor: 'white',
-    color: 'green'
+    backgroundColor: 'white'
   }
 })
 
@@ -15,7 +14,7 @@ class Shelf extends React.Component{
     const { items, onClickAction  } = this.props;
     return (
         <div>
-          <List className={this.props.classes.list}>
+          <List>
             { items.map((e, index) => {
               //check if the entry is the selected one and mark as active
               // e.active = (e.key === selected)
@@ -24,7 +23,7 @@ class Shelf extends React.Component{
               // }
               //return the Item Component
               return (
-                <ListItem
+                <ListItem 
                   key={e.key}
                   {...e}
                   dense

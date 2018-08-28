@@ -63,7 +63,7 @@ class Library extends React.Component {
       let selectedItem = (selectedEntry === "") ? selectedJournal : selectedEntry;
   
         return(
-            <Paper>
+            <div className="library">
                 <Grid className="controls" > 
                     <Button className="home" onClick={this.handleClick}> <HomeIcon /> </Button>
                     <AddJournal className="add" />
@@ -74,7 +74,7 @@ class Library extends React.Component {
                 selected={selectedItem} 
                 onClickAction={selectItem}
                 />          
-            </Paper>
+            </div>
         )
     }
 

@@ -10,7 +10,7 @@ const styles = theme => ({
     },
     text: {
         color: 'white',
-        textShadow: '2px 2px 3px black'
+        textShadow: '0 1px 30px black',
     },
     author: {
         color: 'white',
@@ -39,7 +39,7 @@ class Home extends React.Component {
         if(!this.state.updating) return; 
         let t = new Date(); 
         this.setState({time: t.toLocaleTimeString()});
-        // setTimeout(this.startClock, 100);
+        setTimeout(this.startClock, 100);
     }
     componentWillUnmount(){
         this.setState({updating: false});

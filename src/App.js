@@ -15,18 +15,18 @@ const getActiveEntryText = (selected, entries) => {
   return i.text
 }
 
-
+// finds the active entry to update text changes
 const mapStateToProps = state => {
   return {
-    // finds the active entry to update text changes
     auth: state.auth.logged,
     entry: state.entries.selected,
     text: getActiveEntryText(state.entries.selected, state.entries.entries)
   }
 }
+
+// This is event triggers when a user selects an entry
 const mapDispatchToProps = dispatch => {
   return {
-    // This is event triggers when a user selects an entry
     onChangeAction : e => {
       dispatch(editEntryText(e.target.value, activeEntryKey))
     },
