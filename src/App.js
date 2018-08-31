@@ -1,40 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Journal from './containers/journal/Journal';
-import UserAuth from './containers/UserAuth';
-import { signout, resetEntryListHelper, editEntryText } from './actions/index'
 
-let activeEntryKey = ""
+// the two main components, render Journal or authenticate user 
+import Journal from './containers/Journal';
+import UserAuth from './containers/auth/UserAuth';
 
-// iterates through the entries list to find the selected one
-const getActiveEntryText = (selected, entries) => {
-  if(selected === "")
-    return ""
-  let i = entries.filter(e => e.key === selected)[0]
-  activeEntryKey = i.key
-  return i.text
-}
 
 // finds the active entry to update text changes
 const mapStateToProps = state => {
-  return {
-    auth: state.auth.logged,
-    entry: state.entries.selected,
-    text: getActiveEntryText(state.entries.selected, state.entries.entries)
-  }
+  return { auth: state.auth.logged }
 }
 
-// This is event triggers when a user selects an entry
 const mapDispatchToProps = dispatch => {
-  return {
-    onChangeAction : e => {
-      dispatch(editEntryText(e.target.value, activeEntryKey))
-    },
-    signOut: () => {
-      dispatch(resetEntryListHelper())
-      dispatch(signout())
-    }
-  }
+  return {}
 }
 
 class App extends React.Component{

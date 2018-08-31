@@ -1,12 +1,13 @@
-import { connect } from 'react-redux'
-import { editEntryText } from '../actions/index'
-import EntryTextBox from '../components/EntryTextBox'
+import { connect } from 'react-redux';
+import { editEntryText } from '../../actions';
+import Editor from './Editor';
 
 let activeEntryKey = ""
 
 // iterates through the entries list to find the selected one
 const getActiveEntryText = (selected, entries) => {
-  if(selected === "")
+  console.log(entries)
+  if(selected === "" || entries === undefined)
     return ""
   let i = entries.filter(e => e.key === selected)[0]
   activeEntryKey = i.key
@@ -16,20 +17,19 @@ const getActiveEntryText = (selected, entries) => {
 const mapStateToProps = state => {
   return {
     // finds the active entry to update text changes
-    text: getActiveEntryText(state.journal.selected, state.journal.entries)
+    text: getActiveEntryText(state.entries.selected, state.entries.entries)
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
     // This is event triggers when a user selects an entry
     onChangeAction : e => {
-      dispatch(editEntryText(e.target.value, activeEntryKey))
+      dispatch(editEntryText(e, activeEntryKey))
     }
   }
 }
 
-const EditEntry = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(EntryTextBox)
-export default EditEntry
+)(Editor)

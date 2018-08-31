@@ -1,7 +1,8 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { addNewJournal, addNewEntry } from '../actions'
+import React from 'react';
+import { connect } from 'react-redux';
 import { Input, Button } from '@material-ui/core';
+
+import { addNewJournal, addNewEntry } from '../../actions';
 
 const mapStateToProps = state => {
   return {

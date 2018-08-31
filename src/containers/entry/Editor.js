@@ -1,15 +1,25 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import {Editor, EditorState, Modifier, RichUtils} from 'draft-js';
+import {Editor, EditorState, Modifier, RichUtils, ContentState} from 'draft-js';
 import 'draft-js/dist/Draft.css';
 
-class ColorfulEditorExample extends React.Component {
+class ColorfulEditorExample extends Component {
   constructor(props) {
     super(props);
-    this.state = {editorState: EditorState.createEmpty()};
 
+    if(this.props.text){
+      this.state = { 
+        editorState: this.props.text
+      };
+    } else {
+      this.state = {editorState: EditorState.createEmpty()};
+    }
     this.focus = () => this.refs.editor.focus();
-    this.onChange = (editorState) => this.setState({editorState});
+    this.onChange = (editorState) => {
+      this.setState({editorState});
+      console.log(editorState)
+      // if(editorState.getCurrentContent() !== undefined)
+      //   this.props.onChangeAction(editorState.getCurrentContent());
+    }
     this.toggleColor = (toggledColor) => this._toggleColor(toggledColor);
   }
 

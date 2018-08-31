@@ -1,7 +1,15 @@
-import { connect } from 'react-redux';
-import Token from '../components/token/Token.js';
+//---------------------------------------------------------------------
+//    UserAuth.js
+//
+//    This file handles the connecting the Token container to the 
+//    application data by feeding it data and actions  
+//    
+//    Author: Miguel Gutierrez
+//---------------------------------------------------------------------
 
-import { signInWithEmailAndPassword, signUpWithEmailAndPassword, toggleUserSubscribing, authClearError } from '../actions/index'
+import { connect } from 'react-redux';
+import Token from '../../components/token/Token.js';
+import { signInWithEmailAndPassword, signUpWithEmailAndPassword, toggleUserSubscribing, authClearError } from '../../actions/index'
 
 const mapStateToProps = state => {
   return {

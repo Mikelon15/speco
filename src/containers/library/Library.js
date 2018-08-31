@@ -1,10 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import Shelf from '../components/Shelf';
-import AddJournal from './AddJournal';
-import { selectJournal, selectEntryHelper, deselectJournal } from '../actions';
-import { Button, Grid, Paper } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
+
+// my own component imports 
+import Shelf from '../../components/Shelf';
+import AddJournal from '../library/AddJournal';
+
+// actions 
+import { selectJournal, selectEntryHelper, deselectJournal } from '../../actions';
+
+//styling
 import './library.css';
 
 
@@ -37,7 +43,7 @@ const mapDispatchToProps = dispatch => {
             dispatch(selectEntryHelper(key))
         },
     }
-  };
+};
 
 
 class Library extends React.Component {
