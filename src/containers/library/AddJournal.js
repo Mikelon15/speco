@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Input, Button } from '@material-ui/core';
-
+import './library.css'
 import { addNewJournal, addNewEntry } from '../../actions';
 
 const mapStateToProps = state => {
@@ -44,7 +44,7 @@ class AddJournal extends React.Component {
 
     render() {
       return (
-        <div>
+        <div className="add">
           <Input
             placeholder="add new item"
             value={this.state.value}

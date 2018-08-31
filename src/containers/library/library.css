@@ -1,15 +1,18 @@
 .home{
     float: left;
+    margin-top: 5px;
 }
 .add{
-    display: inline;
+    padding-top: 5px;
+    padding-left: 15px;
+    display: block;
 }
 .controls{
-    padding: 20px;
     text-align: left;
     margin-top: 200px;
 }
 .library{
-    background-color: #fffcf7d4;
+    border-radius:10px;
+    background-color: #fffcf7eb;
     
 }

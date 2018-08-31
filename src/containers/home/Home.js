@@ -40,18 +40,20 @@ class Home extends React.Component {
                 >
                     <Typography 
                       className={classes.time}
-                      variant="display4" >
+                        variant="display3" >
                         { time }
                     </Typography>   
 
                     {/* This is the quote section */}
-                    <Typography className={classes.text} variant="display2">
-                        {quote.quoteText}
-                    </Typography>
-                    <br/>
-                    <Typography className={classes.author} variant="display1">
-                        {quote.quoteAuthor}
-                    </Typography> 
+                    <Grid item xs={8} sm={12} className={classes.quote}>
+                        <Typography className={classes.text} variant="title">
+                            {quote.quoteText}
+                        </Typography>
+                        <br />
+                        <Typography className={classes.author} variant="subheading">
+                            {quote.quoteAuthor}
+                        </Typography> 
+                    </Grid>
                 </Grid>
             </div>
         )

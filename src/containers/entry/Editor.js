@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import {Editor, EditorState, Modifier, RichUtils, ContentState} from 'draft-js';
 import 'draft-js/dist/Draft.css';
-
+import { Slide } from '@material-ui/core'
 class ColorfulEditorExample extends Component {
   constructor(props) {
     super(props);
 
     if(this.props.text){
       this.state = { 
-        editorState: this.props.text
+        editorState: EditorState.createWithContent(ContentState.createFromText(this.props.text))
       };
     } else {
       this.state = {editorState: EditorState.createEmpty()};
@@ -17,8 +17,8 @@ class ColorfulEditorExample extends Component {
     this.onChange = (editorState) => {
       this.setState({editorState});
       console.log(editorState)
-      // if(editorState.getCurrentContent() !== undefined)
-      //   this.props.onChangeAction(editorState.getCurrentContent());
+      if(editorState.getCurrentContent() !== undefined)
+        this.props.onChangeAction(editorState.getCurrentContent().getPlainText());
     }
     this.toggleColor = (toggledColor) => this._toggleColor(toggledColor);
   }
@@ -58,25 +58,26 @@ class ColorfulEditorExample extends Component {
 
     this.onChange(nextEditorState);
   }
-
   render() {
-    const {editorState} = this.state;
+    const { editorState } = this.state;
     return (
+    <Slide direction="up" in={true} mountOnEnter unmountOnExit>
       <div style={styles.root}>
-        <ColorControls
+        {/* <ColorControls
           editorState={editorState}
           onToggle={this.toggleColor}
-        />
+        /> */}
         <div style={styles.editor} onClick={this.focus}>
           <Editor
             customStyleMap={colorStyleMap}
             editorState={editorState}
             onChange={this.onChange}
-            placeholder="Write something colorful..."
+            placeholder="Write your daily thoughts..."
             ref="editor"
           />
         </div>
       </div>
+    </Slide>
     );
   }
 }
@@ -161,13 +162,14 @@ const colorStyleMap = {
 const styles = {
   root: {
     itemsAlign: 'center',
-    marginTop: '10vh',
+    marginTop: '17vh',
     backgroundColor: '#fffcf7d4',
     fontFamily: '\'Georgia\', serif',
     fontSize: 14,
     padding: 20,
     width: '90%',
-    height: '75vh'
+    height: '75vh',
+    borderRadius: '10px'
   },
   editor: {
     borderTop: '1px solid #ddd',
