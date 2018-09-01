@@ -8,7 +8,7 @@ import Shelf from '../../components/Shelf';
 import AddJournal from '../library/AddJournal';
 
 // actions 
-import { selectJournal, selectEntryHelper, deselectJournal } from '../../actions';
+import { selectJournal, selectEntryHelper, deselectJournal, setUserLocation } from '../../actions';
 
 //styling
 import './library.css';
@@ -19,12 +19,14 @@ const mapStateToProps = state => {
       journals: state.journal.journals.map(j => {
         return {
           title: j.title,
-          key: j.key
+          key: j.key,
+          time: j.time
       }}),
       entries: state.entries.entries.map(e => {
         return {
           title: e.title,
-          key: e.key
+          key: e.key,
+          time: e.time
       }}),
       selectedJournal: state.journal.selected,
       selectedEntry: state.entries.selected,
@@ -41,6 +43,7 @@ const mapDispatchToProps = dispatch => {
         },
         selectEntry : key => {
             dispatch(selectEntryHelper(key))
+            dispatch(setUserLocation('entry'))
         },
     }
 };
@@ -67,7 +70,7 @@ class Library extends React.Component {
       let items = (selectedJournal === "") ? journals : entries;
       let selectItem = (selectedJournal === "") ? selectJournal : selectEntry;
       let selectedItem = (selectedEntry === "") ? selectedJournal : selectedEntry;
-  
+        console.log('selectedItem', selectedItem)
         return(
             <div className="library">
                 <Grid className="controls" > 

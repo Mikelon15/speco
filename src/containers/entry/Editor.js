@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import {Editor, EditorState, Modifier, RichUtils, ContentState} from 'draft-js';
+import {Editor, EditorState, Modifier, RichUtils, ContentState, convertFromRaw, convertToRaw} from 'draft-js';
 import 'draft-js/dist/Draft.css';
-import { Slide } from '@material-ui/core'
+import { Slide, Typography } from '@material-ui/core'
 class ColorfulEditorExample extends Component {
   constructor(props) {
     super(props);
 
     if(this.props.text){
       this.state = { 
-        editorState: EditorState.createWithContent(ContentState.createFromText(this.props.text))
+        editorState: EditorState.createWithContent(convertFromRaw(JSON.parse( this.props.text)) )
       };
     } else {
       this.state = {editorState: EditorState.createEmpty()};
@@ -18,7 +18,7 @@ class ColorfulEditorExample extends Component {
       this.setState({editorState});
       console.log(editorState)
       if(editorState.getCurrentContent() !== undefined)
-        this.props.onChangeAction(editorState.getCurrentContent().getPlainText());
+        this.props.onChangeAction(JSON.stringify( convertToRaw(editorState.getCurrentContent())));
     }
     this.toggleColor = (toggledColor) => this._toggleColor(toggledColor);
   }
@@ -60,13 +60,15 @@ class ColorfulEditorExample extends Component {
   }
   render() {
     const { editorState } = this.state;
+    const { title, time } = this.props; 
     return (
     <Slide direction="up" in={true} mountOnEnter unmountOnExit>
       <div style={styles.root}>
-        {/* <ColorControls
+        <div><Typography> {title} {time}</Typography></div>
+        <ColorControls
           editorState={editorState}
           onToggle={this.toggleColor}
-        /> */}
+        />
         <div style={styles.editor} onClick={this.focus}>
           <Editor
             customStyleMap={colorStyleMap}

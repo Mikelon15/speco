@@ -289,7 +289,6 @@ export const addNewJournal = name => {
 ------------------------------------------------------------------------------*/
 export const fetchUserEntries = () => {
   return function (dispatch, getState) {
-    console.log("FETCHING ENTRIES")
     // fetch the user's firebase journals
     firebaseApi.getValueByPathOnce('users/'+getState().user.uid+'/entries/'+
                           getState().journal.selected+'/').then(snapshot => {
@@ -306,11 +305,17 @@ export const fetchUserEntries = () => {
 
 export const addNewEntry = (journalKey, name) => {
   return function(dispatch) {
+    // date object 
+
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    let t = new Date(); 
+    let date = t.toLocaleDateString('en-US', options);
+
     // A post entry.
     let entryData = {
       title: name,
       text: "",
-      time: Date()
+      time: date
     };
     //get user location
     let location = 'users/'+firebaseApi.getUserID()+'/entries/'+journalKey+'/';

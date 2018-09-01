@@ -6,18 +6,21 @@ let activeEntryKey = ""
 
 // iterates through the entries list to find the selected one
 const getActiveEntryText = (selected, entries) => {
-  console.log(entries)
+  // console.log(entries, selected)
   if(selected === "" || entries === undefined)
     return ""
   let i = entries.filter(e => e.key === selected)[0]
   activeEntryKey = i.key
-  return i.text
+  return i
 }
 
 const mapStateToProps = state => {
+  let sel = getActiveEntryText(state.entries.selected, state.entries.entries);
   return {
     // finds the active entry to update text changes
-    text: getActiveEntryText(state.entries.selected, state.entries.entries)
+    text: sel.text,
+    title: sel.title,
+    time: sel.time
   }
 }
 const mapDispatchToProps = dispatch => {
