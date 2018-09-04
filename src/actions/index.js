@@ -32,7 +32,15 @@ export const toggleUserSubscribing = () => ({
 
 export const authInitialized = (user) => {
   return (dispatch) => {    
+    // user init done 
     dispatch(authInitializedDone());
+    // check if location is saved
+    let loc = localStorage.getItem("location"); 
+    console.log(loc)
+    if (loc) {
+      dispatch(setUserLocation(loc));
+    }
+    // check if user is login in or not
     (user) ? dispatch(authLoggedIn(user)) : dispatch(authLoggedOutSuccess());
   };
 }
@@ -85,7 +93,8 @@ export const setUserLocationHelper = (location) => ({
 
 export const setUserLocation = (location) => {
   return (dispatch) => {
-    dispatch(setUserLocationHelper(location))
+    localStorage.setItem("location", location);
+    dispatch(setUserLocationHelper(location));
   }
 }
 /*------------------------------------------------------------------------------
@@ -157,6 +166,11 @@ export const deselectEntryHelper = () => ({
 export const editEntryTextHelper = text => ({
   type: 'ENTRY_EDIT_TEXT',
   text: text
+})
+
+export const editEntryTitleHelper = title => ({
+  type: 'ENTRY_EDIT_TITLE',
+  title: title
 })
 
 export const toggleEntryFetchedHelper = () => ({
@@ -261,10 +275,15 @@ export const fetchUserJournals = () => {
 
 export const addNewJournal = name => {
   return function(dispatch) {
+    // date object 
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    let t = new Date();
+    let date = t.toLocaleDateString('en-US', options);
+
     // A post entry.
     let journalData = {
       title: name,
-      time: Date()
+      time: date
     };
     //get user location
     let location = 'users/'+firebaseApi.getUserID()+'/journals/';
@@ -306,7 +325,6 @@ export const fetchUserEntries = () => {
 export const addNewEntry = (journalKey, name) => {
   return function(dispatch) {
     // date object 
-
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     let t = new Date(); 
     let date = t.toLocaleDateString('en-US', options);
@@ -346,6 +364,21 @@ export const editEntryText = (text, key) => {
 
     //update data
     dispatch(editEntryTextHelper(text))
+    return firebaseApi.updateDatabaseByPath(location, updates);
+  }
+}
+export const editEntryTitle = (title, key) => {
+  return function(dispatch, getState){
+    //if nothing is selected, return
+    if (key === "") return;
+
+    let location = 'users/' + getState().user.uid+'/entries/'+
+                        getState().journal.selected+'/'+key+'/';
+    let updates = {};
+    updates['title'] = title;
+
+    //update data
+    dispatch(editEntryTitleHelper(title))
     return firebaseApi.updateDatabaseByPath(location, updates);
   }
 }

@@ -27,6 +27,14 @@ const entries = (state = initialState, action) => {
             ? {...entry, text: action.text}
             : entry
           )
+      });
+      case 'ENTRY_EDIT_TITLE':
+        return Object.assign({}, state, {
+          entries: state.entries.map(entry =>
+            (entry.key === state.selected)
+              ? { ...entry, title: action.title }
+              : entry
+          )
         });
       case 'ENTRY_TOGGLE_FETCHED':
         return Object.assign({}, state, {

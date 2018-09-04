@@ -1,8 +1,24 @@
 import React, {Component} from 'react';
-import {Editor, EditorState, Modifier, RichUtils, ContentState, convertFromRaw, convertToRaw} from 'draft-js';
+import {Editor, EditorState, Modifier, RichUtils, convertFromRaw, convertToRaw, getDefaultKeyBinding} from 'draft-js';
 import 'draft-js/dist/Draft.css';
-import { Slide, Typography } from '@material-ui/core'
-class ColorfulEditorExample extends Component {
+import './DraftJsRichEditorExample.css';
+import { Slide, Typography, Input, Button } from '@material-ui/core';
+
+import AddIcon from '@material-ui/icons/Add';
+import {styles, colorStyleMap } from './styles';
+import ColorControls from "./ColorControls";
+
+
+// editing icons 
+import Bold from '@material-ui/icons/FormatBold';
+import Italic from '@material-ui/icons/FormatItalic';
+import Underline from '@material-ui/icons/FormatUnderlined';
+
+import Quote from '@material-ui/icons/FormatQuote';
+import OList from '@material-ui/icons/FormatListNumbered';
+import UList from '@material-ui/icons/FormatListBulleted';
+
+class EntryEditor extends Component {
   constructor(props) {
     super(props);
 
@@ -20,7 +36,56 @@ class ColorfulEditorExample extends Component {
       if(editorState.getCurrentContent() !== undefined)
         this.props.onChangeAction(JSON.stringify( convertToRaw(editorState.getCurrentContent())));
     }
+    // buttons bindings 
     this.toggleColor = (toggledColor) => this._toggleColor(toggledColor);
+    this.handleKeyCommand = this._handleKeyCommand.bind(this);
+    this.mapKeyToEditorCommand = this._mapKeyToEditorCommand.bind(this);
+    this.toggleBlockType = this._toggleBlockType.bind(this);
+    this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
+
+
+  }
+
+  _handleKeyCommand(command, editorState) {
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      this.onChange(newState);
+      return true;
+    }
+    return false;
+  }
+  
+  _mapKeyToEditorCommand(e) {
+    if (e.keyCode === 9 /* TAB */) {
+      const newEditorState = RichUtils.onTab(
+        e,
+        this.state.editorState,
+        4, /* maxDepth */
+      );
+      if (newEditorState !== this.state.editorState) {
+        this.onChange(newEditorState);
+      }
+      return;
+    }
+    return getDefaultKeyBinding(e);
+  }
+
+  _toggleBlockType(blockType) {
+    this.onChange(
+      RichUtils.toggleBlockType(
+        this.state.editorState,
+        blockType
+      )
+    );
+  }
+  
+  _toggleInlineStyle(inlineStyle) {
+    this.onChange(
+      RichUtils.toggleInlineStyle(
+        this.state.editorState,
+        inlineStyle
+      )
+    );
   }
 
   _toggleColor(toggledColor) {
@@ -60,71 +125,144 @@ class ColorfulEditorExample extends Component {
   }
   render() {
     const { editorState } = this.state;
-    const { title, time } = this.props; 
+    const { title, time, changeEntryTitle} = this.props; 
+
+    // If the user changes block type before entering any text, we can
+    // either style the placeholder or hide it. Let's just hide it now.
+    let className = 'RichEditor-editor';
+    var contentState = editorState.getCurrentContent();
+    if (!contentState.hasText()) {
+      if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+        className += ' RichEditor-hidePlaceholder';
+      }
+    }
+
     return (
-    <Slide direction="up" in={true} mountOnEnter unmountOnExit>
-      <div style={styles.root}>
-        <div><Typography> {title} {time}</Typography></div>
-        <ColorControls
-          editorState={editorState}
-          onToggle={this.toggleColor}
-        />
-        <div style={styles.editor} onClick={this.focus}>
-          <Editor
-            customStyleMap={colorStyleMap}
+      <Slide direction="up" in={true} mountOnEnter unmountOnExit>
+        <div style={styles.root}>
+          <div style={styles.header}> 
+            <Input 
+              placeholder="enter title" 
+              fullWidth 
+              value={title}
+              style={styles.title}
+              onChange={changeEntryTitle}> </Input>
+            <Typography style={styles.time}> {time}  </Typography>
+          </div>
+          {/* <ColorControls
             editorState={editorState}
-            onChange={this.onChange}
-            placeholder="Write your daily thoughts..."
-            ref="editor"
+            onToggle={this.toggleColor}
+          /> */}
+
+          <InlineStyleControls
+            editorState={editorState}
+            onToggle={this.toggleInlineStyle}
           />
+          
+          <BlockStyleControls
+            editorState={editorState}
+            onToggle={this.toggleBlockType}
+          /> 
+
+          <div style={styles.editor} onClick={this.focus}>
+            <Editor
+              customStyleMap={colorStyleMap}
+              editorState={editorState}
+              onChange={this.onChange}
+              placeholder="Write your daily thoughts..."
+              ref="editor"
+            />
+          </div>
+
+          <Button variant="fab" color="primary" aria-label="Add" style={styles.addButton}>
+            <AddIcon />
+          </Button>
         </div>
-      </div>
-    </Slide>
+      </Slide>
     );
   }
 }
 
+const styleMap = {
+  CODE: {
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+    fontSize: 16,
+    padding: 2,
+  },
+};
+function getBlockStyle(block) {
+  switch (block.getType()) {
+    case 'blockquote': return 'RichEditor-blockquote';
+    default: return null;
+  }
+}
 class StyleButton extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.onToggle = (e) => {
       e.preventDefault();
       this.props.onToggle(this.props.style);
     };
   }
-
   render() {
-    let style;
+    let className = 'RichEditor-styleButton';
     if (this.props.active) {
-      style = {...styles.styleButton, ...colorStyleMap[this.props.style]};
-    } else {
-      style = styles.styleButton;
+      className += ' RichEditor-activeButton';
     }
-
     return (
-      <span style={style} onMouseDown={this.onToggle}>
+      <span className={className} onMouseDown={this.onToggle}>
         {this.props.label}
       </span>
     );
   }
 }
-
-var COLORS = [
-  {label: 'Red', style: 'red'},
-  {label: 'Orange', style: 'orange'},
-  {label: 'Yellow', style: 'yellow'},
-  {label: 'Green', style: 'green'},
-  {label: 'Blue', style: 'blue'},
-  {label: 'Indigo', style: 'indigo'},
-  {label: 'Violet', style: 'violet'},
+const BLOCK_TYPES = [
+  // { label: 'H1', style: 'header-one' },
+  // { label: 'H2', style: 'header-two' },
+  // { label: 'H3', style: 'header-three' },
+  // { label: 'H4', style: 'header-four' },
+  // { label: 'H5', style: 'header-five' },
+  // { label: 'H6', style: 'header-six' },
+  { label: <Quote />, style: 'blockquote' },
+  { label: <UList />, style: 'unordered-list-item' },
+  { label: <OList />, style: 'ordered-list-item' },
 ];
-
-const ColorControls = (props) => {
-  var currentStyle = props.editorState.getCurrentInlineStyle();
+const BlockStyleControls = (props) => {
+  const { editorState } = props;
+  const selection = editorState.getSelection();
+  const blockType = editorState
+    .getCurrentContent()
+    .getBlockForKey(selection.getStartKey())
+    .getType();
   return (
-    <div style={styles.controls}>
-      {COLORS.map(type =>
+    <div className="RichEditor-controls">
+      {BLOCK_TYPES.map((type) =>
         <StyleButton
+          key={type.label}
+          active={type.style === blockType}
+          label={type.label}
+          onToggle={props.onToggle}
+          style={type.style}
+        />
+      )}
+    </div>
+  );
+};
+var INLINE_STYLES = [
+  { label: <Bold />, style: 'BOLD' },
+  { label: <Italic />, style: 'ITALIC' },
+  { label: <Underline />, style: 'UNDERLINE' },
+  // { label: 'Monospace', style: 'CODE' },
+];
+const InlineStyleControls = (props) => {
+  const currentStyle = props.editorState.getCurrentInlineStyle();
+
+  return (
+    <div className="RichEditor-controls">
+      {INLINE_STYLES.map((type) =>
+        <StyleButton
+          key={type.label}
           active={currentStyle.has(type.style)}
           label={type.label}
           onToggle={props.onToggle}
@@ -135,63 +273,4 @@ const ColorControls = (props) => {
   );
 };
 
-// This object provides the styling information for our custom color
-// styles.
-const colorStyleMap = {
-  red: {
-    color: 'rgba(255, 0, 0, 1.0)',
-  },
-  orange: {
-    color: 'rgba(255, 127, 0, 1.0)',
-  },
-  yellow: {
-    color: 'rgba(180, 180, 0, 1.0)',
-  },
-  green: {
-    color: 'rgba(0, 180, 0, 1.0)',
-  },
-  blue: {
-    color: 'rgba(0, 0, 255, 1.0)',
-  },
-  indigo: {
-    color: 'rgba(75, 0, 130, 1.0)',
-  },
-  violet: {
-    color: 'rgba(127, 0, 255, 1.0)',
-  },
-};
-
-const styles = {
-  root: {
-    itemsAlign: 'center',
-    marginTop: '17vh',
-    backgroundColor: '#fffcf7d4',
-    fontFamily: '\'Georgia\', serif',
-    fontSize: 14,
-    padding: 20,
-    width: '90%',
-    height: '75vh',
-    borderRadius: '10px'
-  },
-  editor: {
-    borderTop: '1px solid #ddd',
-    cursor: 'text',
-    fontSize: 16,
-    marginTop: 20,
-    minHeight: 100,
-    paddingTop: 20,
-  },
-  controls: {
-    fontFamily: '\'Helvetica\', sans-serif',
-    fontSize: 14,
-    marginBottom: 10,
-    userSelect: 'none',
-  },
-  styleButton: {
-    color: '#999',
-    cursor: 'pointer',
-    marginRight: 16,
-    padding: '2px 0',
-  },
-};
-export default ColorfulEditorExample
+export default EntryEditor

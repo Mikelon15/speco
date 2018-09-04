@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { editEntryText } from '../../actions';
+import { editEntryText, editEntryTitle } from '../../actions';
 import Editor from './Editor';
 
 let activeEntryKey = ""
@@ -28,6 +28,10 @@ const mapDispatchToProps = dispatch => {
     // This is event triggers when a user selects an entry
     onChangeAction : e => {
       dispatch(editEntryText(e, activeEntryKey))
+    },
+    changeEntryTitle: e => {
+      console.log(e.target.value)
+      dispatch(editEntryTitle(e.target.value, activeEntryKey))
     }
   }
 }

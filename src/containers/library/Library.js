@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 
 // my own component imports 
-import Shelf from '../../components/Shelf';
+import Item from '../../components/Item';
 import AddJournal from '../library/AddJournal';
 
 // actions 
@@ -70,7 +70,6 @@ class Library extends React.Component {
       let items = (selectedJournal === "") ? journals : entries;
       let selectItem = (selectedJournal === "") ? selectJournal : selectEntry;
       let selectedItem = (selectedEntry === "") ? selectedJournal : selectedEntry;
-        console.log('selectedItem', selectedItem)
         return(
             <div className="library">
                 <Grid className="controls" > 
@@ -78,7 +77,7 @@ class Library extends React.Component {
                     <AddJournal className="add" />
                 </Grid> 
                 
-                <Shelf 
+                <Item 
                 items={items} 
                 selected={selectedItem} 
                 onClickAction={selectItem}
