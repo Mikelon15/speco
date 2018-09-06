@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import {Editor, EditorState, Modifier, RichUtils, convertFromRaw, convertToRaw, getDefaultKeyBinding} from 'draft-js';
 import 'draft-js/dist/Draft.css';
-import './DraftJsRichEditorExample.css';
-import { Slide, Typography, Input, Button } from '@material-ui/core';
+import './editorstyle.css';
+import { Slide, Typography, Input, Button , MenuItem} from '@material-ui/core';
+import Select from '@material/react-select'
+import '@material/react-select/dist/select.css';
 
 import AddIcon from '@material-ui/icons/Add';
 import {styles, colorStyleMap } from './styles';
@@ -123,6 +125,11 @@ class EntryEditor extends Component {
 
     this.onChange(nextEditorState);
   }
+
+  handleFontChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
   render() {
     const { editorState } = this.state;
     const { title, time, changeEntryTitle} = this.props; 
@@ -136,7 +143,6 @@ class EntryEditor extends Component {
         className += ' RichEditor-hidePlaceholder';
       }
     }
-
     return (
       <Slide direction="up" in={true} mountOnEnter unmountOnExit>
         <div style={styles.root}>
@@ -153,16 +159,28 @@ class EntryEditor extends Component {
             editorState={editorState}
             onToggle={this.toggleColor}
           /> */}
+          <div className="control-container">
+            <Select
+              value={this.state.age}
+              onChange={this.handleFontChange}
+              displayEmpty
+              outlined
+              name="age"
+            >
+              <option value='pomsky'>Pomsky</option>
+              <option value='goldenDoodle'>Golden Doodle</option>
+            </Select>
 
-          <InlineStyleControls
-            editorState={editorState}
-            onToggle={this.toggleInlineStyle}
-          />
-          
-          <BlockStyleControls
-            editorState={editorState}
-            onToggle={this.toggleBlockType}
-          /> 
+            <InlineStyleControls
+              editorState={editorState}
+              onToggle={this.toggleInlineStyle}
+            />
+
+            <BlockStyleControls
+              editorState={editorState}
+              onToggle={this.toggleBlockType}
+            /> 
+          </div>
 
           <div style={styles.editor} onClick={this.focus}>
             <Editor
@@ -224,9 +242,9 @@ const BLOCK_TYPES = [
   // { label: 'H4', style: 'header-four' },
   // { label: 'H5', style: 'header-five' },
   // { label: 'H6', style: 'header-six' },
-  { label: <Quote />, style: 'blockquote' },
-  { label: <UList />, style: 'unordered-list-item' },
-  { label: <OList />, style: 'ordered-list-item' },
+  { key: 'Quote', label: <Quote />, style: 'blockquote' },
+  { key: 'UList', label: <UList />, style: 'unordered-list-item' },
+  { key: 'OList', label: <OList />, style: 'ordered-list-item' },
 ];
 const BlockStyleControls = (props) => {
   const { editorState } = props;
@@ -239,7 +257,7 @@ const BlockStyleControls = (props) => {
     <div className="RichEditor-controls">
       {BLOCK_TYPES.map((type) =>
         <StyleButton
-          key={type.label}
+          key={type.key}
           active={type.style === blockType}
           label={type.label}
           onToggle={props.onToggle}
@@ -250,9 +268,9 @@ const BlockStyleControls = (props) => {
   );
 };
 var INLINE_STYLES = [
-  { label: <Bold />, style: 'BOLD' },
-  { label: <Italic />, style: 'ITALIC' },
-  { label: <Underline />, style: 'UNDERLINE' },
+  { key: 'Bold', label: <Bold />, style: 'BOLD' },
+  { key: 'Italic', label: <Italic />, style: 'ITALIC' },
+  { key: 'Underline', label: <Underline />, style: 'UNDERLINE' },
   // { label: 'Monospace', style: 'CODE' },
 ];
 const InlineStyleControls = (props) => {
@@ -262,7 +280,7 @@ const InlineStyleControls = (props) => {
     <div className="RichEditor-controls">
       {INLINE_STYLES.map((type) =>
         <StyleButton
-          key={type.label}
+          key={type.key}
           active={currentStyle.has(type.style)}
           label={type.label}
           onToggle={props.onToggle}

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { editEntryText, editEntryTitle } from '../../actions';
-import Editor from './Editor';
+import EntryEditor from './EntryEditor';
 
 let activeEntryKey = ""
 
@@ -30,7 +30,6 @@ const mapDispatchToProps = dispatch => {
       dispatch(editEntryText(e, activeEntryKey))
     },
     changeEntryTitle: e => {
-      console.log(e.target.value)
       dispatch(editEntryTitle(e.target.value, activeEntryKey))
     }
   }
@@ -39,4 +38,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Editor)
+)(EntryEditor)

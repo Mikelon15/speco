@@ -70,13 +70,13 @@ class Journal extends React.Component{
       <div className="container">
 
         <Grid container>
-            <Grid item xs={2} md={4}></Grid>
-            <Grid align='center' item md={4} xs={8}>
+            <Grid item xs={2} md={3}></Grid>
+            <Grid align='center' item md={6} xs={8}>
               {( location === 'journals' ) ? <Library /> : ""}
               {( location === 'home' )     ?  <Home />   : ""}
               {( location === 'entry' )    ?  <Entry />  : ""}
             </Grid>
-            <Grid item xs={2} md={4}></Grid>
+            <Grid item xs={2} md={3}></Grid>
         </Grid>
 
 
