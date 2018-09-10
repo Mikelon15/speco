@@ -1,17 +1,17 @@
 const initialState = {
-  selected : "",
+  selected: "",
   fetched: false,
   fetching: false,
   journals: [],
 };
 
-const journal = (state = initialState, action ) => {
-  switch (action.type){
+const journal = (state = initialState, action) => {
+  switch (action.type) {
     case 'JOURNAL_EDIT':
       return Object.assign({}, state, {});
     case 'JOURNAL_LOAD':
       return Object.assign({}, state, {
-        journals : [{
+        journals: [{
           key: action.key,
           title: action.title,
           time: action.time,
@@ -25,15 +25,14 @@ const journal = (state = initialState, action ) => {
         selected: action.key,
         journals: state.journals.map(journal =>
           (journal.key === action.key)
-          ? {...journal, active: true}
-          : {...journal, active: false}
+            ? { ...journal, active: true }
+            : { ...journal, active: false }
         )
       });
     case 'JOURNAL_DESELECT':
       return Object.assign({}, state, {
         selected: "",
-        journals: state.journals.map(journal =>
-          { return {...journal, active: false}}
+        journals: state.journals.map(journal => { return { ...journal, active: false } }
         )
       });
     case 'JOURNAL_TOGGLE_FETCHED':
@@ -42,7 +41,7 @@ const journal = (state = initialState, action ) => {
       });
     case 'JOURNAL_TOGGLE_FETCHING':
       return Object.assign({}, state, {
-        fetcheding: !state.fetcheding
+        fetching: !state.fetching
       });
     default:
       return state

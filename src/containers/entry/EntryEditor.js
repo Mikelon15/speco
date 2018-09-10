@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { withStyles, Input, Typography, Slide } from '@material-ui/core'
-import ReactQuill from 'react-quill'; 
-import renderHTML from 'react-render-html';
+import { withStyles, Input, Typography } from '@material-ui/core'
+import ReactQuill from 'react-quill';
 
 import 'react-quill/dist/quill.snow.css';
 import './editorstyle.css';
@@ -45,7 +44,7 @@ const modules = {
     toolbar: [
         [{ 'font': [] }],
         [{ size: [] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote', {color: []}],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote', { color: [] }],
         [{ 'list': 'ordered' }, { 'list': 'bullet' },
         { 'indent': '-1' }, { 'indent': '+1' }],
     ],
@@ -65,38 +64,32 @@ const formats = [
 ]
 
 class EntryEditor extends Component {
-    constructor(props) {
-        super(props)
-    }
-
     render() {
-        const { title, time, classes, text, changeEntryTitle, onChangeAction } = this.props; 
-        
+        const { title, time, classes, text, changeEntryTitle, onChangeAction } = this.props;
+
         let placeholder = 'write your epic...'
 
-        return(
-                <Slide direction="up" in={true} mountOnEnter unmountOnExit>
-                   <div className={classes.root}>
-                        <div className={classes.header}>
-                            <Input
-                                className={classes.title}
-                                placeholder="enter title"
-                                fullWidth
-                                value={title}
-                                onChange={changeEntryTitle}>
-                            </Input>
-                        </div>
-                        <Typography className={classes.time}> {time}  </Typography>
-                        <ReactQuill
-                            theme="snow"
-                            onChange={(e) => onChangeAction(e)}
-                            value={text}
-                            modules={modules}
-                            formats={formats}
-                            placeholder={placeholder}
-                        />
-                    </div>
-                </Slide>                
+        return (
+            <div className={classes.root}>
+                <div className={classes.header}>
+                    <Input
+                        className={classes.title}
+                        placeholder="enter title"
+                        fullWidth
+                        value={title}
+                        onChange={changeEntryTitle}>
+                    </Input>
+                </div>
+                <Typography className={classes.time}> {time}  </Typography>
+                <ReactQuill
+                    theme="snow"
+                    onChange={(e) => onChangeAction(e)}
+                    value={text}
+                    modules={modules}
+                    formats={formats}
+                    placeholder={placeholder}
+                />
+            </div>
         )
     }
 }

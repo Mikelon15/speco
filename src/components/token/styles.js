@@ -24,7 +24,10 @@ export const styles = theme => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing.unit / 2,
+  },
+  input: {
+    margin: '0px'
   },
   submit: {
     marginTop: theme.spacing.unit * 3,
@@ -39,7 +42,7 @@ export const styles = theme => ({
   },
   pointer: {
     cursor: 'pointer',
-    textDecoration: 'underline' 
+    textDecoration: 'underline'
   }
 });
 

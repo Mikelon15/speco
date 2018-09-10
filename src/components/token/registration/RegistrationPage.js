@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import RegistrationForm from './RegistrationForm';
-import { Typography, Button } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { withStyles } from '@material-ui/core';
 import styles from '../styles';
 
@@ -32,36 +32,36 @@ class RegistrationPage extends React.Component {
     const field = event.target.name;
     let user = this.state.user;
     user[field] = event.target.value;
-    return this.setState({user: user});
+    return this.setState({ user: user });
   }
 
   createUser(event) {
     event.preventDefault();
     let newState = Object.assign({}, this.state);
-    let { username, email, password, confirm } = this.state.user; 
-    let noErrors = true; 
+    let { username, email, password, confirm } = this.state.user;
+    let noErrors = true;
 
     // display the correct helper text for password
-    if(password !== confirm){
-      noErrors = false; 
+    if (password !== confirm) {
+      noErrors = false;
       newState.valid.password = "Passwords do not match";
       newState.valid.confirm = "Passwords do not match";
-    } else if(password === "" && confirm === ""){
-      noErrors = false; 
+    } else if (password === "" && confirm === "") {
+      noErrors = false;
       newState.valid.password = "Please enter your password";
       newState.valid.confirm = "Please confirm your password";
-    } else { 
-      newState.valid.password = ""; 
+    } else {
+      newState.valid.password = "";
       newState.valid.confirm = "";
     }
     // display the correct helper text for username
-    if(username === ""){
-      noErrors = false; 
+    if (username === "") {
+      noErrors = false;
       newState.valid.username = "Please enter a valid username";
     } else { newState.valid.username = "" }
 
     // helper message for blank email
-    if(email === ""){
+    if (email === "") {
       noErrors = false;
       newState.valid.email = "Please enter a valid email";
     }
@@ -73,23 +73,23 @@ class RegistrationPage extends React.Component {
   }
 
   render() {
-    let { error, classes } = this.props; 
+    let { error, classes, fetching } = this.props;
 
     // "auth/email-already-in-use"
     // "auth/invalid-email"
     let valid = Object.assign({}, this.state.valid);
-    if(error) {
-      switch(error.code){
-        case("auth/invalid-email"): 
+    if (error) {
+      switch (error.code) {
+        case ("auth/invalid-email"):
           valid.email = error.message;
           break;
-        case("auth/email-already-in-use"): 
+        case ("auth/email-already-in-use"):
           valid.email = error.message;
           break;
         default:
-      }  
+      }
     }
-    
+
     return (
       <div>
         <Typography variant='title'>SIGN UP</Typography>
@@ -99,19 +99,12 @@ class RegistrationPage extends React.Component {
           saving={this.state.saving}
           user={this.state.user}
           valid={valid}
+          fetching={fetching}
+          onSubmit={this.createUser}
         />
-        <Button 
-          type="submit"
-          fullWidth
-          variant="raised"
-          color="primary" 
-          style={{float: 'right'}}
-          onClick={this.createUser}>
-          SIGN UP
-        </Button>
         <Typography className={classes.register}>
-          <a className={classes.pointer} onClick={e=>{e.preventDefault(); this.props.toggle()}}> 
-            Already have an account? 
+          <a className={classes.pointer} onClick={e => { e.preventDefault(); this.props.toggle() }}>
+            Already have an account?
           </a>
         </Typography>
       </div>

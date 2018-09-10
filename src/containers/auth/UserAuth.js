@@ -14,7 +14,8 @@ import { signInWithEmailAndPassword, signUpWithEmailAndPassword, toggleUserSubsc
 const mapStateToProps = state => {
   return {
     subscribing: state.auth.subscribing,
-    error: state.auth.error
+    error: state.auth.error,
+    fetching: state.user.fetching
   }
 }
 
@@ -22,8 +23,8 @@ const mapDispatchToProps = dispatch => {
   return {
     onSignUp: (email, password, username) => { dispatch(signUpWithEmailAndPassword(email, password, username)) },
     onSignIn: e => { dispatch(signInWithEmailAndPassword(e)) },
-    toggleUserSubscribing: () => { 
-      dispatch(toggleUserSubscribing()) 
+    toggleUserSubscribing: () => {
+      dispatch(toggleUserSubscribing())
       dispatch(authClearError())
     }
   }

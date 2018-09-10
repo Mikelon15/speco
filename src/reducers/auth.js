@@ -2,13 +2,14 @@ let initialState = {
   initialized: false,
   logged: false,
   subscribing: false,
-  error: null
+  error: null,
+  fetching: false
 }
 
 const auth = (state = initialState, action) => {
   switch (action.type) {
     case 'AUTH_INITIALIZATION_DONE':
-      return Object.assign({}, state, {initialized: true});
+      return Object.assign({}, state, { initialized: true });
 
     case 'AUTH_LOGGED_IN_SUCCESSFUL':
       return Object.assign({}, state, {
@@ -24,6 +25,12 @@ const auth = (state = initialState, action) => {
       return Object.assign({}, state, {
         subscribing: !state.subscribing
       });
+
+    case 'AUTH_TOGGLE_FETCHING':
+      return Object.assign({}, state, {
+        fetching: !state.fetching
+      });
+
     case 'AUTH_ERROR_MESSAGE':
       return Object.assign({}, state, {
         error: action.error

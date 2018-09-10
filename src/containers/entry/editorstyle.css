@@ -10,3 +10,7 @@
   border-radius: 10px;
   border: none;
 }
+.ql-editor {
+  overflow: auto;
+  max-height: 450px;
+}

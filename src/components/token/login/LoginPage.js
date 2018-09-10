@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import LoginForm from './LoginForm'; 
-import { Button, Typography } from '@material-ui/core';
+import LoginForm from './LoginForm';
+import { Typography } from '@material-ui/core';
 import Styles from '../styles';
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -24,7 +24,7 @@ class LoginPage extends React.Component {
     const field = event.target.name;
     let user = this.state.user;
     user[field] = event.target.value;
-    return this.setState({user: user});
+    return this.setState({ user: user });
   }
 
   createUser(event) {
@@ -34,70 +34,62 @@ class LoginPage extends React.Component {
 
 
   render() {
-    let { error, classes } = this.props; 
+    let { error, classes, fetching } = this.props;
 
-    let message = "", valid = true; 
-    if(error) {
+    let message = "", valid = true;
+    if (error) {
       valid = false;
-      if(error) {
-        switch(error.code){
-          case("auth/invalid-email"): 
+      if (error) {
+        switch (error.code) {
+          case ("auth/invalid-email"):
             message = "Account could not be found with credentials provided";
             break;
-          case("auth/user-not-found" ): 
+          case ("auth/user-not-found"):
             message = "Account could not be found with credentials provided";
             break;
-          case("auth/too-many-requests"): 
-            message = error.message; 
+          case ("auth/too-many-requests"):
+            message = error.message;
             break;
-          case("auth/wrong-password"): 
+          case ("auth/wrong-password"):
             message = "Account could not be found with credentials provided";
             break;
           default:
-            message = error.message; 
-        }  
+            message = error.message;
+        }
       }
     }
 
     return (
       <div>
-          <Typography variant='title'>
-            SIGN IN
+        <Typography variant='title'>
+          SIGN IN
           </Typography>
 
-          <LoginForm
-            valid={valid}
-            onChange={this.updateUserState}
-            onSave={this.createUser}
-            user={this.state.user} 
-          />
+        <LoginForm
+          valid={valid}
+          onChange={this.updateUserState}
+          onSubmit={this.createUser}
+          onSave={this.createUser}
+          user={this.state.user}
+          fetching={fetching}
+        />
 
-          <Typography color="error">
-            {message}
-          </Typography>
+        <Typography color="error">
+          {message}
+        </Typography>
 
-          <Button 
-            className={classes.submit}
-            type="submit"
-            fullWidth
-            variant="raised"
-            color="primary" 
-            style={{float: 'right'}}
-            onClick={this.createUser}>
-            SIGN IN
-          </Button>
 
-          <Typography className={classes.register}>
-            <a className={classes.pointer} onClick={e=>{e.preventDefault(); this.props.toggle()}}> 
-              Register now!
+        <Typography className={classes.register}>
+          <a className={classes.pointer} onClick={e => { e.preventDefault(); this.props.toggle() }}>
+            Register now!
             </a>
-          </Typography>
+        </Typography>
 
-          <Typography className={classes.resetpassword}>
-            <a className={classes.pointer} onClick={e=>{e.preventDefault(); this.props.toggle()}}> 
-              Forgot password?
+        <Typography className={classes.resetpassword}>
+          <a className={classes.pointer} onClick={e => { e.preventDefault(); this.props.toggle() }}>
+            Forgot password?
             </a>
-          </Typography>
+        </Typography>
       </div>
     );
   }

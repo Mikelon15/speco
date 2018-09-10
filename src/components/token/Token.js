@@ -7,26 +7,28 @@ import Styles from "./styles";
 import './Token.css';
 
 class Token extends Component {
-    render(){
-        let { onSignUp, onSignIn, toggleUserSubscribing, 
-              classes, subscribing, error } = this.props;
-        let errorMsg = (error) ? error : ""; 
+    render() {
+        let { onSignUp, onSignIn, toggleUserSubscribing,
+            classes, subscribing, error, fetching } = this.props;
+        let errorMsg = (error) ? error : "";
         let authType = (subscribing) ?
-            (<SignUp 
-                error={errorMsg}    
-                onSubmit={onSignUp} 
-                toggle={toggleUserSubscribing} />) : 
+            (<SignUp
+                error={errorMsg}
+                onSubmit={onSignUp}
+                toggle={toggleUserSubscribing}
+                fetching={fetching} />) :
             (<LogIn
                 error={errorMsg}
                 toggle={toggleUserSubscribing}
-                onSubmit={onSignIn} />)
-        return(
-            <Grid  className="grid-container" container>
+                onSubmit={onSignIn}
+                fetching={fetching} />)
+        return (
+            <Grid className="grid-container" container>
                 <Grid item xs={2} md={4}></Grid>
                 <Grid item md={4} xs={8}>
                     <Paper className={classes.paper}>
                         <h1 className="logo">speco</h1>
-                        { authType }
+                        {authType}
                     </Paper>
                 </Grid>
                 <Grid item xs={2} md={4}></Grid>

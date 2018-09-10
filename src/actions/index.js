@@ -30,13 +30,16 @@ export const toggleUserSubscribing = () => ({
   type: 'AUTH_TOGGLE_SUBSCRIBING'
 })
 
+export const toggleAuthFetching = () => ({
+  type: 'AUTH_TOGGLE_FETCHING'
+})
+
 export const authInitialized = (user) => {
-  return (dispatch) => {    
+  return (dispatch) => {
     // user init done 
     dispatch(authInitializedDone());
     // check if location is saved
-    let loc = localStorage.getItem("location"); 
-    console.log(loc)
+    let loc = localStorage.getItem("location");
     if (loc) {
       dispatch(setUserLocation(loc));
     }
@@ -69,8 +72,8 @@ export const setUserEmail = (email) => ({
 });
 
 export const setUserUID = (uid) => ({
-    type: 'SET_USER_UID',
-    uid
+  type: 'SET_USER_UID',
+  uid
 });
 
 export const toggleUserFetching = () => ({
@@ -126,11 +129,11 @@ export const selectJournalHelper = key => ({
   key
 })
 
-export const toggleFetchedJournalHlper = () => ({
+export const toggleJournalFetchedHelper = () => ({
   type: 'JOURNAL_TOGGLE_FETCHED'
 })
 
-export const toggleFetchingJournalHlper = () => ({
+export const toggleJournalFetchingHelper = () => ({
   type: 'JOURNAL_TOGGLE_FETCHING'
 })
 export const deselectJournal = () => {
@@ -142,6 +145,7 @@ export const deselectJournal = () => {
 }
 export const selectJournal = (key) => {
   return (dispatch) => {
+    localStorage.setItem("journal", key);
     dispatch(selectJournalHelper(key))
     dispatch(fetchUserEntries())
   }
@@ -198,37 +202,48 @@ export const selectEntryHelper = key => ({
   key
 })
 
+export const selectEntry = (key) => {
+  return function (dispatch) {
+    localStorage.setItem("entry", key);
+    dispatch(selectEntryHelper(key))
+  }
+}
 /*------------------------------------------------------------------------------
 *
 *                             FIREBASE AUTH ACTIONS
 *
 ------------------------------------------------------------------------------*/
 export const signUpWithEmailAndPassword = (email, password, username) => {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     let user = { email: email, password: password }
-    firebaseApi.createUserWithEmailAndPassword(user).then((obj)=>{
+    dispatch(toggleUserFetching())
+    firebaseApi.createUserWithEmailAndPassword(user).then((obj) => {
       //updates user's profile username
-      obj.user.updateProfile({displayName: username})
+      obj.user.updateProfile({ displayName: username })
       //dipatch functions to let app know user is signed in
       dispatch(authLoggedIn(obj.user))
       dispatch(toggleUserSubscribing())
     })
-    .catch((error) => {
-      // Handle Errors here
-      dispatch(authError(error))
-    });
+      .catch((error) => {
+        // Handle Errors here
+        dispatch(authError(error))
+        dispatch(toggleUserFetching())
+      });
   }
 }
 
 export const signInWithEmailAndPassword = (user) => {
-  return function(dispatch) {
+  return function (dispatch) {
+    dispatch(toggleUserFetching())
     firebaseApi.signInWithEmailAndPassword(user.email, user.password)
-    .then(val => {
-      dispatch(authLoggedIn(val.user));
-    })
-    .catch(error => {
-      dispatch(authError(error))
-    });
+      .then(val => {
+        dispatch(authLoggedIn(val.user));
+        dispatch(toggleUserFetching())
+      })
+      .catch(error => {
+        dispatch(authError(error));
+        dispatch(toggleUserFetching());
+      });
   }
 }
 
@@ -242,8 +257,8 @@ export const authLoggedIn = (user) => {
 }
 
 export const signout = () => {
-  return function(dispatch){
-    firebaseApi.authSignOut().then(function(promise){
+  return function (dispatch) {
+    firebaseApi.authSignOut().then(function (promise) {
       dispatch(signoutUser());
       dispatch(authReset());
       dispatch(userReset());
@@ -260,21 +275,33 @@ export const signout = () => {
 ------------------------------------------------------------------------------*/
 export const fetchUserJournals = () => {
   return function (dispatch, getState) {
+    dispatch(toggleJournalFetchingHelper());
+
     // fetch the user's firebase journals
-    firebaseApi.getValueByPathOnce('users/'+getState().user.uid+'/journals').then(snapshot => {
+    firebaseApi.getValueByPathOnce('users/' + getState().user.uid + '/journals').then(snapshot => {
       // fetch the desired data from the snapshot
       let data = snapshot.val()
+      // check if location is saved for selected entry
+      let loc = localStorage.getItem("journal");
+      let load = false;
+      if (loc) load = true;
+
       //if the data returns contains journals, load them onto the view
-      if(data != null)
-         Object.keys(data).forEach(key => { //dispatch action to load journal
-           dispatch(loadJournalHelper(key, data[key].title, data[key].time))
+      if (data != null)
+        Object.keys(data).forEach(key => { //dispatch action to load journal
+          dispatch(loadJournalHelper(key, data[key].title, data[key].time))
+          if (load)
+            if (loc === key)
+              dispatch(selectJournal(loc));
         });
+      dispatch(toggleJournalFetchedHelper());
+      dispatch(toggleJournalFetchingHelper());
     })
   }
 }
 
 export const addNewJournal = name => {
-  return function(dispatch) {
+  return function (dispatch) {
     // date object 
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     let t = new Date();
@@ -286,7 +313,7 @@ export const addNewJournal = name => {
       time: date
     };
     //get user location
-    let location = 'users/'+firebaseApi.getUserID()+'/journals/';
+    let location = 'users/' + firebaseApi.getUserID() + '/journals/';
 
     // Get a key for a new Entry.
     let newEntryKey = firebaseApi.createNewKeyInPath(location);
@@ -308,25 +335,37 @@ export const addNewJournal = name => {
 ------------------------------------------------------------------------------*/
 export const fetchUserEntries = () => {
   return function (dispatch, getState) {
+    dispatch(toggleEntryFetchingHelper());
+
     // fetch the user's firebase journals
-    firebaseApi.getValueByPathOnce('users/'+getState().user.uid+'/entries/'+
-                          getState().journal.selected+'/').then(snapshot => {
-      // fetch the desired data from the snapshot
-      let data = snapshot.val()
-      //if the data returns contains journals, load them onto the view
-      if(data != null)
-         Object.keys(data).forEach(key => { //dispatch action to load journal
-           dispatch(loadEntryHelper(key, data[key].title, data[key].time, data[key].text))
-        });
-    })
+    firebaseApi.getValueByPathOnce('users/' + getState().user.uid + '/entries/' +
+      getState().journal.selected + '/').then(snapshot => {
+
+        // check if location is saved for selected entry
+        let loc = localStorage.getItem("entry");
+        let load = false;
+        if (loc) load = true;
+        // fetch the desired data from the snapshot
+        let data = snapshot.val()
+        //if the data returns contains journals, load them onto the view
+        if (data != null)
+          Object.keys(data).forEach(key => { //dispatch action to load journal
+            dispatch(loadEntryHelper(key, data[key].title, data[key].time, data[key].text))
+            if (load)
+              if (loc === key)
+                dispatch(selectEntry(loc));
+          });
+        dispatch(toggleEntryFetchedHelper());
+        dispatch(toggleEntryFetchingHelper());
+      })
   }
 }
 
 export const addNewEntry = (journalKey, name) => {
-  return function(dispatch) {
+  return function (dispatch) {
     // date object 
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    let t = new Date(); 
+    let t = new Date();
     let date = t.toLocaleDateString('en-US', options);
 
     // A post entry.
@@ -336,7 +375,7 @@ export const addNewEntry = (journalKey, name) => {
       time: date
     };
     //get user location
-    let location = 'users/'+firebaseApi.getUserID()+'/entries/'+journalKey+'/';
+    let location = 'users/' + firebaseApi.getUserID() + '/entries/' + journalKey + '/';
 
     // Get a key for a new Entry.
     let newEntryKey = firebaseApi.createNewKeyInPath(location);
@@ -350,14 +389,15 @@ export const addNewEntry = (journalKey, name) => {
     return firebaseApi.updateDatabaseByPath(location, updates);
   }
 }
+
 export const editEntryText = (text, key) => {
-  return function(dispatch, getState){
+  return function (dispatch, getState) {
     //if nothing is selected, return and do nothing
     if (key === "") return;
 
     // user location
-    let location = 'users/'+getState().user.uid+'/entries/'+
-                        getState().journal.selected+'/'+key+'/';
+    let location = 'users/' + getState().user.uid + '/entries/' +
+      getState().journal.selected + '/' + key + '/';
 
     let updates = {};
     updates['text'] = text;
@@ -367,13 +407,14 @@ export const editEntryText = (text, key) => {
     return firebaseApi.updateDatabaseByPath(location, updates);
   }
 }
+
 export const editEntryTitle = (title, key) => {
-  return function(dispatch, getState){
+  return function (dispatch, getState) {
     //if nothing is selected, return
     if (key === "") return;
 
-    let location = 'users/' + getState().user.uid+'/entries/'+
-                        getState().journal.selected+'/'+key+'/';
+    let location = 'users/' + getState().user.uid + '/entries/' +
+      getState().journal.selected + '/' + key + '/';
     let updates = {};
     updates['title'] = title;
 

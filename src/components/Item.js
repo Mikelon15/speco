@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { MenuList, MenuItem, withStyles, Typography } from '@material-ui/core';
 
 const styles = theme => ({
+  root: {
+    overflow: 'auto',
+    maxHeight: '350px'
+  },
   list: {
     backgroundColor: 'white'
   },
@@ -18,7 +22,7 @@ const styles = theme => ({
 
 })
 
-class Shelf extends React.Component{
+class Shelf extends React.Component {
   state = {
     selectedIndex: 1,
   };
@@ -27,39 +31,36 @@ class Shelf extends React.Component{
     this.setState({ selectedIndex: index });
   };
 
-  render(){
+  render() {
     //     const { selected } = this.props;
-    const { items, onClickAction, selected, classes  } = this.props;
-    console.log(selected)
+    const { items, onClickAction, selected, classes } = this.props;
     return (
-      
-        <div>
-          <MenuList component="nav">
-            { items.map((e, index) => {
+      <div>
+        <MenuList className={classes.root} component="nav">
+          {items.map((e, index) => {
             //check if the entry is the selected one and mark as active
-            console.log(index, (index === 1))
-              return (
-                <MenuItem
-                  key={e.key} 
-                  selected={(e.key === selected) }
-                  dense
-                  button
-                  onClick={(event) => {
-                    this.handleListItemClick(index)
-                    onClickAction(e.key);
-                    event.preventDefault();
-                  }}> 
-                  <Typography className={classes.title}>
-                    {e.title}
-                  </Typography>
-                  <Typography className={classes.time}>
-                    {e.time}
-                  </Typography> 
-                </MenuItem>
-              )
-            })}
-          </MenuList>
-        </div>
+            return (
+              <MenuItem
+                key={e.key}
+                selected={(e.key === selected)}
+                dense
+                button
+                onClick={(event) => {
+                  this.handleListItemClick(index)
+                  onClickAction(e.key);
+                  event.preventDefault();
+                }}>
+                <Typography className={classes.title}>
+                  {e.title}
+                </Typography>
+                <Typography className={classes.time}>
+                  {e.time}
+                </Typography>
+              </MenuItem>
+            )
+          })}
+        </MenuList>
+      </div>
     )
   }
 }
