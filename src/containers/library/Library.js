@@ -10,7 +10,7 @@ import AddJournal from './AddJournal';
 import Item from '../../components/Item';
 
 // actions 
-import { selectJournal, selectEntry, deselectJournal, setUserLocation } from '../../actions';
+import { selectJournal, selectEntry, deselectJournal, setUserLocation, editJournalTitle } from '../../actions';
 
 //styling
 import './library.css';
@@ -51,6 +51,9 @@ const mapDispatchToProps = dispatch => {
             dispatch(selectEntry(key))
             dispatch(setUserLocation('entry'))
         },
+        onChangeJournalTitle: (title, key) => {
+            dispatch(editJournalTitle(title, key))
+        }
     }
 };
 
@@ -70,7 +73,7 @@ class Library extends React.Component {
         let { journals, entries, selectedEntry, selectedJournal, fetchingJournals, fetchingEntries } = this.props;
 
         // action variables
-        let { selectJournal, selectEntry } = this.props;
+        let { selectJournal, selectEntry, onChangeJournalTitle } = this.props;
 
         // show journal or entries depending on which location user is at
         let items = (selectedJournal === "") ? journals : entries;
@@ -87,6 +90,7 @@ class Library extends React.Component {
         let itemDisplay =
             ((items.length !== 0) ?
                 <Item
+                    onChangeJournalTitle={onChangeJournalTitle}
                     items={items}
                     selected={selectedItem}
                     onClickAction={selectItem}

@@ -151,6 +151,12 @@ export const selectJournal = (key) => {
   }
 }
 
+export const editJournalTitleHelper = (title, key) => ({
+  type: 'JOURNAL_EDIT_TITLE',
+  title: title,
+  key: key
+})
+
 /*------------------------------------------------------------------------------
 *
 *                             ENTRY STATE ACTIONS
@@ -327,7 +333,20 @@ export const addNewJournal = name => {
     return firebaseApi.updateDatabaseByPath(location, updates);
   }
 }
+export const editJournalTitle = (title, key) => {
+  return function (dispatch, getState) {
+    //if nothing is selected, return
+    if (key === "") return;
 
+    let location = 'users/' + getState().user.uid + '/journals/' + '/' + key + '/';
+    let updates = {};
+    updates['title'] = title;
+
+    //update data
+    dispatch(editJournalTitleHelper(title, key))
+    return firebaseApi.updateDatabaseByPath(location, updates);
+  }
+}
 /*------------------------------------------------------------------------------
 *
 *                             FIREBASE ENTRY ACTIONS

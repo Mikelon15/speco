@@ -9,6 +9,14 @@ const journal = (state = initialState, action) => {
   switch (action.type) {
     case 'JOURNAL_EDIT':
       return Object.assign({}, state, {});
+    case 'JOURNAL_EDIT_TITLE':
+      return Object.assign({}, state, {
+        journals: state.journals.map(journal =>
+          (journal.key === action.key)
+            ? { ...journal, title: action.title }
+            : journal
+        )
+      });
     case 'JOURNAL_LOAD':
       return Object.assign({}, state, {
         journals: [{

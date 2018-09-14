@@ -39,11 +39,12 @@ class Shelf extends React.Component {
     this.editItem = this.editItem.bind(this);
     this.deleteJournal = this.deleteJournal.bind(this)
     this.handleListItemClick = this.handleListItemClick.bind(this);
+    this.changeJournalName = this.changeJournalName.bind(this)
   }
   handleListItemClick = (index) => {
     this.setState({ selectedIndex: index });
   };
-  editItem(item) {
+  editItem(item, index) {
     this.setState({ selected: item })
     this.setState({ editing: true })
   }
@@ -52,7 +53,13 @@ class Shelf extends React.Component {
     this.setState({ editing: !this.state.editing })
   }
 
-  changeJournalName() {
+  changeJournalName(e) {
+    this.props.onChangeJournalTitle(e.target.value, this.state.selected.key)
+    // this.props.items.map((i) => {
+    //   if (i.key === this.state.selected.key) {
+    //     this.setState({ selected: i })
+    //   }
+    // })
   }
 
   deleteJournal() {
