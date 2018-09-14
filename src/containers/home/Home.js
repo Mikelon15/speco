@@ -3,29 +3,32 @@ import { Typography, Grid, withStyles } from '@material-ui/core';
 import quotes from '../../media/quotes';
 import styles from './styles';
 
+let timer;
+
 class Home extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
-            quote : "",
+            quote: "",
             time: "",
             updating: true
         }
         this.startClock = this.startClock.bind(this);
+        timer = setInterval(this.startClock, 100);
     }
     componentDidMount() {
-        let index = Math.floor(Math.random() * 1640); 
-        this.setState({quote: quotes[index], updating: true}); 
-        this.startClock(); 
+        let index = Math.floor(Math.random() * 1640);
+        this.setState({ quote: quotes[index], updating: true });
+        this.startClock();
     }
-    startClock(){        
-        if(!this.state.updating) return; 
-        let t = new Date(); 
-        this.setState({time: t.toLocaleTimeString()});
-        setTimeout(this.startClock, 100);
+    startClock() {
+        let t = new Date();
+        this.setState({ time: t.toLocaleTimeString() });
+        // setTimeout(this.startClock, 100);
     }
-    componentWillUnmount(){
-        this.setState({updating: false});
+    componentWillUnmount() {
+        // this.setState({updating: false});
+        clearInterval(timer)
     }
     render() {
         let { quote, time } = this.state;
@@ -33,16 +36,16 @@ class Home extends React.Component {
         return (
             <div>
                 <Grid
-                container
-                direction="row"
-                justify="center"
-                alignItems="center"
+                    container
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
                 >
-                    <Typography 
-                      className={classes.time}
+                    <Typography
+                        className={classes.time}
                         variant="display3" >
-                        { time }
-                    </Typography>   
+                        {time}
+                    </Typography>
 
                     {/* This is the quote section */}
                     <Grid item xs={8} sm={12} className={classes.quote}>
@@ -52,7 +55,7 @@ class Home extends React.Component {
                         <br />
                         <Typography className={classes.author} variant="subheading">
                             {quote.quoteAuthor}
-                        </Typography> 
+                        </Typography>
                     </Grid>
                 </Grid>
             </div>

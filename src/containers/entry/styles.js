@@ -28,7 +28,7 @@ export const styles = {
     root: {
         itemsAlign: 'center',
         marginTop: '17vh',
-        backgroundColor: '#fffcf7d4',
+        backgroundColor: '##f5f5f5f2',
         fontFamily: '\'Georgia\', serif',
         fontSize: 14,
         padding: 20,
@@ -63,6 +63,7 @@ export const styles = {
         marginBottom: '5px'
     },
     time: {
+        fontSize: '10px',
         float: 'right',
         width: '60%',
         position: 'absolute',
@@ -75,7 +76,7 @@ export const styles = {
     header: {
         paddingBottom: '20px'
     },
-    addButton:{
+    addButton: {
         position: 'absolute',
         bottom: '100px',
         right: '20px'

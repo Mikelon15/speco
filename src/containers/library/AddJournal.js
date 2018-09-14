@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Input, Button } from '@material-ui/core';
+import { Input, Button, Collapse, Grow, Typography } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add'
 import './library.css'
 import { addNewJournal, addNewEntry } from '../../actions';
+import Transition from 'react-transition-group/Transition';
+import { DialogActions, DialogContent, Dialog, TextField, DialogTitle } from '@material-ui/core';
 
 const mapStateToProps = state => {
   return {
@@ -20,43 +23,120 @@ const mapDispatchToProps = dispatch => {
   }
 }
 class AddJournal extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {value: ''};
+  constructor(props) {
+    super(props);
+    this.state = { value: '', hover: false, adding: false, newJournal: "" };
 
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.changeColor = this.changeColor.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.changeJournalName = this.changeJournalName.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({ value: event.target.value });
+  }
+
+  handleSubmit(event) {
+    let { selectedJournal } = this.props;
+    if (selectedJournal === "")
+      this.props.addNewJournal(this.state.newJournal)
+    else
+      this.props.addNewEntry(selectedJournal, this.state.newJournal)
+    this.setState({ newJournal: '', adding: false })
+    event.preventDefault();
+  }
+  changeColor() {
+    this.setState({ hover: !this.state.hover })
+    this.setState({ newJournal: '' })
+  }
+  handleClick() {
+    this.setState({ adding: !this.state.adding })
+    this.setState({ newJournal: '' })
+  }
+  changeJournalName(e) {
+    console.log(e)
+    this.setState({ newJournal: e.target.value })
+  }
+  render() {
+    let duration = 100;
+
+    let defaultStyle = {
+      transition: `width .15s ease-in-out`,
+      width: '150px',
+      maxHeight: '24px',
+      color: 'white',
+      overflow: 'hidden'
     }
 
-    handleChange(event) {
-      this.setState({value: event.target.value});
-    }
+    let transitionStyles = {
+      entering: { width: '0px', color: 'none' },
+      entered: { width: '150px' },
+      exiting: { width: '150px' },
+      exited: { width: '0px' },
+    };
 
-    handleSubmit(event) {
-      let { selectedJournal } = this.props;
-      if(selectedJournal === "")
-        this.props.addNewJournal(this.state.value)
-      else
-        this.props.addNewEntry(selectedJournal, this.state.value)
-      this.setState({value: ''})
-      event.preventDefault();
-    }
+    return (
+      <div className="add">
+        <Button
+          style={{ float: 'right', padding: 'none', margin: 'none' }}
+          onMouseEnter={this.changeColor}
+          onMouseLeave={this.changeColor} style={{ marginRight: '5px', borderRadius: '45px' }}
+          onClick={this.handleClick}
+          variant="contained"
+          color="primary" >
+          <Transition
+            in={this.state.hover}
+            timeout={100}
+            appear={true}
+          >
+            {state =>
+              <Typography style={{
+                ...defaultStyle,
+                ...transitionStyles[state]
+              }}>
+                create new journal
+              </Typography>
+            }
+          </Transition>
+          <AddIcon />
+        </Button>
 
-    render() {
-      return (
-        <div className="add">
-          <Input
-            placeholder="add new item"
-            value={this.state.value}
-            onChange={this.handleChange}
-            name="new"
-            type="text"
-            id="new"
-          />
-          <Button onClick={ this.handleSubmit } variant="contained" color="primary" > Add </Button>
-        </div>
-      );
-    }
+
+        <Dialog
+          open={this.state.adding}
+          onClose={this.handleClick}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">ADD NEW ITEM</DialogTitle>
+          <DialogContent>
+            <form onSubmit={this.handleSubmit}>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="New Journal"
+                type="text"
+                fullWidth
+                value={this.state.newJournal}
+                onChange={this.changeJournalName}
+              />
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClick} color="secondary">
+              cancel
+            </Button>
+            <Button onClick={this.handleSubmit} color="primary">
+              ADD
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+      </div>
+    );
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddJournal)

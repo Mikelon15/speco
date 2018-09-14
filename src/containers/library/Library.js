@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Grid, Typography, CircularProgress } from '@material-ui/core';
+import { Slide, Button, Grid, Typography, CircularProgress } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import HomeIcon from '@material-ui/icons/Home';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import Empty from '../../media/empty.png';
 import AddJournal from './AddJournal';
 
@@ -97,27 +97,24 @@ class Library extends React.Component {
                         height="200" width="200" alt=""></img>
                     <Typography variant='subheading'> No {itemType} found </Typography>
                     <br />
-                    <Button variant="fab" color="primary" aria-label="Add" style={{ margin: '50px' }}>
-                        <AddIcon />
-                    </Button>
                 </div>
             )
 
         return (
-            <div className="library">
-                <Grid className="controls" >
-                    <Button style={{ padding: '2px', minWidth: '48px' }} className="home" onClick={this.handleClick}> <HomeIcon /> </Button>
-                    {(selectedJournal) ?
-                        (<Typography variant='title' style={{ paddingTop: '7px', display: 'inline-flex' }} noWrap='true'>
-                            >   {selectedJournalName}
-                        </Typography>)
-                        : ""
-                    }
-                    <AddJournal className="add" />
-                </Grid>
-                {(isFetching) ? <CircularProgress /> : itemDisplay}
-
-            </div>
+            <Slide direction="up" in={true} mountOnEnter unmountOnExit>
+                <div className="library">
+                    <Grid className="controls" >
+                        <Button style={{ padding: '2px', minWidth: '48px', }} className="home" onClick={this.handleClick}> <LibraryBooksIcon /> </Button>
+                        {(selectedJournal) &&
+                            (<Typography variant='title' style={{ verticalAlign: 'middle', padding: '2%', display: 'inline-flex', paddingLeft: '0' }}>
+                                >   {selectedJournalName}
+                            </Typography>)
+                        }
+                        <AddJournal className="add" />
+                    </Grid>
+                    {(isFetching) ? <CircularProgress /> : itemDisplay}
+                </div>
+            </Slide>
         )
     }
 

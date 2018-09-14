@@ -50,7 +50,7 @@ class Entry extends React.Component {
           {(entry !== "") ?
             <EntryEditor text={text} title={title} time={time} onChangeAction={onChangeAction} changeEntryTitle={changeEntryTitle} />
             :
-            <Paper style={{ marginTop: '100px', padding: '20px' }}>
+            <Paper style={{ marginTop: '20%', padding: '20px', backgroundColor: '#fffcf7eb' }}>
               <img src={Empty}
                 height="200" width="200" alt=""></img>
               <Typography variant="subheading">No Journal or Entry Selected</Typography>

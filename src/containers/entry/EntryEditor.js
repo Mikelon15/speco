@@ -7,25 +7,15 @@ import './editorstyle.css';
 
 const styles = {
     root: {
-        backgroundColor: '#f5f5f5cc',
-        marginTop: '15%',
+        backgroundColor: '#fffcf7eb',
+        marginTop: '15vh',
         borderRadius: '10px',
-        height: '550px'
+        height: '70vh'
     },
     header: {
         padding: '7px',
-        paddingBottom: '0'
-    },
-    time: {
-        float: 'right',
-        width: '60%',
-        position: 'absolute',
-        top: '0',
-        right: '0',
-        textAlign: 'right',
-        padding: '5px',
-        color: '#92928d',
-        fontSize: '.7em'
+        paddingBottom: '0',
+        minHeight: '15px'
     },
     editor: {
         height: '200px'
@@ -34,7 +24,21 @@ const styles = {
         position: 'absolute',
         bottom: '100px',
         right: '20px'
-    }
+    },
+    time: {
+        fontSize: '10pt',
+        float: 'right',
+        position: 'relative',
+        top: '0',
+        right: '0',
+        color: '#6f6f6f',
+    },
+    title: {
+        background: 'none',
+        border: 'none',
+        fontSize: '12pt',
+        fontFamily: 'roboto',
+    },
 }
 /* 
  * Quill modules to attach to editor
@@ -44,9 +48,7 @@ const modules = {
     toolbar: [
         [{ 'font': [] }],
         [{ size: [] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote', { color: [] }],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' },
-        { 'indent': '-1' }, { 'indent': '+1' }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote', { color: [] }]
     ],
     clipboard: {
         // toggle to add extra line breaks when pasting HTML:
@@ -59,13 +61,12 @@ const modules = {
  */
 const formats = [
     'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent', 'color'
+    'bold', 'italic', 'underline', 'strike', 'blockquote', 'color'
 ]
 
 class EntryEditor extends Component {
     render() {
-        const { title, time, classes, text, changeEntryTitle, onChangeAction } = this.props;
+        const { title, classes, text, changeEntryTitle, onChangeAction } = this.props;
 
         let placeholder = 'write your epic...'
 
@@ -80,7 +81,6 @@ class EntryEditor extends Component {
                         onChange={changeEntryTitle}>
                     </Input>
                 </div>
-                <Typography className={classes.time}> {time}  </Typography>
                 <ReactQuill
                     theme="snow"
                     onChange={(e) => onChangeAction(e)}

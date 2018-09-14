@@ -30,6 +30,7 @@ import Entry from './entry/Entry';
 
 // user actions 
 import { fetchUserJournals, setUserLocation, signout } from '../actions';
+import BottomNav from '../components/BottomNav';
 
 
 const mapStateToProps = state => {
@@ -127,29 +128,8 @@ class Journal extends React.Component {
           </Grid>
         </Grid>
 
+        <BottomNav location={location} handleChange={this.handleChange} />
 
-        <div className="bottom">
-          <BottomNavigation
-            value={location}
-            showLabels
-            onChange={this.handleChange}
-          >
-            <BottomNavigationAction
-              value="home"
-              label="Home"
-              icon={<HomeIcon />}
-            />
-            <BottomNavigationAction
-              value="journals"
-              label="Journals"
-              icon={<LibraryBooksIcon />}
-            />
-            <BottomNavigationAction
-              value="entry"
-              label="Entry"
-              icon={<LibraryAddIcon />} />
-          </BottomNavigation>
-        </div>
       </div>
     )
   }
