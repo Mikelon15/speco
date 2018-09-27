@@ -1,14 +1,15 @@
-.container{
-    height: 100vh; 
+.container {
+    height: 100vh;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center; 
-    background-image: url('../media/ls3.jpg');
+    background-position: center center;
+    /* background-image: url('../media/ls2.jpg'); */
 }
-.bottom{
-    box-shadow: 0px -3px 15px grey; 
-    bottom: 0; 
-    width: 100vw; 
+
+.bottom {
+    box-shadow: 0px -3px 15px grey;
+    bottom: 0;
+    width: 100vw;
     position: fixed;
     margin: auto;
     background-color: beige;

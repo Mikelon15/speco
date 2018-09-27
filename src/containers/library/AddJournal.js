@@ -52,11 +52,14 @@ class AddJournal extends React.Component {
     this.setState({ newJournal: '' })
   }
   handleClick() {
-    this.setState({ adding: !this.state.adding })
-    this.setState({ newJournal: '' })
+    if (!this.props.selectedJournal) {
+      this.setState({ adding: !this.state.adding })
+      this.setState({ newJournal: '' })
+    } else {
+      this.props.addNewEntry(this.props.selectedJournal, this.state.newJournal)
+    }
   }
   changeJournalName(e) {
-    console.log(e)
     this.setState({ newJournal: e.target.value })
   }
   render() {
@@ -96,7 +99,7 @@ class AddJournal extends React.Component {
                 ...defaultStyle,
                 ...transitionStyles[state]
               }}>
-                create new journal
+                Add new {(this.props.selectedJournal) ? ("ENTRY") : ("JOURNAL")}
               </Typography>
             }
           </Transition>
@@ -109,7 +112,7 @@ class AddJournal extends React.Component {
           onClose={this.handleClick}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">ADD NEW ITEM</DialogTitle>
+          <DialogTitle id="form-dialog-title">Add new {(this.props.selectedJournal) ? ("ENTRY") : ("JOURNAL")}</DialogTitle>
           <DialogContent>
             <form onSubmit={this.handleSubmit}>
               <TextField

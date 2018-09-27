@@ -3,7 +3,7 @@ h1.logo{
   font-size: 48pt;
 }
 .grid-container {
-  height: 98vh;
+  height: 100vh;
   display: grid;
   grid-column-gap: 50px;
   grid-template-columns: auto auto auto;

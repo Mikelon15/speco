@@ -13,21 +13,20 @@ class Home extends React.Component {
             time: "",
             updating: true
         }
+        this.timer = null;
         this.startClock = this.startClock.bind(this);
-        timer = setInterval(this.startClock, 100);
     }
     componentDidMount() {
+        this.startClock();
         let index = Math.floor(Math.random() * 1640);
         this.setState({ quote: quotes[index], updating: true });
-        this.startClock();
+        timer = setInterval(this.startClock, 5000);
     }
     startClock() {
         let t = new Date();
-        this.setState({ time: t.toLocaleTimeString() });
-        // setTimeout(this.startClock, 100);
+        this.setState({ time: t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
     }
     componentWillUnmount() {
-        // this.setState({updating: false});
         clearInterval(timer)
     }
     render() {

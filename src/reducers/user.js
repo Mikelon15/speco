@@ -5,31 +5,33 @@ const initialState = {
   location: 'home', //'home', 'library', 'entry' 
   name: null,
   uid: null,
+  online: false,
+  background: null
 };
 
 const user = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_USER_NAME':
-        return Object.assign({}, state, {
-            name: action.name
-    });
+      return Object.assign({}, state, {
+        name: action.name
+      });
     case 'SET_USER_EMAIL':
-        return Object.assign({}, state, {
-            email: action.email
-    });
+      return Object.assign({}, state, {
+        email: action.email
+      });
     case 'SET_USER_UID':
       return Object.assign({}, state, {
         uid: action.uid
-    });
+      });
     case 'TOGGLE_USER_FETCHING':
-        let fetch = !state.fetching
-        return Object.assign({}, state, {
-            fetching: fetch
-    });
+      let fetch = !state.fetching
+      return Object.assign({}, state, {
+        fetching: fetch
+      });
     case 'USER_ERROR_MESSAGE':
       return Object.assign({}, state, {
         error: action.error
-    });
+      });
     case 'USER_SET_LOCATION':
       return Object.assign({}, state, {
         location: action.location
@@ -38,6 +40,16 @@ const user = (state = initialState, action) => {
       return initialState;
     case 'USER_RESET':
       return Object.assign({}, state, initialState);
+    case 'USER_TOGGLE_ONLINE':
+      return {
+        ...state,
+        online: !state.online
+      }
+    case 'USER_CHANGE_BACKGROUND':
+      return {
+        ...state,
+        background: action.background
+      }
     default:
       return state;
   }

@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { withStyles, Input, Typography } from '@material-ui/core'
+import { withStyles, Input, Typography, Button } from '@material-ui/core'
 import ReactQuill from 'react-quill';
 
 import 'react-quill/dist/quill.snow.css';
 import './editorstyle.css';
 
-const styles = {
+const styles = (theme) => ({
     root: {
         backgroundColor: '#fffcf7eb',
         marginTop: '15vh',
         borderRadius: '10px',
-        height: '70vh'
+        height: '70vh',
+        position: 'relative'
     },
     header: {
         padding: '7px',
@@ -39,7 +40,12 @@ const styles = {
         fontSize: '12pt',
         fontFamily: 'roboto',
     },
-}
+    fab: {
+        position: 'absolute',
+        bottom: theme.spacing.unit * 2,
+        right: theme.spacing.unit * 2,
+    }
+})
 /* 
  * Quill modules to attach to editor
  * See https://quilljs.com/docs/modules/ for complete options
@@ -89,6 +95,9 @@ class EntryEditor extends Component {
                     formats={formats}
                     placeholder={placeholder}
                 />
+                <Button variant="fab" className={classes.fab}>
+                    new
+                  </Button>
             </div>
         )
     }

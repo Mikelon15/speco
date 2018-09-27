@@ -44,7 +44,7 @@ export const authInitialized = (user) => {
       dispatch(setUserLocation(loc));
     }
     // check if user is login in or not
-    (user) ? dispatch(authLoggedIn(user)) : dispatch(authLoggedOutSuccess());
+    (user) ? dispatch(authLoggedIn(user)): dispatch(authLoggedOutSuccess());
   };
 }
 
@@ -94,6 +94,13 @@ export const setUserLocationHelper = (location) => ({
   location
 })
 
+export const userToggleOnline = () => ({
+  type: 'USER_TOGGLE_ONLINE'
+})
+export const changeUserBackgroundHelper = (background) => ({
+  type: 'USER_CHANGE_BACKGROUND',
+  background: background
+})
 export const setUserLocation = (location) => {
   return (dispatch) => {
     localStorage.setItem("location", location);
@@ -138,6 +145,7 @@ export const toggleJournalFetchingHelper = () => ({
 })
 export const deselectJournal = () => {
   return (dispatch) => {
+    localStorage.setItem("journal", null);
     dispatch(deselectJournalHelper())
     dispatch(deselectEntryHelper())
     dispatch(resetEntryListHelper())
@@ -150,6 +158,26 @@ export const selectJournal = (key) => {
     dispatch(fetchUserEntries())
   }
 }
+
+export const deleteJournal = (key) => {
+  return (dispatch, getState) => {
+    if (getState().journal.selected === key) {
+      dispatch(deselectJournal());
+    }
+    dispatch(deleteJournalHelper(key))
+    //if nothing is selected, return
+    if (key === "") return;
+
+    let location = 'users/' + getState().user.uid + '/journals/' + '/' + key + '/';
+    //update data
+    return firebaseApi.removeDatabaseByPath(location);
+  }
+}
+
+export const deleteJournalHelper = (key) => ({
+  type: 'JOURNAL_DELETE',
+  key: key
+})
 
 export const editJournalTitleHelper = (title, key) => ({
   type: 'JOURNAL_EDIT_TITLE',
@@ -219,17 +247,18 @@ export const selectEntry = (key) => {
 *                             FIREBASE AUTH ACTIONS
 *
 ------------------------------------------------------------------------------*/
-export const signUpWithEmailAndPassword = (email, password, username) => {
+export const signUpWithEmailAndPassword = (email, password) => {
   return function (dispatch, getState) {
-    let user = { email: email, password: password }
+    let user = {
+      email: email,
+      password: password
+    }
     dispatch(toggleUserFetching())
     firebaseApi.createUserWithEmailAndPassword(user).then((obj) => {
-      //updates user's profile username
-      obj.user.updateProfile({ displayName: username })
-      //dipatch functions to let app know user is signed in
-      dispatch(authLoggedIn(obj.user))
-      dispatch(toggleUserSubscribing())
-    })
+        //dipatch functions to let app know user is signed in
+        dispatch(authLoggedIn(obj.user))
+        dispatch(toggleUserSubscribing())
+      })
       .catch((error) => {
         // Handle Errors here
         dispatch(authError(error))
@@ -252,12 +281,36 @@ export const signInWithEmailAndPassword = (user) => {
       });
   }
 }
+export const dispatchToggleConnectivity = () => {
+  return function (dispatch) {
+    dispatch(userToggleOnline())
+    console.log('user toggle called')
+  }
+}
+export const getUserBackground = () => {
+  return function (dispatch) {
+    let date = new Date().getDate();
+    let lastDate = localStorage.getItem('lastLogin');
+    let url = localStorage.getItem('background');
 
+    // check if date is been refreshed or if no background
+    if (date != lastDate || !url) {
+      url = 'url(../media/ls' + Math.floor(Math.random() * 5 + 1) + '.jpg)';
+      localStorage.setItem('lastLogin', date)
+      localStorage.setItem('background', url)
+    }
+
+    dispatch(changeUserBackgroundHelper(url));
+  }
+}
 export const authLoggedIn = (user) => {
   return (dispatch) => {
+    // set online/offline listeners
+    window.addEventListener('online', dispatchToggleConnectivity);
+    window.addEventListener('offline', dispatchToggleConnectivity);
+    dispatch(getUserBackground());
     dispatch(setUserUID(user.uid));
     dispatch(setUserEmail(user.email));
-    dispatch(setUserName(user.displayName));
     dispatch(authLoggedInSuccess());
   };
 }
@@ -265,6 +318,7 @@ export const authLoggedIn = (user) => {
 export const signout = () => {
   return function (dispatch) {
     firebaseApi.authSignOut().then(function (promise) {
+      localStorage.clear();
       dispatch(signoutUser());
       dispatch(authReset());
       dispatch(userReset());
@@ -308,15 +362,10 @@ export const fetchUserJournals = () => {
 
 export const addNewJournal = name => {
   return function (dispatch) {
-    // date object 
-    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    let t = new Date();
-    let date = t.toLocaleDateString('en-US', options);
-
     // A post entry.
     let journalData = {
       title: name,
-      time: date
+      time: getDate()
     };
     //get user location
     let location = 'users/' + firebaseApi.getUserID() + '/journals/';
@@ -344,6 +393,8 @@ export const editJournalTitle = (title, key) => {
 
     //update data
     dispatch(editJournalTitleHelper(title, key))
+
+
     return firebaseApi.updateDatabaseByPath(location, updates);
   }
 }
@@ -360,38 +411,33 @@ export const fetchUserEntries = () => {
     firebaseApi.getValueByPathOnce('users/' + getState().user.uid + '/entries/' +
       getState().journal.selected + '/').then(snapshot => {
 
-        // check if location is saved for selected entry
-        let loc = localStorage.getItem("entry");
-        let load = false;
-        if (loc) load = true;
-        // fetch the desired data from the snapshot
-        let data = snapshot.val()
-        //if the data returns contains journals, load them onto the view
-        if (data != null)
-          Object.keys(data).forEach(key => { //dispatch action to load journal
-            dispatch(loadEntryHelper(key, data[key].title, data[key].time, data[key].text))
-            if (load)
-              if (loc === key)
-                dispatch(selectEntry(loc));
-          });
-        dispatch(toggleEntryFetchedHelper());
-        dispatch(toggleEntryFetchingHelper());
-      })
+      // check if location is saved for selected entry
+      let loc = localStorage.getItem("entry");
+      let load = false;
+      if (loc) load = true;
+      // fetch the desired data from the snapshot
+      let data = snapshot.val()
+      //if the data returns contains journals, load them onto the view
+      if (data != null)
+        Object.keys(data).forEach(key => { //dispatch action to load journal
+          dispatch(loadEntryHelper(key, data[key].title, data[key].time, data[key].text))
+          if (load)
+            if (loc === key)
+              dispatch(selectEntry(loc));
+        });
+      dispatch(toggleEntryFetchedHelper());
+      dispatch(toggleEntryFetchingHelper());
+    })
   }
 }
 
 export const addNewEntry = (journalKey, name) => {
   return function (dispatch) {
-    // date object 
-    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    let t = new Date();
-    let date = t.toLocaleDateString('en-US', options);
-
     // A post entry.
     let entryData = {
       title: name,
       text: "",
-      time: date
+      time: getDate()
     };
     //get user location
     let location = 'users/' + firebaseApi.getUserID() + '/entries/' + journalKey + '/';
@@ -405,6 +451,8 @@ export const addNewEntry = (journalKey, name) => {
 
     // dispatch action to change local data
     dispatch(addEntryHelper(newEntryKey, entryData.title, entryData.time))
+    dispatch(selectEntry(newEntryKey))
+    dispatch(setUserLocation("entry"))
     return firebaseApi.updateDatabaseByPath(location, updates);
   }
 }
@@ -441,4 +489,14 @@ export const editEntryTitle = (title, key) => {
     dispatch(editEntryTitleHelper(title))
     return firebaseApi.updateDatabaseByPath(location, updates);
   }
+}
+
+function getDate() {
+  var options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  };
+  let t = new Date();
+  return t.toLocaleDateString('en-US', options);
 }

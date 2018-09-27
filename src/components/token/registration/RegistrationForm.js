@@ -11,18 +11,6 @@ class RegistrationForm extends React.Component {
     return (
       <div>
         <form onSubmit={onSubmit} className={classes.form}>
-          <FormControl className={classes.input} error={(valid.username === "") ? false : true} margin="normal" required fullWidth>
-            <InputLabel htmlFor="username">Username</InputLabel>
-            <Input
-              value={user.username}
-              onChange={onChange}
-              name="username"
-              id="username"
-              autoComplete="current-username"
-              autoFocus
-            />
-            <FormHelperText>{valid.username}</FormHelperText>
-          </FormControl>
           <FormControl className={classes.input} error={(valid.email === "") ? false : true} margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email Address</InputLabel>
             <Input

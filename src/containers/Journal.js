@@ -15,12 +15,8 @@ import React from 'react'
 import { connect } from 'react-redux';
 
 // ui elements 
-import { Grid, BottomNavigation, BottomNavigationAction, Button, Popper, Grow, Paper, MenuList, MenuItem, ClickAwayListener } from '@material-ui/core';
-import HomeIcon from '@material-ui/icons/Home';
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
-import SettingsIcon from '@material-ui/icons/Settings';
-
+import { Grid, withStyles } from '@material-ui/core';
+import compose from 'recompose/compose';
 
 // containers and components 
 import './journal.css';
@@ -31,10 +27,13 @@ import Entry from './entry/Entry';
 // user actions 
 import { fetchUserJournals, setUserLocation, signout } from '../actions';
 import BottomNav from '../components/BottomNav';
-
+import Settings from '../components/Settings';
 
 const mapStateToProps = state => {
-  return { location: state.user.location }
+  return {
+    location: state.user.location,
+    background: state.user.background
+  }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -56,21 +55,10 @@ const mapDispatchToProps = dispatch => {
 
 class Journal extends React.Component {
   state = {
-    value: 'home',
-    open: false
+    value: 'home'
   };
 
-  handleToggle = () => {
-    this.setState(state => ({ open: !state.open }));
-  };
 
-  handleClose = event => {
-    if (this.anchorEl.contains(event.target)) {
-      return;
-    }
-
-    this.setState({ open: false });
-  };
 
   // fetch list of journals when component loads 
   componentWillMount() {
@@ -83,48 +71,27 @@ class Journal extends React.Component {
 
   render() {
     // props  varibles
-    let { location } = this.props;
-    // state
-    let { open } = this.state;
+    let { location, classes, background } = this.props;
 
     return (
-      <div className="container">
+      < div className="container"
+        style={
+          {
+            backgroundImage: background
+          }
+        } >
 
         <Grid container>
           <Grid item xs={2} md={3}></Grid>
+
           <Grid align='center' item md={6} xs={8}>
-            {(location === 'journals') ? <Library /> : ""}
-            {(location === 'home') ? <Home /> : ""}
-            {(location === 'entry') ? <Entry /> : ""}
+            {(location === 'journals') && <Library />}
+            {(location === 'home') && <Home />}
+            {(location === 'entry') && <Entry />}
           </Grid>
+
           <Grid item xs={2} md={3}>
-            <Button
-              buttonRef={node => {
-                this.anchorEl = node;
-              }}
-              aria-owns={(open) ? 'menu-list-grow' : null}
-              aria-haspopup="true"
-              onClick={this.handleToggle}
-              style={{ float: 'right' }}>
-              <SettingsIcon />
-            </Button>
-            <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
-              {({ TransitionProps, placement }) => (
-                <Grow
-                  {...TransitionProps}
-                  id="menu-list-grow"
-                  style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                >
-                  <Paper>
-                    <ClickAwayListener onClickAway={this.handleClose}>
-                      <MenuList>
-                        <MenuItem onClick={this.props.signout}>Logout</MenuItem>
-                      </MenuList>
-                    </ClickAwayListener>
-                  </Paper>
-                </Grow>
-              )}
-            </Popper>
+            <Settings signout={this.props.signout} />
           </Grid>
         </Grid>
 
@@ -135,4 +102,4 @@ class Journal extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Journal);
+export default connect(mapStateToProps, mapDispatchToProps)(Journal)

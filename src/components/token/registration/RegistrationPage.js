@@ -11,13 +11,11 @@ class RegistrationPage extends React.Component {
 
     this.state = {
       user: {
-        username: "",
         email: "",
         password: "",
         confirm: "",
       },
       valid: {
-        username: "",
         email: "",
         password: "",
         confirm: ""
@@ -38,7 +36,7 @@ class RegistrationPage extends React.Component {
   createUser(event) {
     event.preventDefault();
     let newState = Object.assign({}, this.state);
-    let { username, email, password, confirm } = this.state.user;
+    let { email, password, confirm } = this.state.user;
     let noErrors = true;
 
     // display the correct helper text for password
@@ -54,11 +52,6 @@ class RegistrationPage extends React.Component {
       newState.valid.password = "";
       newState.valid.confirm = "";
     }
-    // display the correct helper text for username
-    if (username === "") {
-      noErrors = false;
-      newState.valid.username = "Please enter a valid username";
-    } else { newState.valid.username = "" }
 
     // helper message for blank email
     if (email === "") {
@@ -69,7 +62,7 @@ class RegistrationPage extends React.Component {
     // update the state, and if no errors, then register user
     this.setState(newState);
     if (noErrors)
-      this.props.onSubmit(email, password, username);
+      this.props.onSubmit(email, password);
   }
 
   render() {

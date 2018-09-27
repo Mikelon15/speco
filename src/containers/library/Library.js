@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Slide, Button, Grid, Typography, CircularProgress } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import Empty from '../../media/empty.png';
 import AddJournal from './AddJournal';
-
 // my own component imports 
 import Item from '../../components/Item';
 
 // actions 
-import { selectJournal, selectEntry, deselectJournal, setUserLocation, editJournalTitle } from '../../actions';
+import {
+    selectJournal, selectEntry, deselectJournal,
+    setUserLocation, editJournalTitle, deleteJournal
+} from '../../actions';
 
 //styling
 import './library.css';
@@ -53,6 +54,9 @@ const mapDispatchToProps = dispatch => {
         },
         onChangeJournalTitle: (title, key) => {
             dispatch(editJournalTitle(title, key))
+        },
+        deleteJournal: (key) => {
+            dispatch(deleteJournal(key))
         }
     }
 };
@@ -70,7 +74,8 @@ class Library extends React.Component {
     }
     render() {
         // state  varibles
-        let { journals, entries, selectedEntry, selectedJournal, fetchingJournals, fetchingEntries } = this.props;
+        let { journals, entries, selectedEntry, selectedJournal,
+            fetchingJournals, fetchingEntries, deleteJournal } = this.props;
 
         // action variables
         let { selectJournal, selectEntry, onChangeJournalTitle } = this.props;
@@ -90,6 +95,7 @@ class Library extends React.Component {
         let itemDisplay =
             ((items.length !== 0) ?
                 <Item
+                    deleteJournal={deleteJournal}
                     onChangeJournalTitle={onChangeJournalTitle}
                     items={items}
                     selected={selectedItem}

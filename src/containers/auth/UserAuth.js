@@ -21,7 +21,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSignUp: (email, password, username) => { dispatch(signUpWithEmailAndPassword(email, password, username)) },
+    onSignUp: (email, password) => { dispatch(signUpWithEmailAndPassword(email, password)) },
     onSignIn: e => { dispatch(signInWithEmailAndPassword(e)) },
     toggleUserSubscribing: () => {
       dispatch(toggleUserSubscribing())

@@ -43,6 +43,14 @@ const journal = (state = initialState, action) => {
         journals: state.journals.map(journal => { return { ...journal, active: false } }
         )
       });
+    case 'JOURNAL_DELETE':
+      return Object.assign({}, state, {
+        journals: state.journals.filter((journal) => {
+          if (journal.key !== action.key) {
+            return journal;
+          }
+        })
+      });
     case 'JOURNAL_TOGGLE_FETCHED':
       return Object.assign({}, state, {
         fetched: !state.fetched

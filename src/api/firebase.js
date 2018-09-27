@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import {firebaseConfig} from './config';
+import { firebaseConfig } from './config';
 
 
 class FirebaseApi {
@@ -18,8 +18,8 @@ class FirebaseApi {
       );
     });
   }
- 
-  static createUserWithEmailAndPassword(user){
+
+  static createUserWithEmailAndPassword(user) {
     return firebase.auth().createUserWithEmailAndPassword(user.email, user.password);
   }
 
@@ -31,11 +31,11 @@ class FirebaseApi {
       );
     })
   }
-  static getFirebase(){
+  static getFirebase() {
     return firebase;
   }
 
-  static authSignOut(){
+  static authSignOut() {
     return firebase.auth().signOut();
   }
 
@@ -54,7 +54,7 @@ class FirebaseApi {
     });
   }
 
-  static getUserID(){
+  static getUserID() {
     return firebase.auth().currentUser.uid;
   }
 
@@ -91,11 +91,17 @@ class FirebaseApi {
       .set(value);
 
   }
-  static updateDatabaseByPath(path, update){
+  static updateDatabaseByPath(path, update) {
     return firebase
       .database()
       .ref(path)
       .update(update)
+  }
+  static removeDatabaseByPath(path) {
+    return firebase
+      .database()
+      .ref(path)
+      .remove()
   }
 }
 
