@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import LogIn from './login/LoginPage';
 import SignUp from './registration/RegistrationPage';
 import { Grid, Paper, withStyles } from '@material-ui/core';
+import './Token.css';
 import Styles from "./styles";
 
-import './Token.css';
 
 class Token extends Component {
     render() {

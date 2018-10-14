@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles, Input, Typography, Button } from '@material-ui/core'
 import ReactQuill from 'react-quill';
+import AddIcon from '@material-ui/icons/Add'
 
 import 'react-quill/dist/quill.snow.css';
 import './editorstyle.css';
@@ -95,8 +96,9 @@ class EntryEditor extends Component {
                     formats={formats}
                     placeholder={placeholder}
                 />
-                <Button variant="fab" className={classes.fab}>
-                    new
+                <Button
+          color="primary" variant="fab" className={classes.fab}>
+                    <AddIcon />
                   </Button>
             </div>
         )
