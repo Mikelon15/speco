@@ -16,7 +16,7 @@ import FirebaseApi from './api/firebase';
 import rootReducer from './reducers';
 
 // containers
-import App from './App'
+import App from './containers/App'
 
 // actions
 import { authInitialized } from './actions/index'

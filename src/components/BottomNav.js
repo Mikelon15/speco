@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core';
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 
 const styles = (themes) => ({
     root: {

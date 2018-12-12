@@ -9,8 +9,9 @@ import Item from '../../components/Item';
 
 // actions 
 import {
+    resetJournalListHelper, resetEntryListHelper, fetchUserJournals, fetchUserEntries,
     selectJournal, selectEntry, deselectJournal,
-    setUserLocation, editJournalTitle, deleteJournal
+    setUserLocation, editJournalTitle, deleteJournal, 
 } from '../../actions';
 
 //styling
@@ -42,6 +43,16 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        // i fetch the journals here because I want the journal list
+        // to load as soon as the uesr is logged in 
+        fetchJournals: () => {
+            dispatch(resetJournalListHelper());
+            dispatch(fetchUserJournals())
+        },
+        fetchEntries: () => {
+            dispatch(resetEntryListHelper());
+            dispatch(fetchUserEntries());
+        },
         deselectJournal: () => {
             dispatch(deselectJournal())
         },
@@ -67,6 +78,11 @@ class Library extends React.Component {
         super(props)
         this.handleClick = this.handleClick.bind(this);
     }
+    
+    componentWillMount() {
+        (this.props.selectedJournal) ? this.props.fetchEntries() : this.props.fetchJournals();
+    }
+
     // this allows the nav to go back to journal list
     handleClick(event) {
         this.props.deselectJournal();

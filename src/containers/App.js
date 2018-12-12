@@ -9,28 +9,30 @@
 //    Author: Miguel Gutierrez
 //---------------------------------------------------------------------
 
-
-// react-redux
-import React from 'react'
+import React from 'react';
 import { connect } from 'react-redux';
 
+// the two main components, render Journal or authenticate user 
+import UserAuth from './auth/UserAuth';
+
+
 // ui elements 
-import { Grid, withStyles } from '@material-ui/core';
-import compose from 'recompose/compose';
+import { Grid } from '@material-ui/core';
 
 // containers and components 
 import './journal.css';
-import Home from './/home/Home';
-import Library from './library/Library';
-import Entry from './entry/Entry';
+import Home from './home/Home';
+import Journals from './Journals';
 
 // user actions 
 import { fetchUserJournals, setUserLocation, signout } from '../actions';
 import BottomNav from '../components/BottomNav';
 import Settings from '../components/Settings';
 
+// finds the active entry to update text changes
 const mapStateToProps = state => {
   return {
+    auth: state.auth.logged,
     location: state.user.location,
     background: state.user.background
   }
@@ -50,56 +52,45 @@ const mapDispatchToProps = dispatch => {
       dispatch(signout())
     }
   }
-};
+}
 
-
-class Journal extends React.Component {
+class App extends React.Component {
   state = {
     value: 'home'
   };
 
-
-
-  // fetch list of journals when component loads 
-  componentWillMount() {
-    this.props.fetchJournals();
-  }
-
   handleChange = (event, value) => {
     this.props.changeLocation(value)
   }
-
   render() {
     // props  varibles
-    let { location, classes, background } = this.props;
+    let { location, background } = this.props;
 
+    let { auth } = this.props;
     return (
-      < div className="container"
-        style={
-          {
-            backgroundImage: background
-          }
-        } >
+      <div id="app">
+        {(!auth) && <UserAuth />}
+        {(auth) && (
+          < div className="container" style={{ backgroundImage: background }} >
+            <Grid container>
+              <Grid item xs={2} md={3}></Grid>
 
-        <Grid container>
-          <Grid item xs={2} md={3}></Grid>
+              <Grid align='center' item md={6} xs={8}>
+                {(location === 'journals') && <Journals />}
+                {(location === 'home') && <Home />}
+              </Grid>
 
-          <Grid align='center' item md={6} xs={8}>
-            {(location === 'journals') && <Library />}
-            {(location === 'home') && <Home />}
-            {(location === 'entry') && <Entry />}
-          </Grid>
+              <Grid item xs={2} md={3}>
+                <Settings signout={this.props.signout} />
+              </Grid>
+            </Grid>
 
-          <Grid item xs={2} md={3}>
-            <Settings signout={this.props.signout} />
-          </Grid>
-        </Grid>
-
-        <BottomNav location={location} handleChange={this.handleChange} />
-
+            <BottomNav location={location} handleChange={this.handleChange} />
+          </div>
+        )}
       </div>
     )
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Journal)
+export default connect(mapStateToProps, mapDispatchToProps)(App);

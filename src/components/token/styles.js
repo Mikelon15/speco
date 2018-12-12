@@ -10,7 +10,7 @@ export const styles = theme => ({
     },
   },
   paper: {
-    backgroundColor: '#c1cac9',
+    backgroundColor: '#fbfbfbe0',
     opacity: .96,
     marginTop: theme.spacing.unit * 8,
     display: 'flex',

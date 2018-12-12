@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   MenuList, MenuItem, withStyles, Typography, Button,
-  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField
+  Dialog, DialogActions, DialogContent, DialogTitle, TextField
 } from '@material-ui/core';
 
 import MoreVertIcon from '@material-ui/icons/MoreVert';

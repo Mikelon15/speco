@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Input, Button, Collapse, Grow, Typography } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add'
 import './library.css'
 import { addNewJournal, addNewEntry } from '../../actions';
@@ -63,7 +63,6 @@ class AddJournal extends React.Component {
     this.setState({ newJournal: e.target.value })
   }
   render() {
-    let duration = 100;
 
     let defaultStyle = {
       transition: `width .15s ease-in-out`,
@@ -86,7 +85,7 @@ class AddJournal extends React.Component {
           style={{ float: 'right', padding: 'none', margin: 'none' }}
           onMouseEnter={this.changeColor}
           onMouseLeave={this.changeColor} style={{ marginRight: '5px', borderRadius: '45px' }}
-          onClick={this.handleClick}
+          onClick={this.handleClick} 
           variant="contained"
           color="primary" >
           <Transition

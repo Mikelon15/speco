@@ -168,7 +168,7 @@ export const deleteJournal = (key) => {
     //if nothing is selected, return
     if (key === "") return;
 
-    let location = 'users/' + getState().user.uid + '/journals/' + '/' + key + '/';
+    let location = 'users/' + getState().user.uid + '/journals/' + key + '/';
     //update data
     return firebaseApi.removeDatabaseByPath(location);
   }
@@ -294,7 +294,7 @@ export const getUserBackground = () => {
     let url = localStorage.getItem('background');
 
     // check if date is been refreshed or if no background
-    if (date != lastDate || !url) {
+    if (date !== lastDate || !url) {
       url = 'url(../media/ls' + Math.floor(Math.random() * 5 + 1) + '.jpg)';
       localStorage.setItem('lastLogin', date)
       localStorage.setItem('background', url)
@@ -387,7 +387,7 @@ export const editJournalTitle = (title, key) => {
     //if nothing is selected, return
     if (key === "") return;
 
-    let location = 'users/' + getState().user.uid + '/journals/' + '/' + key + '/';
+    let location = 'users/' + getState().user.uid + '/journals/' + key + '/';
     let updates = {};
     updates['title'] = title;
 
